@@ -54,3 +54,79 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+
+/*login*/
+
+.login-logo {
+    width: 50px;
+    height: 50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .login-logo > img {
+        width: 100%;
+        height: 100%;
+    }
+
+.login-header {
+    text-align: center
+}
+
+.login-card {
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);
+    margin-top: 70px;
+    margin-bottom: 70px;
+}
+
+.login-btn {
+    border-radius: 0;
+    background-color: #e6630e;
+    color: white;
+    border: 0;
+}
+
+    .login-btn:hover {
+        background-color: #ff6b0a;
+        transform: scale(1.01);
+        box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);
+        transition: all ease 0.3s;
+        color: white;
+    }
+
+.other-socials-intro {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 1em;
+}
+
+.fb {
+    background-color: #3B5998;
+    color: white;
+    border-radius: 0;
+}
+
+.google {
+    background-color: #dd4b39;
+    color: white;
+    border-radius: 0;
+}
+
+    .google:hover,
+    .fb:hover {
+        color: white;
+    }
+
+    .google:active {
+        outline: none !important;
+    }
+
+.showpassword {
+    cursor: pointer;
+}
+
+/*end login*/
