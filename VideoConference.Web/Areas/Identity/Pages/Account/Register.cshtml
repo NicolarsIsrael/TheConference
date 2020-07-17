@@ -4,63 +4,66 @@
     ViewData["Title"] = "Register";
 }
 
+    <div class="container">
+        <div class="card mx-auto register-card">
+            <div class="card-body">
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <h4 class="register-header">REGISTER</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="Input.Email" class="form-control" placeholder="Email" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group mb-1">
+                            <input asp-for="Input.Password" class="form-control" placeholder="Password" id="passwordInput" />
+                            <div class="input-group-append">
+                                <div class="input-group-text showpassword" onclick="ShowPassword()">
+                                    <span id="password-lock-icon" class="fas fa-eye"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
 
-<div class="card mx-auto register-card">
-    <div class="card-body">
-        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h4 class="register-header">REGISTER</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <input asp-for="Input.Email" class="form-control" placeholder="Email" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="input-group mb-1">
-                    <input asp-for="Input.Password" class="form-control" placeholder="Password" id="passwordInput" />
-                    <div class="input-group-append">
-                        <div class="input-group-text showpassword" onclick="ShowPassword()">
-                            <span id="password-lock-icon" class="fas fa-eye"></span>
+                    <div class="form-group">
+                        <div class="input-group mb-1">
+                            <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Password" id="ConfirmPasswordInput" />
+                            <div class="input-group-append">
+                                <div class="input-group-text showconfirmpassword" onclick="ShowConfirmPassword()">
+                                    <span id="confirm-password-lock-icon" class="fas fa-eye"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-block register-btn">Register</button>
+                    </div>
+                    <div class="mb-2">
+                        <div class="other-socials-intro">
+                            Or register with social media accounts
+                        </div>
+                        <div class="w-100">
+                            <a href="#" class="fb btn w-100 mb-1">
+                                <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
+                            </a>
+                            <a href="#" class="google btn w-100 mb-1">
+                                <i class="fab fa-google fa-fw"></i> Register with Google+
+                            </a>
+                        </div>
+                        <div class="mt-3" style="text-align:center">
+                            Already a user? <a id="forgot-password" asp-page="./Login">Login</a>
                         </div>
                     </div>
-                </div>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </form>
             </div>
 
-            <div class="form-group">
-                <div class="input-group mb-1">
-                    <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Password" id="ConfirmPasswordInput" />
-                    <div class="input-group-append">
-                        <div class="input-group-text showconfirmpassword" onclick="ShowConfirmPassword()">
-                            <span id="confirm-password-lock-icon" class="fas fa-eye"></span>
-                        </div>
-                    </div>
-                </div>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
+        </div>
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block register-btn">Register</button>
-            </div>
-            <div class="mb-2">
-                <div class="other-socials-intro">
-                    Or register with social media accounts
-                </div>
-                <div class="w-100">
-                    <a href="#" class="fb btn w-100 mb-1">
-                        <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                    </a>
-                    <a href="#" class="google btn w-100 mb-1">
-                        <i class="fab fa-google fa-fw"></i> Register with Google+
-                    </a>
-                </div>
-            </div>
-        </form>
     </div>
-    
-</div>
-
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

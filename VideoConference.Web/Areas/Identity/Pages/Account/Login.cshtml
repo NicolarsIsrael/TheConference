@@ -4,84 +4,67 @@
 @{
     ViewData["Title"] = "Log in";
 }
-
-<div class="card mx-auto login-card">
-    <div class="card-body">
-        <form id="account" method="post">
-            <h4 class="login-header">LOGIN</h4>
-            <hr />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <input asp-for="Input.Email" class="form-control" placeholder="Email" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-1">
-                <div class="input-group mb-1">
-                    <input asp-for="Input.Password" class="form-control" placeholder="Password" id="passwordInput"/>
-                    <div class="input-group-append">
-                        <div class="input-group-text showpassword" onclick="ShowPassword()">
-                            <span id="password-lock-icon" class="fas fa-eye"></span>
+    <div class="container">
+        <div class="card mx-auto login-card">
+            <div class="card-body">
+                <form id="account" method="post">
+                    <h4 class="login-header">LOGIN</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <input asp-for="Input.Email" class="form-control" placeholder="Email" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-1">
+                        <div class="input-group mb-1">
+                            <input asp-for="Input.Password" class="form-control" placeholder="Password" id="passwordInput" />
+                            <div class="input-group-append">
+                                <div class="input-group-text showpassword" onclick="ShowPassword()">
+                                    <span id="password-lock-icon" class="fas fa-eye"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-1">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe" class="mb-0">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
                         </div>
                     </div>
-                </div>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-1">
-                <div class="checkbox">
-                    <label asp-for="Input.RememberMe" class="mb-0">
-                        <input asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary btn-block login-btn">Log in</button>
-            </div>
-            <div class="mb-2">
-                <div class="other-socials-intro">
-                    Or connect with social media accounts
-                </div>
-                <div class="w-100">
-                    <a href="#" class="fb btn w-100 mb-1">
-                        <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
-                    </a>
-                    <a href="#" class="google btn w-100 mb-1">
-                        <i class="fab fa-google fa-fw"></i> Login with Google+
-                    </a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6 p-0 pr-1">
-                    <div style="text-align:right">
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot password?</a>
-                    </div>
-                </div>
-                <div class="col-6 p-0 pl-1" style="border-left:1px solid black">
-                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-6">
-
                     <div class="form-group">
-                        <p class="mb-1">
-
-                        </p>
-                        <p class="mb-1">
-
-                        </p>
+                        <button type="submit" class="btn btn-primary btn-block login-btn">Log in</button>
                     </div>
-                </div>
+                    <div class="mb-2">
+                        <div class="other-socials-intro">
+                            Or connect with social media accounts
+                        </div>
+                        <div class="w-100">
+                            <a href="#" class="fb btn w-100 mb-1">
+                                <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+                            </a>
+                            <a href="#" class="google btn w-100 mb-1">
+                                <i class="fab fa-google fa-fw"></i> Login with Google+
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 p-0 pr-1">
+                            <div style="text-align:right">
+                                <a id="forgot-password" asp-page="./ForgotPassword">Forgot password?</a>
+                            </div>
+                        </div>
+                        <div class="col-6 p-0 pl-1" style="border-left:1px solid black">
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
+                        </div>
+                    </div>
 
+                </form>
             </div>
-
-
-
-        </form>
+        </div>
     </div>
-</div>
-
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
