@@ -15,3 +15,15 @@ function ShowPassword() {
 
     passwordLockIcon.classList.toggle("fa-eye-slash");
 }
+
+function ShowConfirmPassword() {
+    var ConfirmPasswordInput = document.getElementById("ConfirmPasswordInput");
+    var ConfirmPasswordLockIcon = document.getElementById("confirm-password-lock-icon")
+    if (ConfirmPasswordInput.type === "password") {
+        ConfirmPasswordInput.type = "text";
+    } else {
+        ConfirmPasswordInput.type = "password";
+    }
+
+    ConfirmPasswordLockIcon.classList.toggle("fa-eye-slash");
+}

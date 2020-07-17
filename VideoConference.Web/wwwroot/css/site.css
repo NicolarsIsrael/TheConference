@@ -70,11 +70,13 @@ body {
         height: 100%;
     }
 
-.login-header {
+.login-header,
+.register-header{
     text-align: center
 }
 
-.login-card {
+.login-card,
+.register-card {
     min-width: 300px;
     max-width: 400px;
     box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);
@@ -82,14 +84,16 @@ body {
     margin-bottom: 70px;
 }
 
-.login-btn {
+.login-btn,
+.register-btn{
     border-radius: 0;
     background-color: #e6630e;
     color: white;
     border: 0;
 }
 
-    .login-btn:hover {
+    .login-btn:hover,
+    .register-btn:hover{
         background-color: #ff6b0a;
         transform: scale(1.01);
         box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);
@@ -125,7 +129,8 @@ body {
         outline: none !important;
     }
 
-.showpassword {
+.showpassword,
+.showconfirmpassword {
     cursor: pointer;
 }
 
