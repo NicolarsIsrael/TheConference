@@ -56,6 +56,22 @@ body {
 }
 
 
+.custom-primary-btn {
+    background-color: #e6630e;
+    color: white !important;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+    .custom-primary-btn:hover {
+        background-color: #ff6b0a;
+        transform: scale(1.01);
+        box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);
+        transition: all ease 0.3s;
+        color: white;
+    }
+
+
 /*login*/
 
 .login-logo {
