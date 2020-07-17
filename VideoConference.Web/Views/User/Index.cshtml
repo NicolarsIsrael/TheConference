@@ -117,23 +117,23 @@
 }
 
 .tab-link:hover {
-    color: #df7204 !important;
+    color: #e6630e !important;
 }
 
-.categories_tab .nav-tabs {
+.meetings_tab .nav-tabs {
     border-bottom: 0;
 }
 
-    .categories_tab .nav-tabs li.nav-item a.active, 
-    .categories_tab .nav-tabs li.nav-item a.active :hover {
-        color: #df7204 !important;
+    .meetings_tab .nav-tabs li.nav-item a.active, 
+    .meetings_tab .nav-tabs li.nav-item a.active :hover {
+        color: #e6630e !important;
     }
 
-    .categories_tab .nav-tabs li.nav-item a {
+    .meetings_tab .nav-tabs li.nav-item a {
         padding: 0px 15px;
     }
 
-    .categories_tab .nav-tabs li.nav-item:last-child a {
+    .meetings_tab .nav-tabs li.nav-item:last-child a {
         padding-right: 0;
     }
 
@@ -190,7 +190,7 @@
 @@media only screen and (max-width: 991px) {
 
 
-    #categoriesMenuBar {
+    #meetingsMenuBar {
         position: absolute;
         right: 0;
         top: 100%;
@@ -204,13 +204,13 @@
         height: auto !important;
     }
 
-        #categoriesMenuBar.show {
+        #meetingsMenuBar.show {
             opacity: 1;
             visibility: visible;
             margin-top: 0;
         }
 
-        #categoriesMenuBar li a {
+        #meetingsMenuBar li a {
             text-align: left;
         }
 
@@ -227,14 +227,14 @@
         <div class="section_header_text">
             <h2></h2>
         </div>
-        <div class="categories_tab">
-            <button class="navbar-toggler collapsed  position-relative" type="button" data-toggle="collapse" data-target="#categoriesMenuBar"
+        <div class="meetings_tab">
+            <button class="navbar-toggler collapsed position-relative" type="button" data-toggle="collapse" data-target="#meetingsMenuBar"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="blackline"></span>
-                <span class="blackline"></span>
-                <span class="blackline mb-0"></span>
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
-            <ul class="nav nav-tabs justify-content-center justify-content-md-end" id="categoriesMenuBar" role="tablist">
+            <ul class="nav nav-tabs justify-content-center justify-content-md-end" id="meetingsMenuBar" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active tab-link" id="upcoming-meetings" data-toggle="tab" href="#upcoming-meetings-tab" role="tab"
                        aria-controls="upcoming-meetings" aria-selected="true">Upcoming meetings</a>
