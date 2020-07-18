@@ -22,13 +22,14 @@ namespace VideoConference.Web.Controllers
         public IActionResult Index()
         {
             var allMeetings = _context.Meeting.ToList();
-            IEnumerable<ScheduleMeetingVM> meetingsModel = allMeetings
+            IEnumerable<ScheduleMeetingVM> meetingsModel = allMeetings.Where(m=>m.StartTime>DateTime.Now)
                 .Select(m => new ScheduleMeetingVM()
                 {
                     Topic = m.Topic,
                     StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
+                    StartDate = m.StartTime,
                     GeneratedId = m.GeneratedId,
-                });
+                }).OrderBy(m=>m.StartDate);
             return View(meetingsModel);
         }
 
