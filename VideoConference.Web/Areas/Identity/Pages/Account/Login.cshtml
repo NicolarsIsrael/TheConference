@@ -4,7 +4,11 @@
 @{
     ViewData["Title"] = "Log in";
 }
+
     <div class="container">
+        <div class="login-register-logo-div mx-auto">
+            <img src="~/Images/logo.jpg" />
+        </div>
         <div class="card mx-auto login-card">
             <div class="card-body">
                 <form id="account" method="post">
@@ -58,7 +62,7 @@
                             <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register</a>
                         </div>
                     </div>
-                  
+
                 </form>
             </div>
         </div>
