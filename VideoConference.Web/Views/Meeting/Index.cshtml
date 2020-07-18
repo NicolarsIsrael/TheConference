@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<VideoConference.Web.Models.ScheduleMeetingVM>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -369,6 +370,21 @@
                                     <a class="btn btn-sm custom-primary-btn float-right" href="https://us04web.zoom.us/j/71379701119?pwd=R0s3OVVWU1ZORGNLNUpSa2hEa2dIdz09" target="_blank">Join</a>
                                 </td>
                             </tr>
+
+                            @{
+                                foreach (var meeting in Model)
+                                {
+                                    <tr>
+                                        <td>@meeting.StartDateString</td>
+                                        <td>@meeting.Topic</td>
+                                        <td>@meeting.GeneratedId</td>
+                                        <td>
+                                            <a class="btn btn-sm custom-primary-btn float-right" href="https://us04web.zoom.us/j/71379701119?pwd=R0s3OVVWU1ZORGNLNUpSa2hEa2dIdz09" target="_blank">Join</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
                         </tbody>
                     </table>
                 </div>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using VideoConference.Web.Core;
 
 namespace VideoConference.Web.Data
 {
@@ -12,5 +13,7 @@ namespace VideoConference.Web.Data
             : base(options)
         {
         }
+
+        public DbSet<Meeting> Meeting { get; set; }
     }
 }
