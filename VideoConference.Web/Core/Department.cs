@@ -9,5 +9,6 @@ namespace VideoConference.Web.Core
     {
         public int Id { get; set; }
         public string DeptName { get; set; }
+        public string UserId { get; set; }
     }
 }

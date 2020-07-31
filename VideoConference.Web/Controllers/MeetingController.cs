@@ -20,7 +20,6 @@ namespace VideoConference.Web.Controllers
         private readonly ApplicationDbContext _context;
         private static string key = "e1b05d2ccb6d4614b4b4119de9668add";
         private static string appID = "368dbe.vidyo.io";
-        //private static string userName = "user1";
         private static long expiresInSecs = 1800;
         private static string expiresAt = null;
 
