@@ -9,14 +9,14 @@ namespace VideoConference.Web.Models
     public class ScheduleMeetingVM
     {
         public int Id { get; set; }
-
+        public int DeptId { get; set; }
         [BeginWIthAlphabeth(ErrorMessage ="Topic should begin with an alphabeth")]
         [Required(ErrorMessage ="Topic is required")]
         public string Topic { get; set; }
 
         [Display(Name ="Start date")]
         [Required(ErrorMessage ="Start date is required")]
-        [MeetingGreaterThanNow(ErrorMessage ="Meeting can not be scheduled for the past")]
+    //    [MeetingGreaterThanNow(ErrorMessage ="Meeting can not be scheduled for the past")]
         public DateTime StartDate { get; set; }
         public bool CanJoin { get; set; }
         public string StartDateString { get; set; }
@@ -40,20 +40,20 @@ namespace VideoConference.Web.Models
         }
     }
 
-    public class MeetingGreaterThanNow: ValidationAttribute
-    {
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            DateTime? dateValue = value as DateTime?;
+    //public class MeetingGreaterThanNow: ValidationAttribute
+    //{
+    //    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    //    {
+    //        DateTime? dateValue = value as DateTime?;
 
-            if(!dateValue.HasValue)
-                return new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName));
+    //        if(!dateValue.HasValue)
+    //            return new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName));
 
-            if(dateValue.Value<DateTime.Now)
-                return new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName));
+    //        if(dateValue.Value<DateTime.Now)
+    //            return new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName));
 
-            return ValidationResult.Success;
-        }
-    }
+    //        return ValidationResult.Success;
+    //    }
+    //}
 
 }

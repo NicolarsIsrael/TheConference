@@ -1,0 +1,40 @@
+﻿@model IEnumerable<VideoConference.Web.Models.UserViewModel>
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container mt-3">
+        <div class="section_header">
+            <div class="section_header_text">
+                <h3>Users</h3>
+            </div>
+            <div>
+                <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="registeruser">Add new users</a>
+            </div>
+     </div>
+        <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+            <div class="card-body px-1 py-0  table-responsive">
+                <table class="table w-100">
+                    <thead>
+                        <tr class="w-100">
+                            <th>Email</th>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            @{
+                                foreach (var user in Model)
+                                {
+                                <tr>
+                                    <td>@user.Email</td>
+                                    <td>@user.Username</td>
+                                </tr>
+                            }
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>

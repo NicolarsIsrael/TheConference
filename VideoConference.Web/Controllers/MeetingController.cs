@@ -31,62 +31,8 @@ namespace VideoConference.Web.Controllers
 
         public IActionResult Index()
         {
-            var allMeetings = _context.Meeting.ToList();
-            foreach(var meeting in allMeetings)
-            {
-                meeting.RoomName = Regex.Replace(meeting.Topic, @"\s+", "");
-                _context.Entry(meeting).State = EntityState.Modified;
-            }
-            _context.SaveChanges();
+            return RedirectToAction("index", "department");
 
-            IEnumerable<ScheduleMeetingVM> meetingsModel = allMeetings//.Where(m => m.StartTime > DateTime.Now)
-                .Select(m => new ScheduleMeetingVM()
-                {
-                    Id=m.Id,
-                    Topic = m.Topic,
-                    StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
-                    StartDate = m.StartTime,
-                    CanJoin = m.StartTime < DateTime.Now ? true : false,
-                    GeneratedId = m.GeneratedId,
-                    RoomName = m.RoomName,
-                }).OrderBy(m=>m.StartDate);
-            return View(meetingsModel);
-        }
-
-        public IActionResult ScheduleMeeting()
-        {
-            ViewBag.Today = DateTime.Today;
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM scheduleModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "One or more validation errors");
-                return View(scheduleModel);
-            }
-
-            string roomName = Regex.Replace(scheduleModel.Topic, @"\s+", "");
-            if (_context.Meeting.Where(m => m.RoomName == roomName).Count() > 0)
-            {
-                ModelState.AddModelError("", "Topic already exist");
-                return View(scheduleModel);
-            }
-
-            Meeting meeting = new Meeting()
-            {
-                Topic = scheduleModel.Topic,
-                RoomName = roomName,
-                StartTime = scheduleModel.StartDate,
-                GeneratedId = GenerateMeetingId(),
-            };
-
-            await _context.Meeting.AddAsync(meeting);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Meet(int id=0)

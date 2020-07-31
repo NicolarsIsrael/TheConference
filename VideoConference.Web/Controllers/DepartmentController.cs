@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
+using VideoConference.Web.Models;
 
 namespace VideoConference.Web.Controllers
 {
@@ -37,7 +39,128 @@ namespace VideoConference.Web.Controllers
                 throw new Exception();
 
             ViewBag.Dept = dept.DeptName;
-            return View();
+            var allMeetings = _context.Meeting.ToList();
+            IEnumerable<ScheduleMeetingVM> meetingsModel = allMeetings
+                .Where(m => m.DeptID == dept.Id).Select(m => new ScheduleMeetingVM()
+                {
+                    Id = m.Id,
+                    Topic = m.Topic,
+                    StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
+                    StartDate = m.StartTime,
+                    CanJoin = m.StartTime < DateTime.Now ? true : false,
+                    RoomName = m.RoomName,
+                }).OrderBy(m => m.StartDate);
+            return View(meetingsModel);
+        }
+
+
+        [Authorize(Roles = "DeptAdmin")]
+        public IActionResult ScheduleMeeting()
+        {
+
+            var dept = GetLoggedInUserDept();
+            if (dept == null)
+                throw new Exception();
+
+            ScheduleMeetingVM scheduleMeeting = new ScheduleMeetingVM()
+            {
+                DeptId = dept.Id,
+            };
+
+            ViewBag.Today = DateTime.Today;
+            return View(scheduleMeeting);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "DeptAdmin")]
+        public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM scheduleModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "One or more validation errors");
+                return View(scheduleModel);
+            }
+
+            var dept = _context.Department.Where(d => d.Id == scheduleModel.DeptId).FirstOrDefault();
+            if (dept == null)
+                throw new Exception();
+
+            string roomName = Regex.Replace(scheduleModel.Topic, @"\s+", "");
+            if (_context.Meeting.Where(m => m.RoomName == roomName).Count() > 0)
+            {
+                ModelState.AddModelError("", "Topic already exist");
+                return View(scheduleModel);
+            }
+
+            Meeting meeting = new Meeting()
+            {
+                Topic = scheduleModel.Topic,
+                RoomName = roomName,
+                StartTime = scheduleModel.StartDate,
+                DeptID = dept.Id,
+            };
+
+            await _context.Meeting.AddAsync(meeting);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "DeptAdmin")]
+        public IActionResult RegisterUser()
+        {
+            Department dept = GetLoggedInUserDept();
+            RegisterViewModel registerModel = new RegisterViewModel()
+            {
+                DeptId = dept.Id,
+                DeptName = dept.DeptName,
+            };
+            return View(registerModel);
+        }
+
+        [Authorize(Roles ="DeptAdmin")]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> RegisterUser(RegisterViewModel registerModel)
+        {
+            if (ModelState.IsValid)
+            {
+                Department dept = GetLoggedInUserDept();
+                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email,DeptID = dept.Id };
+                var result = await _userManager.CreateAsync(user, registerModel.Password);
+                if (result.Succeeded)
+                {
+                    if (await _roleManager.FindByNameAsync("User") == null)
+                        await _roleManager.CreateAsync(new ApplicationRole("User"));
+                    await _userManager.AddToRoleAsync(user, "User");
+                    return RedirectToAction(nameof(Users));
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                    return View(registerModel);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "One or more validation errors");
+                return View(registerModel);
+            }
+            return View(registerModel);
+        }
+
+        public IActionResult Users()
+        {
+            var dept = GetLoggedInUserDept();
+            IEnumerable<UserViewModel> users = _context.Users
+                .Where(u => u.DeptID == dept.Id).Select(u => new UserViewModel()
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    Username = u.UserName,
+                }).ToList();
+
+            return View(users);
         }
 
         public Department GetLoggedInUserDept()

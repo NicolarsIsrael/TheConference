@@ -40,7 +40,17 @@ namespace VideoConference.Web
             services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(
-                options => options.Stores.MaxLengthForKeys = 128)
+                options => { options.Stores.MaxLengthForKeys = 128;
+                    options.User.RequireUniqueEmail = true;
+
+                    //password validation
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequiredUniqueChars = 0;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();

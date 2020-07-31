@@ -12,7 +12,7 @@ namespace VideoConference.Web.Controllers
     {
         public IActionResult Index()
         {
-            return RedirectToAction("Index","Meeting");
+            return RedirectToAction("Index","department");
         }
 
         public IActionResult Privacy()
