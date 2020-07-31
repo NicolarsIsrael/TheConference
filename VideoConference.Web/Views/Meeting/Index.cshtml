@@ -7,13 +7,22 @@
 
 <style>
     .background {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("Images/background-image.PNG");
+        background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("Images/background-image.jpg");
         background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
+        background-size: 100% 100%;
         background-position: center center;
         background-attachment: fixed;
-        height: 30vh;
+        height: 40vh;
+    }
+
+    .mobile-background{
+                background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("Images/background-image-mobile.jpg");
+          background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-position: center center;
+    background-attachment: fixed;
+    height: 100%;
     }
 
     .custom-primary-btn {
@@ -23,7 +32,7 @@
         cursor: pointer;
     }
 
-        .custom-primary-btn:hover {
+        .custom-primary-btn:hover { 
             background-color: #ff6b0a;
             transform: scale(1.01);
             box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);
@@ -281,10 +290,39 @@
             display: none;
         }
     }
+
+    .img-box {
+        height: 250px;
+        width: 100%;
+    }
+
+        .img-box img {
+            height: 100%;
+            width: 100%;
+        }
+
+        .img-box-lg{
+            height:400px;
+            width:100%;
+        }
+
+        .img-box-lg img{
+            height:100%;
+            width:100%;
+        }
+
 </style>
+<div class="d-sm-block d-md-none d-lg-none d-xl-none">
+    <div class="img-box">
+        <img class="img-box" src="~/Images/background-image-mobile.jpg"/>
 
-<div class="background">
+    </div>
 
+</div>
+<div class="d-none d-md-block">
+    <div style="height:400px;width:100%">
+        <img src="~/Images/background-image.jpg" class="img-box-lg" />
+    </div>
 </div>
 
 <div class="container mt-3">
@@ -331,46 +369,6 @@
                         </thead>
                         <tbody>
                             <tr>
-                                @*<td> 21/Jul/2020 (9:00 AM)</td>
-                                <td>Board Meeting</td>
-                                <td>342-008-234</td>
-                                <td>
-                                    <a class="btn btn-sm custom-primary-btn float-right" href="https://us04web.zoom.us/j/71379701119?pwd=R0s3OVVWU1ZORGNLNUpSa2hEa2dIdz09" target="_blank">Join</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td> 23/Jul/2020 (9:00 AM)</td>
-                                <td>State Desk Officers Meeting</td>
-                                <td>235-234-223</td>
-                                <td>
-                                    <a class="btn btn-sm custom-primary-btn float-right" href="https://us04web.zoom.us/j/71379701119?pwd=R0s3OVVWU1ZORGNLNUpSa2hEa2dIdz09" target="_blank">Join</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>25/Jul/2020 (8:30 PM)</td>
-                                <td>General Meeting</td>
-                                <td>342-344-278</td>
-                                <td>
-                                    <a class="btn btn-sm custom-primary-btn float-right" href="https://us04web.zoom.us/j/71379701119?pwd=R0s3OVVWU1ZORGNLNUpSa2hEa2dIdz09" target="_blank">Join</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>27/Jul/2020 (5:30 PM)</td>
-                                <td>Directors Meeting</td>
-                                <td>390-445-392</td>
-                                <td>
-                                    <a class="btn btn-sm custom-primary-btn float-right" href="https://us04web.zoom.us/j/71379701119?pwd=R0s3OVVWU1ZORGNLNUpSa2hEa2dIdz09" target="_blank">Join</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>01/Aug/2020 (10:00 AM)</td>
-                                <td>Staff Meeting</td>
-                                <td>112-232-805</td>
-                                <td>
-                                    <a class="btn btn-sm custom-primary-btn float-right" href="https://us04web.zoom.us/j/71379701119?pwd=R0s3OVVWU1ZORGNLNUpSa2hEa2dIdz09" target="_blank">Join</a>
-                                </td>
-                            </tr>*@
-
                             @{
                                 foreach (var meeting in Model)
                                 {
@@ -379,7 +377,12 @@
                                         <td>@meeting.Topic</td>
                                         <td>@meeting.GeneratedId</td>
                                         <td>
-                                            <a class="btn btn-sm custom-primary-btn float-right" href="https://us04web.zoom.us/j/71379701119?pwd=R0s3OVVWU1ZORGNLNUpSa2hEa2dIdz09" target="_blank">Join</a>
+                                            @if (meeting.CanJoin)
+                                            {
+                                                <a class="btn btn-sm custom-primary-btn float-right" target="_blank"
+                                                   asp-controller="Meeting" asp-action="Meet" asp-route-id="@meeting.Id">Join</a>
+                                            }
+
                                         </td>
                                     </tr>
                                 }

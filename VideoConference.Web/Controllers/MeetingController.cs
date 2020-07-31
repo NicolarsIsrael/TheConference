@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
@@ -14,6 +18,13 @@ namespace VideoConference.Web.Controllers
     public class MeetingController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private static string key = "e1b05d2ccb6d4614b4b4119de9668add";
+        private static string appID = "368dbe.vidyo.io";
+        //private static string userName = "user1";
+        private static long expiresInSecs = 1800;
+        private static string expiresAt = null;
+
+        private const long EPOCH_SECONDS = 62167219200;
         public MeetingController(ApplicationDbContext context)
         {
             _context = context;
@@ -22,13 +33,23 @@ namespace VideoConference.Web.Controllers
         public IActionResult Index()
         {
             var allMeetings = _context.Meeting.ToList();
-            IEnumerable<ScheduleMeetingVM> meetingsModel = allMeetings.Where(m=>m.StartTime>DateTime.Now)
+            foreach(var meeting in allMeetings)
+            {
+                meeting.RoomName = Regex.Replace(meeting.Topic, @"\s+", "");
+                _context.Entry(meeting).State = EntityState.Modified;
+            }
+            _context.SaveChanges();
+
+            IEnumerable<ScheduleMeetingVM> meetingsModel = allMeetings//.Where(m => m.StartTime > DateTime.Now)
                 .Select(m => new ScheduleMeetingVM()
                 {
+                    Id=m.Id,
                     Topic = m.Topic,
                     StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
                     StartDate = m.StartTime,
+                    CanJoin = m.StartTime < DateTime.Now ? true : false,
                     GeneratedId = m.GeneratedId,
+                    RoomName = m.RoomName,
                 }).OrderBy(m=>m.StartDate);
             return View(meetingsModel);
         }
@@ -49,9 +70,17 @@ namespace VideoConference.Web.Controllers
                 return View(scheduleModel);
             }
 
+            string roomName = Regex.Replace(scheduleModel.Topic, @"\s+", "");
+            if (_context.Meeting.Where(m => m.RoomName == roomName).Count() > 0)
+            {
+                ModelState.AddModelError("", "Topic already exist");
+                return View(scheduleModel);
+            }
+
             Meeting meeting = new Meeting()
             {
                 Topic = scheduleModel.Topic,
+                RoomName = roomName,
                 StartTime = scheduleModel.StartDate,
                 GeneratedId = GenerateMeetingId(),
             };
@@ -61,6 +90,24 @@ namespace VideoConference.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Meet(int id=0)
+        {
+            Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
+            if (meeting == null)
+                return Content("null");
+
+            string username = "aadkdhlshjshksdjhflshfkslfjsslsfhskhfskhsfsskjshlsjlasdkkfhlasdflsjflsjfhsdfjljfasdfcbasdfalcmfaierirerywofasdfalfxfxmashffamxlfkfhdfamfhsflmsdfmlsfmhfslfmfshflmsajdflshdfaxfalsnfafkhfkasfsdfnhafskfhsfnksfhskdnfasdfhksdfasakfacxacahaldhahwueroawurcxbankdfhavkadfcnaxiadkaeihwecakjfaxnafaiecaxfankfekrwebdxbfkdhfbabxkdfaladadfwryiwerxnacbakdhaoeuhfskdlaweskdflcbk";
+            Random rand = new Random();
+            int a = rand.Next(1, username.Length - 13);
+            int b = rand.Next(5, 10);
+            username = username.Substring(a, b);
+
+            ViewBag.Room = meeting.RoomName;
+            ViewBag.Topic = meeting.Topic;
+            ViewBag.Username = username;
+            ViewBag.Token = generateToken(username);
+            return View();
+        }
 
         private string GenerateMeetingId()
         {
@@ -75,6 +122,73 @@ namespace VideoConference.Web.Controllers
             }
 
             return meetingId;
+        }
+
+        private string generateToken(string userName)
+        {
+            // As long as proper arguments were entered, generate the token
+            if ((appID != null) && (key != null) && (userName != null))
+            {
+                string expires = "";
+
+                // Check if using expiresInSecs or expiresAt
+                if (expiresInSecs > 0)
+                {
+                    TimeSpan timeSinceEpoch = DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0));
+                    expires = (Math.Floor(timeSinceEpoch.TotalSeconds) + EPOCH_SECONDS + expiresInSecs).ToString();
+                }
+                else if (expiresAt != null)
+                {
+                    try
+                    {
+                        TimeSpan epochToExpires = DateTime.Parse(expiresAt).ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0));
+                        expires = (Math.Floor(epochToExpires.TotalSeconds) + EPOCH_SECONDS).ToString();
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception();
+                    }
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
+               
+                if (expiresAt != null)
+                    Console.WriteLine("Setting expiresAt     : " + expiresAt);
+                Console.WriteLine("Expirey time          : " + expires);
+                string jid = userName + "@" + appID;
+                string body = "provision" + "\0" + jid + "\0" + expires + "\0" + "";
+
+                var encoder = new UTF8Encoding();
+                var hmacsha = new HMACSHA384(encoder.GetBytes(key));
+                byte[] mac = hmacsha.ComputeHash(encoder.GetBytes(body));
+
+                // macBase64 can be used for debugging
+                //string macBase64 = Convert.ToBase64String(hashmessage);
+
+                // Get the hex version of the mac
+                string macHex = BytesToHex(mac);
+
+                string serialized = body + '\0' + macHex;
+                return Convert.ToBase64String(encoder.GetBytes(serialized));
+                //Console.WriteLine("\nGenerated token:\n" + Convert.ToBase64String(encoder.GetBytes(serialized)));
+            }
+            else
+            {
+                throw new Exception();
+            }
+        }
+
+        private static string BytesToHex(byte[] bytes)
+        {
+            var hex = new StringBuilder(bytes.Length * 2);
+            foreach (byte b in bytes)
+            {
+                hex.AppendFormat("{0:x2}", b);
+            }
+            return hex.ToString();
         }
     }
 }
