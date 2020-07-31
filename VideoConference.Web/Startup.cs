@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VideoConference.Web.Core;
 
 namespace VideoConference.Web
 {
@@ -35,12 +36,19 @@ namespace VideoConference.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<SignInManager<ApplicationUser>, SignInManager<ApplicationUser>>();
+            services.AddScoped<UserManager<ApplicationUser>, UserManager<ApplicationUser>>();
+
+            services.AddIdentity<ApplicationUser, ApplicationRole>(
+                options => options.Stores.MaxLengthForKeys = 128)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection1")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
