@@ -76,6 +76,11 @@ namespace VideoConference.Web
 
             app.UseMvc(routes =>
             {
+               routes.MapRoute(
+                      name: "Department",
+                      template: "Department/{deptName}-{id}",
+                      defaults: new { controller = "Department", action = "Dept" } );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

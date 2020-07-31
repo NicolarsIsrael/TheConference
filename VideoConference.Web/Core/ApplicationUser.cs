@@ -10,7 +10,7 @@ namespace VideoConference.Web.Core
     public class ApplicationUser : IdentityUser
     {
         public ApplicationUser() : base() { }
-
+        public int DeptID { get; set; }
 
     }
 }
