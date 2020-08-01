@@ -42,6 +42,11 @@ namespace VideoConference.Web.Controllers
             return View(meetingsModel);
         }
 
+        public IActionResult EndMeeting()
+        {
+            return PartialView("_endMeetingMessage");
+        }
+
         public IActionResult DepartmentMeeting()
         {
             var depts = _context.Department

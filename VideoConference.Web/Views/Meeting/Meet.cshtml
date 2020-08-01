@@ -110,6 +110,25 @@
             return true;
         }
 
+        function ShowEndMeeting() {
+          //  openAlert();
+            $.ajax({
+                url: "/Home/EndMeeting/",
+                dataType: "html",
+                data: {},
+                success: function (result) {
+                    $("#custom-alert-body").html(result);
+                    openAlert();
+                },
+                error: function (xhr, status, error) {
+                }
+            });
+        }
+
+        function EndMeeting() {
+            window.open('', '_parent', '');
+            window.close();
+        }
 
 /**/</script>
     <div>
@@ -121,7 +140,7 @@
                 <h4> @ViewBag.Topic</h4>
             </div>
             <div class="col-2">
-                <button type="button" class="btn btn-sm float-lg-right btn-danger">END</button>
+                <button type="button" class="btn btn-sm float-lg-right btn-danger" onclick="ShowEndMeeting()">END</button>
             </div>
 
         </div>
@@ -149,8 +168,14 @@
             </div>
 
         </div>
+        <div id="custom-alert" class="custom-alert">
+            @*<a href="javascript:void(0)" class="closebtn p-0" onclick="closeAlert()">&times;</a>*@
+            <div id="custom-alert-body" class="custom-alert-body"></div>
+        </div>
     </div>
     <script src="https://static.vidyo.io/latest/javascript/VidyoClient/VidyoClient.js?onload=onVidyoClientLoaded&webrtc=true&plugin=false"></script>
 </body>
 </html>
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/site.js"></script>

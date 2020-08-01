@@ -91,13 +91,30 @@ a.navbar-brand {
         color: #dc3545;
     }
 
-.sidenav .closebtn {
+.sidenav .closebtn,
+.custom-alert .closebtn{
     position: absolute;
     top: 0;
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
 }
+
+/*custom-alert*/
+.custom-alert {
+    min-height: 100px;
+    width: 0;
+    position: fixed;
+    z-index: 2000;
+    bottom: 20px;
+    right: 20px;
+    background-color: white;
+    overflow-x: hidden;
+    transition: 0.2s;
+    padding-top: 10px;
+}
+
+
 
 .section_header {
     padding-bottom: 15px;

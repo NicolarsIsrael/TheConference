@@ -48,6 +48,18 @@ function SelectDeptMeeting() {
     window.location.href = "/Department/Index/" + deptID;
 }
 
+function openAlert() {
+    var customAlert = document.getElementById("custom-alert");
+    customAlert.style.width = "300px";
+    customAlert.classList.add("sideNavBorder");
+}
+
+function cloesAlert() {
+    var customAlert = document.getElementById("custom-alert");
+    customAlert.style.width = "0";
+    customAlert.classList.remove("sideNavBorder");
+}
+
 function openNav() {
     var sideNav = document.getElementById("sidenav");
     sideNav.style.width = "300px";
