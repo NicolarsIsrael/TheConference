@@ -1,6 +1,100 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
+    Layout = null;
 }
 <h1>@ViewData["Title"]</h1>
+<html>
+<body>
+    <script>
 
-<p>Use this page to detail your site's privacy policy.</p>
+        // Add Vidyo Libray Callback
+        function onVidyoClientLoaded(status) {
+            switch (status.state) {
+                case "READY":
+
+                    // Create Vidyoconnector
+
+                    VC.CreateVidyoConnector({
+                        viewId: "renderer",
+                        viewStyle: "VIDYO_CONNECTORVIEWSTYLE_Default",
+                        remoteParticipants: 8,
+                        logFileFilter: "warning info@VidyoClient info@VidyoConnector",
+                        logFileName: "",
+                        userData: ""
+                    }).then(function (vidyoConnector) {
+                        /*Handle appearance and disappearance of camera devices in the system*/
+                        vidyoConnector.RegisterLocalCameraEventListener({
+                            onAdded: function (localCamera) { },
+                            onRemoved: function (localCamera) { },
+                            onSelected: function (localCamera) { },
+                            onStateUpdated: function (localCamera, state) { }
+                        }).then(function () {
+                            console.log("RegisterLocalCameraEventListener Success");
+                        }).catch(function () {
+                            console.error("RegisterLocalCameraEventListener Failed");
+                        });
+
+                        /*Handle appearance and disappearance of microphone devices in the system*/
+                        vidyoConnector.RegisterLocalMicrophoneEventListener({
+                            onAdded: function (localMicrophone) { },
+                            onRemoved: function (localMicrophone) { },
+                            onSelected: function (localMicrophone) { },
+                            onStateUpdated: function (localMicrophone, state) { }
+                        }).then(function () {
+                            console.log("RegisterLocalMicrophoneEventListener Success");
+                        }).catch(function () {
+                            console.error("RegisterLocalMicrophoneEventListener Failed");
+                        });
+
+                        /*Handle appearance and disappearance of speaker devices in the system*/
+                        vidyoConnector.RegisterLocalSpeakerEventListener({
+                            onAdded: function (localSpeaker) { },
+                            onRemoved: function (localSpeaker) { },
+                            onSelected: function (localSpeaker) { },
+                            onStateUpdated: function (localSpeaker, state) { }
+                        }).then(function () {
+                            console.log("RegisterLocalSpeakerEventListener Success");
+                        }).catch(function () {
+                            console.error("RegisterLocalSpeakerEventListener Failed");
+                        });
+                        // Add Token and Connect To Conference
+                        vidyoConnector.Connect({
+                            host: "prod.vidyo.io",
+                            token: 'cHJvdmlzaW9uAHVzZXIxQDcxZGM2OS52aWR5by5pbwA2Mzc2MzUzMTQ3MQAANTVlN2Y3ODA5YjhkMDRmNzUzNmNlZGM3ZmJhNmIxOTQ4YTExNDIzNjdkNTk5ZTBkYTNhZGMxZWU5NGRhNjE4MDQ5OGMxNzUwZmVkZGI1NDY5ZjIwZjdlYjIyM2ZlMmNm', //Generated Token
+                            displayName: "user1", //User Name
+                            resourceId: "demoroom", //Conference Name
+                            onSuccess: function () {
+                                console.log("Sucessfully connected");
+                            },
+                            onFailure: function (reason) {
+                                console.log("Error while connecting ", reason);
+                            },
+                            onDisconnected: function (reason) {
+                                console.log("Disconnected ", reason);
+                            }
+                        }).then(function (status) {
+
+                        }).catch(function () {
+
+                        });
+                    });
+
+
+                    break;
+                case "RETRYING":
+                    break;
+                case "FAILED":
+                    break;
+                case "FAILEDVERSION":
+                    break;
+                case "NOTAVAILABLE":
+                    break;
+            }
+            return true;
+        }
+
+    </script>
+    <div id="renderer" style="position: absolute; top: 41px; left: 3px; bottom: -23px; z-index: 99; height: 300px; width: 300px;"></div>
+    <script src="https://static.vidyo.io/latest/javascript/VidyoClient/VidyoClient.js?onload=onVidyoClientLoaded&webrtc=true&plugin=false"></script>
+</body>
+</html>

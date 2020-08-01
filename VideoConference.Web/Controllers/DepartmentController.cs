@@ -134,7 +134,6 @@ namespace VideoConference.Web.Controllers
 
         public IActionResult Users()
         {
-            var dept = GetLoggedInUserDept();
             IEnumerable<UserViewModel> users = _context.Users
                 .Select(u => new UserViewModel()
                 {
@@ -146,19 +145,19 @@ namespace VideoConference.Web.Controllers
             return View(users);
         }
 
-        public Department GetLoggedInUserDept()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = _userManager.Users.Where(u => u.Id == userId).FirstOrDefault();
-            if (user == null)
-                throw new Exception();
+        //public Department GetLoggedInUserDept()
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var user = _userManager.Users.Where(u => u.Id == userId).FirstOrDefault();
+        //    if (user == null)
+        //        throw new Exception();
 
-            Department dept = _context.Department.FirstOrDefault();
-            if (dept == null)
-                throw new Exception();
+        //    Department dept = _context.Department.FirstOrDefault();
+        //    if (dept == null)
+        //        throw new Exception();
 
-            return dept;
-        }
+        //    return dept;
+        //}
 
         private string GenerateDeptRoute(string Name, int Id)
         {

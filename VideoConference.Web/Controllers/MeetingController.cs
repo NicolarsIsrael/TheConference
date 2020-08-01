@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
@@ -18,6 +20,8 @@ namespace VideoConference.Web.Controllers
     [Authorize]
     public class MeetingController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ApplicationDbContext _context;
         private static string key = "e1b05d2ccb6d4614b4b4119de9668add";
         private static string appID = "368dbe.vidyo.io";
@@ -25,9 +29,11 @@ namespace VideoConference.Web.Controllers
         private static string expiresAt = null;
 
         private const long EPOCH_SECONDS = 62167219200;
-        public MeetingController(ApplicationDbContext context)
+        public MeetingController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleMananger)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleMananger;
         }
 
         public IActionResult Index()
@@ -36,23 +42,23 @@ namespace VideoConference.Web.Controllers
 
         }
 
-        //[AllowSameSiteAttribute]
+        [Authorize]
         public IActionResult Meet(int id=0)
         {
             Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
             if (meeting == null)
                 return Content("null");
-
-            string username = "aadkdhlshjshksdjhflshfkslfjsslsfhskhfskhsfsskjshlsjlasdkkfhlasdflsjflsjfhsdfjljfasdfcbasdfalcmfaierirerywofasdfalfxfxmashffamxlfkfhdfamfhsflmsdfmlsfmhfslfmfshflmsajdflshdfaxfalsnfafkhfkasfsdfnhafskfhsfnksfhskdnfasdfhksdfasakfacxacahaldhahwueroawurcxbankdfhavkadfcnaxiadkaeihwecakjfaxnafaiecaxfankfekrwebdxbfkdhfbabxkdfaladadfwryiwerxnacbakdhaoeuhfskdlaweskdflcbk";
-            Random rand = new Random();
-            int a = rand.Next(1, username.Length - 13);
-            int b = rand.Next(5, 10);
-            username = username.Substring(a, b);
+            var user = GetLoggedInUser();
+            //string username = "aadkdhlshjshksdjhflshfkslfjsslsfhskhfskhsfsskjshlsjlasdkkfhlasdflsjflsjfhsdfjljfasdfcbasdfalcmfaierirerywofasdfalfxfxmashffamxlfkfhdfamfhsflmsdfmlsfmhfslfmfshflmsajdflshdfaxfalsnfafkhfkasfsdfnhafskfhsfnksfhskdnfasdfhksdfasakfacxacahaldhahwueroawurcxbankdfhavkadfcnaxiadkaeihwecakjfaxnafaiecaxfankfekrwebdxbfkdhfbabxkdfaladadfwryiwerxnacbakdhaoeuhfskdlaweskdflcbk";
+            //Random rand = new Random();
+            //int a = rand.Next(1, username.Length - 13);
+            //int b = rand.Next(5, 10);
+            //username = username.Substring(a, b);
 
             ViewBag.Room = meeting.RoomName;
             ViewBag.Topic = meeting.Topic;
-            ViewBag.Username = username;
-            ViewBag.Token = generateToken(username);
+            ViewBag.Username = user.UserName;
+            ViewBag.Token = generateToken(user.UserName);
             return View();
         }
 
@@ -136,6 +142,15 @@ namespace VideoConference.Web.Controllers
                 hex.AppendFormat("{0:x2}", b);
             }
             return hex.ToString();
+        }
+
+        private ApplicationUser GetLoggedInUser()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _userManager.Users.Where(u => u.Id == userId).FirstOrDefault();
+            if (user == null)
+                throw new Exception();
+            return user;
         }
     }
 }

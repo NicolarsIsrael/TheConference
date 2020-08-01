@@ -26,6 +26,13 @@ namespace VideoConference.Web.Models
         public List<SelectListItem> SelectDepts { get; set; }
     }
 
+    public class MeetingVM
+    {
+        public string UserName { get; set; }
+        public string Token { get; set; }
+        public string ResourceId { get; set; }
+    }
+
     public class BeginWIthAlphabeth : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)

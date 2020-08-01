@@ -19,6 +19,11 @@ namespace VideoConference.Web.Controllers
         {
             _context = context;
         }
+        
+        public IActionResult D()
+        {
+            return View();
+        }
 
         [Authorize()]
         public IActionResult Index()
