@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
+using VideoConference.Web.CustomFilters;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
 
@@ -35,6 +36,7 @@ namespace VideoConference.Web.Controllers
 
         }
 
+        //[AllowSameSiteAttribute]
         public IActionResult Meet(int id=0)
         {
             Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();

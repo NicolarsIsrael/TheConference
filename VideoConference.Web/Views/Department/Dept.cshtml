@@ -21,8 +21,6 @@
     </div>
 </div>
 
-
-
 <div class="container mt-3">
     <div class="section_header">
         <div class="section_header_text">
@@ -60,6 +58,7 @@
                             <tr class="w-100">
                                 <th>Start time</th>
                                 <th style="width:50%">Topic</th>
+                                <th>Dept</th>
                                 <th style="min-width:10%"></th>
                             </tr>
                         </thead>
@@ -71,7 +70,7 @@
                                     <tr>
                                         <td>@meeting.StartDateString</td>
                                         <td>@meeting.Topic</td>
-                                        <td>@meeting.GeneratedId</td>
+                                        <th>@meeting.DeptName</th>
                                         <td>
                                             @if (meeting.CanJoin)
                                             {

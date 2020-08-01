@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
@@ -14,7 +15,7 @@ using VideoConference.Web.Models;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize(Roles = "SuperAdmin,DeptAdmin,User")]
+    [Authorize(Roles = "Admin,User")]
     public class DepartmentController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,24 +28,33 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id=0)
         {
-            return Redirect(GenerateDeptRoute());
+            var dept = _context.Department.Where(d => d.Id == id).FirstOrDefault();
+            if (id != 0 && dept == null)
+                throw new Exception();
+            string name = id > 0 ? dept.DeptName : "General";
+            return Redirect(GenerateDeptRoute(name, id));
         }
+
 
         public IActionResult Dept(int id=0)
         {
             var dept= _context.Department.Where(d => d.Id == id).FirstOrDefault();
-            if (dept == null)
+            if (id!=0 && dept == null)
                 throw new Exception();
 
-            ViewBag.Dept = dept.DeptName;
-            var allMeetings = _context.Meeting.ToList();
-            IEnumerable<ScheduleMeetingVM> meetingsModel = allMeetings
+            ViewBag.Dept =id>0? dept.DeptName:"General";
+            var deptMeetings = _context.Meeting.ToList();
+            if (id > 0)
+                deptMeetings = deptMeetings.Where(d => d.DeptID == id).ToList();
+
+            IEnumerable<ScheduleMeetingVM> meetingsModel = deptMeetings
                 .Where(m => m.DeptID == dept.Id).Select(m => new ScheduleMeetingVM()
                 {
                     Id = m.Id,
                     Topic = m.Topic,
+                    DeptName = m.DeptName,
                     StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
                     StartDate = m.StartTime,
                     CanJoin = m.StartTime < DateTime.Now ? true : false,
@@ -54,41 +64,56 @@ namespace VideoConference.Web.Controllers
         }
 
 
-        [Authorize(Roles = "DeptAdmin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult ScheduleMeeting()
         {
-
-            var dept = GetLoggedInUserDept();
-            if (dept == null)
-                throw new Exception();
+            var depts = _context.Department;
+            List<SelectListItem> deptSelectList = new List<SelectListItem>();
+            foreach (var dept in depts)
+                deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString() });
+            deptSelectList.Add(new SelectListItem { Text = "General", Value = "0" });
 
             ScheduleMeetingVM scheduleMeeting = new ScheduleMeetingVM()
             {
-                DeptId = dept.Id,
+                SelectDepts = deptSelectList,
+                StartDate = DateTime.Today,
             };
 
-            ViewBag.Today = DateTime.Today;
             return View(scheduleMeeting);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "DeptAdmin")]
-        public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM scheduleModel)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM scheduleModel,int selectedDeptId)
         {
             if (!ModelState.IsValid)
             {
+                var depts = _context.Department;
+                List<SelectListItem> deptSelectList = new List<SelectListItem>();
+                foreach (var _dept in depts)
+                    deptSelectList.Add(new SelectListItem { Text = _dept.DeptName, Value = _dept.Id.ToString(),Selected =_dept.Id==selectedDeptId?true:false });
+                deptSelectList.Add(new SelectListItem { Text = "General", Value = "0", Selected = 0 == selectedDeptId ? true : false });
+
+                scheduleModel.SelectDepts = deptSelectList;
                 ModelState.AddModelError("", "One or more validation errors");
                 return View(scheduleModel);
             }
 
-            var dept = _context.Department.Where(d => d.Id == scheduleModel.DeptId).FirstOrDefault();
-            if (dept == null)
+            var dept = _context.Department.Where(d => d.Id == selectedDeptId).FirstOrDefault();
+            if (selectedDeptId != 0 && dept == null)
                 throw new Exception();
 
             string roomName = Regex.Replace(scheduleModel.Topic, @"\s+", "");
             if (_context.Meeting.Where(m => m.RoomName == roomName).Count() > 0)
             {
+                var depts = _context.Department;
+                List<SelectListItem> deptSelectList = new List<SelectListItem>();
+                foreach (var _dept in depts)
+                    deptSelectList.Add(new SelectListItem { Text = _dept.DeptName, Value = _dept.Id.ToString(), Selected = _dept.Id == selectedDeptId ? true : false });
+                deptSelectList.Add(new SelectListItem { Text = "General", Value = "0", Selected = 0 == selectedDeptId ? true : false });
+
+                scheduleModel.SelectDepts = deptSelectList;
                 ModelState.AddModelError("", "Topic already exist");
                 return View(scheduleModel);
             }
@@ -98,15 +123,16 @@ namespace VideoConference.Web.Controllers
                 Topic = scheduleModel.Topic,
                 RoomName = roomName,
                 StartTime = scheduleModel.StartDate,
-                DeptID = dept.Id,
+                DeptID = selectedDeptId,
+                DeptName = selectedDeptId == 0 ? "General" : dept.DeptName,
             };
 
             await _context.Meeting.AddAsync(meeting);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index","Home");
         }
 
-        [Authorize(Roles = "DeptAdmin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult RegisterUser()
         {
             Department dept = GetLoggedInUserDept();
@@ -118,7 +144,7 @@ namespace VideoConference.Web.Controllers
             return View(registerModel);
         }
 
-        [Authorize(Roles ="DeptAdmin")]
+        [Authorize(Roles ="Admin")]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> RegisterUser(RegisterViewModel registerModel)
@@ -126,7 +152,7 @@ namespace VideoConference.Web.Controllers
             if (ModelState.IsValid)
             {
                 Department dept = GetLoggedInUserDept();
-                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email,DeptID = dept.Id };
+                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email};
                 var result = await _userManager.CreateAsync(user, registerModel.Password);
                 if (result.Succeeded)
                 {
@@ -153,7 +179,7 @@ namespace VideoConference.Web.Controllers
         {
             var dept = GetLoggedInUserDept();
             IEnumerable<UserViewModel> users = _context.Users
-                .Where(u => u.DeptID == dept.Id).Select(u => new UserViewModel()
+                .Select(u => new UserViewModel()
                 {
                     Id = u.Id,
                     Email = u.Email,
@@ -165,29 +191,27 @@ namespace VideoConference.Web.Controllers
 
         public Department GetLoggedInUserDept()
         {
-
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = _userManager.Users.Where(u => u.Id == userId).FirstOrDefault();
             if (user == null)
                 throw new Exception();
 
-            Department dept = _context.Department.Where(d => d.Id == user.DeptID).FirstOrDefault();
+            Department dept = _context.Department.FirstOrDefault();
             if (dept == null)
                 throw new Exception();
 
             return dept;
         }
 
-        private string GenerateDeptRoute()
+        private string GenerateDeptRoute(string Name, int Id)
         {
+            string phrase = string.Format("{0}-{1}", Name, Id);// Creates in the specific pattern  
             string route = "";
-            Department dept = GetLoggedInUserDept();
-            route = dept.DeptName + "-" + dept.Id;
-            string str = GetByteArray(route).ToLower();
-            str = Regex.Replace(str, @"[^a-z0-9\s-]", "");// Remove invalid characters for param  
-            str = Regex.Replace(str, @"\s+", "-").Trim(); // convert multiple spaces into one hyphens
-            str = Regex.Replace(str, @"\s", "-"); // Replaces spaces with hyphens    
-            route ="~/department/"+ str;
+            route = GetByteArray(phrase).ToLower();
+            route = Regex.Replace(route, @"[^a-z0-9\s-]", "");// Remove invalid characters for param  
+            route = Regex.Replace(route, @"\s+", "-").Trim(); // convert multiple spaces into one hyphens
+            route = Regex.Replace(route, @"\s", "-"); // Replaces spaces with hyphens    
+            route ="~/department/"+ route;
             return route;
         }
 

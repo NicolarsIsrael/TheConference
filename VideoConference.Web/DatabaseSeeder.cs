@@ -24,75 +24,24 @@ namespace VideoConference.Web
                     serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
                 {
 
-                    if (await _roleManager.FindByNameAsync("SuperAdmin") == null)
+                    if (await _roleManager.FindByNameAsync("Admin") == null)
                     {
-                        await _roleManager.CreateAsync(new ApplicationRole("SuperAdmin"));
-                        var user = new ApplicationUser { UserName = "SuperAdmin", Email = "superadmin@gmail.com", DeptID = 0 };
+                        await _roleManager.CreateAsync(new ApplicationRole("Admin"));
+                        var user = new ApplicationUser { UserName = "admin", Email = "admin@gmail.com" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();
-                        await _userManager.AddToRoleAsync(user, "SuperAdmin");
+                        await _userManager.AddToRoleAsync(user, "Admin");
+
+                        var depts =  new List<Department>
+                        {
+                            new Department { DeptName = "Planning research and statistics"},
+                            new Department { DeptName ="Administration & Supplies"},
+                        };
+                            
+                        depts.ForEach(d => context.Department.Add(d));
+                        await context.SaveChangesAsync();
                     }
-
-
-                    if (await _roleManager.FindByNameAsync("DeptAdmin") == null)
-                    {
-                        await _roleManager.CreateAsync(new ApplicationRole("DeptAdmin"));
-
-                        var deptAdmin1 = new ApplicationUser { UserName = "deptAdmin1", Email = "deptadmin1@gmail.com",DeptID = 1 };
-                        var result = await _userManager.CreateAsync(deptAdmin1, "Abc123*");
-                        if (result.Succeeded)
-                        {
-                            await _userManager.AddToRoleAsync(deptAdmin1, "DeptAdmin");
-                            Department dept = new Department()
-                            {
-                                DeptName = "Dept1",
-                            };
-                            await context.Department.AddAsync(dept);
-                            await context.SaveChangesAsync();
-                        }
-
-                        var deptAdmin2 = new ApplicationUser { UserName = "deptAdmin2", Email = "deptadmin2@gmail.com",DeptID =2 };
-                        result = await _userManager.CreateAsync(deptAdmin2, "Abc123*");
-                        if (result.Succeeded)
-                        {
-                            await _userManager.AddToRoleAsync(deptAdmin2, "DeptAdmin");
-                            Department dept = new Department()
-                            {
-                                DeptName = "Dept2",
-                            };
-                            await context.Department.AddAsync(dept);
-                            await context.SaveChangesAsync();
-                        }
-
-                        var deptAdmin3 = new ApplicationUser { UserName = "deptAdmin3", Email = "deptadmin3@gmail.com",DeptID = 3 };
-                        result = await _userManager.CreateAsync(deptAdmin3, "Abc123*");
-                        if (result.Succeeded)
-                        {
-                            await _userManager.AddToRoleAsync(deptAdmin3, "DeptAdmin");
-                            Department dept = new Department()
-                            {
-                                DeptName = "Dept3",
-                            };
-                            await context.Department.AddAsync(dept);
-                            await context.SaveChangesAsync();
-                        }
-
-                        var deptAdmin4 = new ApplicationUser { UserName = "deptAdmin4", Email = "deptadmin4@gmail.com", DeptID = 4 };
-                        result = await _userManager.CreateAsync(deptAdmin4, "Abc123*");
-                        if (result.Succeeded)
-                        {
-                            await _userManager.AddToRoleAsync(deptAdmin4, "DeptAdmin");
-                            Department dept = new Department()
-                            {
-                                DeptName = "Dept4",
-                            };
-                            await context.Department.AddAsync(dept);
-                            await context.SaveChangesAsync();
-                        }
-
-                    }
-
 
                     if (await _roleManager.FindByNameAsync("User") == null)
                         await _roleManager.CreateAsync(new ApplicationRole("User"));

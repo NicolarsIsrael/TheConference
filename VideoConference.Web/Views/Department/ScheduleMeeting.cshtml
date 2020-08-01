@@ -15,10 +15,15 @@
                 <h4 class="login-header">SCHEDULE MEETING</h4>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input asp-for="DeptId" type="hidden"/>
+                <input asp-for="DeptId" type="hidden" />
                 <div class="form-group">
                     <label asp-for="Topic" class="control-label"></label>
                     <input asp-for="Topic" class="form-control" />
+                    <span asp-validation-for="Topic" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Departments" class="control-label"></label>
+                    <select name="selectedDeptId" class="form-control" asp-items="Model.SelectDepts"></select>
                     <span asp-validation-for="Topic" class="text-danger"></span>
                 </div>
                 <div class="form-group">

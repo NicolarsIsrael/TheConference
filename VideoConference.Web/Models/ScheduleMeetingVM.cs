@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,18 +11,19 @@ namespace VideoConference.Web.Models
     {
         public int Id { get; set; }
         public int DeptId { get; set; }
+        public string DeptName { get; set; }
         [BeginWIthAlphabeth(ErrorMessage ="Topic should begin with an alphabeth")]
         [Required(ErrorMessage ="Topic is required")]
         public string Topic { get; set; }
 
         [Display(Name ="Start date")]
         [Required(ErrorMessage ="Start date is required")]
-    //    [MeetingGreaterThanNow(ErrorMessage ="Meeting can not be scheduled for the past")]
         public DateTime StartDate { get; set; }
         public bool CanJoin { get; set; }
         public string StartDateString { get; set; }
         public string RoomName { get; set; }
-        public string GeneratedId { get; set; }
+        public IEnumerable<DeptAndIdViewModel> Departments { get; set; }
+        public List<SelectListItem> SelectDepts { get; set; }
     }
 
     public class BeginWIthAlphabeth : ValidationAttribute
@@ -40,20 +42,20 @@ namespace VideoConference.Web.Models
         }
     }
 
-    //public class MeetingGreaterThanNow: ValidationAttribute
-    //{
-    //    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-    //    {
-    //        DateTime? dateValue = value as DateTime?;
+    public class MeetingGreaterThanNow : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            DateTime? dateValue = value as DateTime?;
 
-    //        if(!dateValue.HasValue)
-    //            return new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName));
+            if (!dateValue.HasValue)
+                return new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName));
 
-    //        if(dateValue.Value<DateTime.Now)
-    //            return new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName));
+            if (dateValue.Value < DateTime.Now)
+                return new ValidationResult(this.FormatErrorMessage(validationContext.DisplayName));
 
-    //        return ValidationResult.Success;
-    //    }
-    //}
+            return ValidationResult.Success;
+        }
+    }
 
 }
