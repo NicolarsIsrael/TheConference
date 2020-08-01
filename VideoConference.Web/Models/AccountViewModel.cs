@@ -28,9 +28,6 @@ namespace VideoConference.Web.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
-
-        public string DeptName { get; set; }
-        public int DeptId { get; set; }
     }
 
     public class AlphaNumeric : ValidationAttribute

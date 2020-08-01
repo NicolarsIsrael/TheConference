@@ -11,10 +11,7 @@
         <div class="card-body">
             <form method="post">
                 <h4 class="register-header">REGISTER</h4>
-                <h6 class="register-header">Dept: @Model.DeptName</h6>
                 <hr />
-                <input type="hidden" asp-for="DeptId" />
-                <input type="hidden" asp-for="DeptName" />
                 <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
                     <input asp-for="Email" class="form-control" placeholder="Email" />

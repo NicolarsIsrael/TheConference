@@ -132,49 +132,6 @@ namespace VideoConference.Web.Controllers
             return RedirectToAction("Index","Home");
         }
 
-        [Authorize(Roles = "Admin")]
-        public IActionResult RegisterUser()
-        {
-            Department dept = GetLoggedInUserDept();
-            RegisterViewModel registerModel = new RegisterViewModel()
-            {
-                DeptId = dept.Id,
-                DeptName = dept.DeptName,
-            };
-            return View(registerModel);
-        }
-
-        [Authorize(Roles ="Admin")]
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> RegisterUser(RegisterViewModel registerModel)
-        {
-            if (ModelState.IsValid)
-            {
-                Department dept = GetLoggedInUserDept();
-                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email};
-                var result = await _userManager.CreateAsync(user, registerModel.Password);
-                if (result.Succeeded)
-                {
-                    if (await _roleManager.FindByNameAsync("User") == null)
-                        await _roleManager.CreateAsync(new ApplicationRole("User"));
-                    await _userManager.AddToRoleAsync(user, "User");
-                    return RedirectToAction(nameof(Users));
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
-                    return View(registerModel);
-                }
-            }
-            else
-            {
-                ModelState.AddModelError("", "One or more validation errors");
-                return View(registerModel);
-            }
-            return View(registerModel);
-        }
-
         public IActionResult Users()
         {
             var dept = GetLoggedInUserDept();

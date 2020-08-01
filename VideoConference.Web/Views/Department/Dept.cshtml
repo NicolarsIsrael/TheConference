@@ -13,17 +13,17 @@
     <h4>Dept: @ViewBag.Dept</h4>
     <div class="section_header">
         <div class="section_header_text">
-            <a class="btn btn-sm custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
             @{
                 if (SignInManager.IsSignedIn(User))
                 {
                     if (User.IsInRole("Admin"))
                     {
-                        <a class="btn btn-sm custom-secondary-btn" onclick="ShowDeptMeetings()">Department meeting</a>
+                        <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
                     }
                 }
 
             }
+            <a class="btn btn custom-secondary-btn" onclick="ShowDeptMeetings()">Department meeting</a>
 
         </div>
         <div class="meetings_tab">

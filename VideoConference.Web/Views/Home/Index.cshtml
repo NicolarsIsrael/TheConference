@@ -29,17 +29,18 @@
 <div class="container mt-3">
     <div class="section_header">
         <div class="section_header_text">
-            <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">Schedule new meeting</a>
             @{
                 if (SignInManager.IsSignedIn(User))
                 {
                     if (User.IsInRole("Admin"))
                     {
-                        <a class="btn btn custom-secondary-btn" onclick="ShowDeptMeetings()">Department meeting</a>
+                        <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
                     }
                 }
 
             }
+            <a class="btn btn custom-secondary-btn" onclick="ShowDeptMeetings()">Department meeting</a>
+
         </div>
         <div class="meetings_tab">
             <button class="navbar-toggler collapsed position-relative" type="button" data-toggle="collapse" data-target="#meetingsMenuBar"
