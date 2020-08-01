@@ -50,16 +50,16 @@ namespace VideoConference.Web.Controllers
                 deptMeetings = deptMeetings.Where(d => d.DeptID == id).ToList();
 
             IEnumerable<ScheduleMeetingVM> meetingsModel = deptMeetings
-                .Where(m => m.DeptID == dept.Id).Select(m => new ScheduleMeetingVM()
+                .Select(m => new ScheduleMeetingVM()
                 {
                     Id = m.Id,
                     Topic = m.Topic,
-                    DeptName = m.DeptName,
+                    DeptName =  m.DeptName,
                     StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
                     StartDate = m.StartTime,
                     CanJoin = m.StartTime < DateTime.Now ? true : false,
                     RoomName = m.RoomName,
-                }).OrderBy(m => m.StartDate);
+                }).OrderBy(m => m.StartDate).ToList();
             return View(meetingsModel);
         }
 

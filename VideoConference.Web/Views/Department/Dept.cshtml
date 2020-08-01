@@ -1,30 +1,30 @@
 ﻿@model IEnumerable<VideoConference.Web.Models.ScheduleMeetingVM>
+@using Microsoft.AspNetCore.Identity
+@using VideoConference.Web.Core
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = ViewBag.Dept;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<style>
- 
-</style>
-<div class="d-sm-block d-md-none d-lg-none d-xl-none">
-    <div class="img-box">
-        <img class="img-box" src="~/Images/background-image-mobile.jpg" />
-
-    </div>
-
-</div>
-<div class="d-none d-md-block">
-    <div style="height:400px;width:100%">
-        <img src="~/Images/background-image.jpg" class="img-box-lg" />
-    </div>
-</div>
-
 <div class="container mt-3">
+    <h4>Dept: @ViewBag.Dept</h4>
     <div class="section_header">
         <div class="section_header_text">
-            <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">Schedule new meeting</a>
+            <a class="btn btn-sm custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
+            @{
+                if (SignInManager.IsSignedIn(User))
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-sm custom-secondary-btn" onclick="ShowDeptMeetings()">Department meeting</a>
+                    }
+                }
+
+            }
+
         </div>
         <div class="meetings_tab">
             <button class="navbar-toggler collapsed position-relative" type="button" data-toggle="collapse" data-target="#meetingsMenuBar"
@@ -70,7 +70,7 @@
                                     <tr>
                                         <td>@meeting.StartDateString</td>
                                         <td>@meeting.Topic</td>
-                                        <th>@meeting.DeptName</th>
+                                        <td>@meeting.DeptName</td>
                                         <td>
                                             @if (meeting.CanJoin)
                                             {
