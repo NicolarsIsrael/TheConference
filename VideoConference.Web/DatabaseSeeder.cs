@@ -35,8 +35,20 @@ namespace VideoConference.Web
 
                         var depts =  new List<Department>
                         {
-                            new Department { DeptName = "Planning research and statistics"},
+                            new Department { DeptName ="Deputy E.S Technical"},
+                            new Department { DeptName ="Deputy E.S Services"},
+                            new Department { DeptName ="Federal Teachers Scheme"},
+                            new Department { DeptName ="Procurement"},
+                            new Department { DeptName ="Public Relation/Protocol"},
+                            new Department { DeptName ="Legal"},
+                            new Department { DeptName ="Internal Audit"},
+                            new Department { DeptName ="Special Project"},
+                            new Department { DeptName ="Servicom"},
                             new Department { DeptName ="Administration & Supplies"},
+                            new Department { DeptName ="Finance & Accounts"},
+                            new Department { DeptName ="Planning Research & Statistics"},
+                            new Department { DeptName ="Academic Services"},
+                            new Department { DeptName ="Social Mobilization"},
                         };
                             
                         depts.ForEach(d => context.Department.Add(d));

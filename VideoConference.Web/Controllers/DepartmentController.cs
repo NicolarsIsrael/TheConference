@@ -34,7 +34,7 @@ namespace VideoConference.Web.Controllers
             if (id != 0 && dept == null)
                 throw new Exception();
             string name = id > 0 ? dept.DeptName : "General";
-            return Redirect(GenerateDeptRoute(name, id));
+            return Redirect("~/department/"+GenerateRoute(name, id));
         }
 
 
@@ -59,6 +59,8 @@ namespace VideoConference.Web.Controllers
                     StartDate = m.StartTime,
                     CanJoin = m.StartTime < DateTime.Now ? true : false,
                     RoomName = m.RoomName,
+                    AnonymousLink = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" +
+                                    $"/AnonMeeting/{GenerateRoute(m.Topic, m.Id)}"
                 }).OrderBy(m => m.StartDate).ToList();
             return View(meetingsModel);
         }
@@ -71,7 +73,7 @@ namespace VideoConference.Web.Controllers
             List<SelectListItem> deptSelectList = new List<SelectListItem>();
             foreach (var dept in depts)
                 deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString() });
-            deptSelectList.Add(new SelectListItem { Text = "General", Value = "0" });
+            deptSelectList.Add(new SelectListItem { Text = "General", Value = "0", Selected = true });
 
             ScheduleMeetingVM scheduleMeeting = new ScheduleMeetingVM()
             {
@@ -159,7 +161,7 @@ namespace VideoConference.Web.Controllers
         //    return dept;
         //}
 
-        private string GenerateDeptRoute(string Name, int Id)
+        private string GenerateRoute(string Name, int Id)
         {
             string phrase = string.Format("{0}-{1}", Name, Id);// Creates in the specific pattern  
             string route = "";
@@ -167,7 +169,6 @@ namespace VideoConference.Web.Controllers
             route = Regex.Replace(route, @"[^a-z0-9\s-]", "");// Remove invalid characters for param  
             route = Regex.Replace(route, @"\s+", "-").Trim(); // convert multiple spaces into one hyphens
             route = Regex.Replace(route, @"\s", "-"); // Replaces spaces with hyphens    
-            route ="~/department/"+ route;
             return route;
         }
 

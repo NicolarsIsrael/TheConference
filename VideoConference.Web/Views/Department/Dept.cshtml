@@ -18,7 +18,7 @@
                 {
                     if (User.IsInRole("Admin"))
                     {
-                        <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
+                <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
                     }
                 }
 
@@ -60,6 +60,7 @@
                                 <th style="width:50%">Topic</th>
                                 <th>Dept</th>
                                 <th style="min-width:10%"></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,19 +68,28 @@
                                 @{
                                     foreach (var meeting in Model)
                                     {
-                                    <tr>
-                                        <td>@meeting.StartDateString</td>
-                                        <td>@meeting.Topic</td>
-                                        <td>@meeting.DeptName</td>
-                                        <td>
-                                            @if (meeting.CanJoin)
+                                <tr>
+                                    <td>@meeting.StartDateString</td>
+                                    <td>@meeting.Topic</td>
+                                    <td>@meeting.DeptName</td>
+                                    <td>
+                                        @if (meeting.CanJoin)
                                             {
-                                                <a class="btn btn-sm custom-primary-btn float-right" target="_blank"
-                                                   asp-controller="Meeting" asp-action="Meet" asp-route-id="@meeting.Id">Join</a>
+                                        <a class="btn btn-sm custom-primary-btn" target="_blank"
+                                           asp-controller="Meeting" asp-action="Index" asp-route-id="@meeting.Id">Join</a>
                                             }
 
-                                        </td>
-                                    </tr>
+                                    </td>
+                                    <td>
+                                        @if(meeting.CanJoin)
+                                            {
+                                        <button class="btn btn-sm custom-secondary-btn" onclick="CopyToClipBoard('@meeting.AnonymousLink')">
+                                            <img src="~/Images/copy.svg" />
+                                        </button>
+                                            }
+
+                                    </td>
+                                </tr>
                                 }
                                 }
 

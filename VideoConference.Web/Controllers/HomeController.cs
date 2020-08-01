@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
+using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace VideoConference.Web.Controllers
 {
@@ -38,6 +41,8 @@ namespace VideoConference.Web.Controllers
                     StartDate = m.StartTime,
                     CanJoin = m.StartTime < DateTime.Now ? true : false,
                     RoomName = m.RoomName,
+                    AnonymousLink = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" +
+                                    $"/AnonMeeting/{GenerateRoute(m.Topic,m.Id)}"
                 }).OrderBy(m => m.StartDate);
             return View(meetingsModel);
         }
@@ -74,5 +79,23 @@ namespace VideoConference.Web.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        private string GenerateRoute(string Name, int Id)
+        {
+            string phrase = string.Format("{0}-{1}", Name, Id);// Creates in the specific pattern  
+            string route = "";
+            route = GetByteArray(phrase).ToLower();
+            route = Regex.Replace(route, @"[^a-z0-9\s-]", "");// Remove invalid characters for param  
+            route = Regex.Replace(route, @"\s+", "-").Trim(); // convert multiple spaces into one hyphens
+            route = Regex.Replace(route, @"\s", "-"); // Replaces spaces with hyphens    
+            return route;
+        }
+
+        private string GetByteArray(string text)
+        {
+            byte[] bytes = System.Text.Encoding.GetEncoding("Cyrillic").GetBytes(text);
+            return System.Text.Encoding.ASCII.GetString(bytes);
+        }
+
     }
 }

@@ -36,10 +36,13 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int id=0)
         {
-            return RedirectToAction("index", "department");
-
+            Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
+            if (meeting == null)
+                throw new Exception();
+            
+            return Redirect("~/Meeting/"+GenerateMeetingRoute(meeting.Topic, id));
         }
 
         [Authorize]
@@ -47,18 +50,31 @@ namespace VideoConference.Web.Controllers
         {
             Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
             if (meeting == null)
-                return Content("null");
+                throw new Exception();
             var user = GetLoggedInUser();
-            //string username = "aadkdhlshjshksdjhflshfkslfjsslsfhskhfskhsfsskjshlsjlasdkkfhlasdflsjflsjfhsdfjljfasdfcbasdfalcmfaierirerywofasdfalfxfxmashffamxlfkfhdfamfhsflmsdfmlsfmhfslfmfshflmsajdflshdfaxfalsnfafkhfkasfsdfnhafskfhsfnksfhskdnfasdfhksdfasakfacxacahaldhahwueroawurcxbankdfhavkadfcnaxiadkaeihwecakjfaxnafaiecaxfankfekrwebdxbfkdhfbabxkdfaladadfwryiwerxnacbakdhaoeuhfskdlaweskdflcbk";
-            //Random rand = new Random();
-            //int a = rand.Next(1, username.Length - 13);
-            //int b = rand.Next(5, 10);
-            //username = username.Substring(a, b);
-
             ViewBag.Room = meeting.RoomName;
             ViewBag.Topic = meeting.Topic;
             ViewBag.Username = user.UserName;
             ViewBag.Token = generateToken(user.UserName);
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult AnonMeeting(int id = 0)
+        {
+            Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
+            if (meeting == null)
+                throw new Exception();
+            //string username = "aadkdhlshjshksdjhflshfkslfjsslsfhskhfskhsadhadfcmacnljgdfkadhfkskdfjncshkdfjdahlkd2343fsskjshlsjlasdkkfhlasdflsjflsjfhsdfjljfasdfcbasdfalcmfaierirerywofasdfalfxfxmashffamxlfkfhdfamfhsflmsdfmlsfmhfsasdfw3435qkadfclfmfshflmsajdflshdfaxfalsnfafkhfkasfsdfnhafskfhsfnksfhskdnfasdfhksdfasakfacxacahaldhahwueroawurcxbankdfhavkadfcnaxiadkaeihwecakjfaxnafaadfewadfeaiecaxfankfekrwebdxbfkdhdfaseaasdfbabxkdfaladadfwryiwerxnacbakdhaasdfwesasoeuhfskdlaweskdflcbk";
+            //Random rand = new Random();
+            //int a = rand.Next(1, username.Length - 13);
+            //int b = rand.Next(5, 10);
+            //username = username.Substring(a, b);
+            string username = "Anonymous" + DateTime.Now.ToString("yyyymmddhhmmssfff");
+            ViewBag.Room = meeting.RoomName;
+            ViewBag.Topic = meeting.Topic;
+            ViewBag.Username = username;
+            ViewBag.Token = generateToken(username);
             return View();
         }
 
@@ -152,5 +168,23 @@ namespace VideoConference.Web.Controllers
                 throw new Exception();
             return user;
         }
+
+        private string GenerateMeetingRoute(string Name, int Id)
+        {
+            string phrase = string.Format("{0}-{1}", Name, Id);// Creates in the specific pattern  
+            string route = "";
+            route = GetByteArray(phrase).ToLower();
+            route = Regex.Replace(route, @"[^a-z0-9\s-]", "");// Remove invalid characters for param  
+            route = Regex.Replace(route, @"\s+", "-").Trim(); // convert multiple spaces into one hyphens
+            route = Regex.Replace(route, @"\s", "-"); // Replaces spaces with hyphens    
+            return route;
+        }
+
+        private string GetByteArray(string text)
+        {
+            byte[] bytes = System.Text.Encoding.GetEncoding("Cyrillic").GetBytes(text);
+            return System.Text.Encoding.ASCII.GetString(bytes);
+        }
+
     }
 }

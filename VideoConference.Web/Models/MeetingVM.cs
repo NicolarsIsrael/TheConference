@@ -22,15 +22,9 @@ namespace VideoConference.Web.Models
         public bool CanJoin { get; set; }
         public string StartDateString { get; set; }
         public string RoomName { get; set; }
+        public string AnonymousLink { get; set; }
         public IEnumerable<DeptAndIdViewModel> Departments { get; set; }
         public List<SelectListItem> SelectDepts { get; set; }
-    }
-
-    public class MeetingVM
-    {
-        public string UserName { get; set; }
-        public string Token { get; set; }
-        public string ResourceId { get; set; }
     }
 
     public class BeginWIthAlphabeth : ValidationAttribute

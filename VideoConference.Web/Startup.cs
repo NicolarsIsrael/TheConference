@@ -89,7 +89,20 @@ namespace VideoConference.Web
                routes.MapRoute(
                       name: "Department",
                       template: "Department/{deptName}-{id}",
-                      defaults: new { controller = "Department", action = "Dept" } );
+                      defaults: new { controller = "Department", action = "Dept" } 
+                      );
+
+                routes.MapRoute(
+                        name: "Meeting",
+                        template: "Meeting/{meetingName}-{id}",
+                        defaults: new { controller = "Meeting", action = "Meet" }
+                    );
+
+                routes.MapRoute(
+                      name: "AnonMeeting",
+                        template: "AnonMeeting/{meetingName}-{id}",
+                        defaults: new { controller = "Meeting", action = "AnonMeeting" }
+                    );
 
                 routes.MapRoute(
                     name: "default",
