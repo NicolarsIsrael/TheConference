@@ -1,0 +1,19 @@
+﻿@model VideoConference.Web.Models.UserViewModel
+
+<div style="padding:10px">
+    <hr />
+    <div class="mr-2">
+        <h6>Are you sure you wish to delete this user? This change cannot be reversed.</h6>
+        <div>
+            Email: @Model.Email
+        </div>
+        <div>
+            Username: @Model.Username
+        </div>
+        <div>
+            <hr class="my-2" />
+            <input type="button" value="Delete user" class="btn mt-0 custom-primary-btn"
+                   onclick="DeleteUser('@Model.Id')" />
+        </div>
+    </div>
+</div>

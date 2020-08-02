@@ -57,11 +57,18 @@ namespace VideoConference.Web.Controllers
                     DeptName =  m.DeptName,
                     StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
                     StartDate = m.StartTime,
-                    CanJoin = m.StartTime < DateTime.Now ? true : false,
                     RoomName = m.RoomName,
                     AnonymousLink = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" +
                                     $"/AnonMeeting/{GenerateRoute(m.Topic, m.Id)}"
                 }).OrderBy(m => m.StartDate).ToList();
+
+            foreach (var meeting in meetingsModel)
+            {
+                if (DateTime.Compare(meeting.StartDate, DateTime.Now) <= 0)
+                    meeting.CanJoin = true;
+                else
+                    meeting.CanJoin = false;
+            }
             return View(meetingsModel);
         }
 

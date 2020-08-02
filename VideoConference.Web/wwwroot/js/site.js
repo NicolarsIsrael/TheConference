@@ -43,6 +43,25 @@ function ShowDeptMeetings() {
     });
 }
 
+function ShowDeleteUser(id) {
+    $.ajax({
+        url: "/Users/DeleteUser/",
+        dataType: "html",
+        data: {id:id},
+        success: function (result) {
+            $("#sidebarbody").html(result);
+            openNav();
+        },
+        error: function (xhr, status, error) {
+            ShowSnackbarError("Oops, sorry! Error");
+        }
+    });
+}
+
+function DeleteUser(id) {
+    window.location.href = "/Users/ConfirmDeleteUser?id=" + id;
+}
+
 function CopyToClipBoard(copyValue) {
     // Create new element
     var el = document.createElement('textarea');

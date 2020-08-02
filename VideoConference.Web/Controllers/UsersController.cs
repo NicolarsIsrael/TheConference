@@ -26,7 +26,7 @@ namespace VideoConference.Web.Controllers
 
 
         [Authorize(Roles ="Admin")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             IEnumerable<UserViewModel> users = _context.Users
                 .Select(u => new UserViewModel()
@@ -34,7 +34,16 @@ namespace VideoConference.Web.Controllers
                     Id = u.Id,
                     Email = u.Email,
                     Username = u.UserName,
+                    User = u,
                 }).ToList();
+
+            foreach(var user in users)
+            {
+                if (await _userManager.IsInRoleAsync(user.User, "Admin"))
+                    user.IsAdmin = true;
+                else
+                    user.IsAdmin = false;
+            }
 
             return View(users);
         }
@@ -75,5 +84,31 @@ namespace VideoConference.Web.Controllers
             return View(registerModel);
         }
 
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeleteUser(string id)
+        {
+            var user = _userManager.Users.Where(u => u.Id == id).FirstOrDefault();
+            if (user == null)
+                throw new Exception();
+
+            UserViewModel userModel = new UserViewModel()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Username = user.UserName,
+            };
+
+            return PartialView("_deleteUser",userModel);
+        }
+
+        public async Task<IActionResult> ConfirmDeleteUser(string id)
+        {
+            var user = _userManager.Users.Where(u => u.Id == id).FirstOrDefault();
+            if (user == null)
+                throw new Exception();
+
+            await _userManager.DeleteAsync(user);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

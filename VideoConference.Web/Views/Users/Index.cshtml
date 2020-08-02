@@ -19,6 +19,7 @@
                     <tr class="w-100">
                         <th>Email</th>
                         <th>Username</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,6 +30,12 @@
                                 <tr>
                                     <td>@user.Email</td>
                                     <td>@user.Username</td>
+                                    <td>
+                                        @if (!user.IsAdmin)
+                                        {
+                                            <a class="btn btn-sm custom-secondary-btn float-right" onclick="ShowDeleteUser('@user.Id')">delete</a>
+                                        }
+                                    </td>
                                 </tr>
                              }
                         }

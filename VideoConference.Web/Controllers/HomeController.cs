@@ -31,6 +31,9 @@ namespace VideoConference.Web.Controllers
         [Authorize()]
         public IActionResult Index()
         {
+            var a = DateTime.Now;
+            var b = _context.Meeting;
+            var c = _context.Meeting.Where(m => m.Id == 4);
             IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting
                 .Select(m => new ScheduleMeetingVM()
                 {
@@ -39,11 +42,18 @@ namespace VideoConference.Web.Controllers
                     DeptName = m.DeptName,
                     StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
                     StartDate = m.StartTime,
-                    CanJoin = m.StartTime < DateTime.Now ? true : false,
                     RoomName = m.RoomName,
                     AnonymousLink = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" +
                                     $"/AnonMeeting/{GenerateRoute(m.Topic,m.Id)}"
-                }).OrderBy(m => m.StartDate);
+                }).OrderBy(m => m.StartDate).ToList();
+
+            foreach (var meeting in meetingsModel)
+            {
+                if (DateTime.Compare(meeting.StartDate, DateTime.Now) <= 0)
+                    meeting.CanJoin = true;
+                else
+                    meeting.CanJoin = false;
+            }
             return View(meetingsModel);
         }
 

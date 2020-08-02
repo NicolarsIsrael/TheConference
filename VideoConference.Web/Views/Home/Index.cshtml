@@ -87,7 +87,7 @@
                                     <tr>
                                         <td>@meeting.StartDateString</td>
                                         <td>@meeting.Topic</td>
-                                      
+
                                         <td>@meeting.DeptName</td>
                                         <td>
                                             @if (meeting.CanJoin)
@@ -98,10 +98,10 @@
 
                                         </td>
                                         <td>
-                                            @if(meeting.CanJoin)
+                                            @if (meeting.CanJoin)
                                             {
                                                 <button class="btn btn-sm custom-secondary-btn" onclick="CopyToClipBoard('@meeting.AnonymousLink')">
-                                                    <img src="~/Images/copy.svg"/>
+                                                    <img src="~/Images/copy.svg" />
                                                 </button>
                                             }
 
@@ -123,7 +123,7 @@
                                 <tr class="w-100">
                                     <th>Date</th>
                                     <th style="width:50%">Topic</th>
-                                    <th>Meeting Id</th>
+                                    <th>Dept</th>
                                     <th>Duration</th>
                                     <th style="min-width:10%"></th>
                                 </tr>
@@ -132,21 +132,21 @@
                                 <tr>
                                     <td>01/Jun/2020 (5:30 PM)</td>
                                     <td>Montly staff review</td>
-                                    <td>123-773-402</td>
+                                    <td>Federal Teachers Scheme</td>
                                     <td>100 minutes</td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td> 06/Jul/2020 (9:00 AM)</td>
                                     <td>Security meeting</td>
-                                    <td>123-443-008</td>
+                                    <td>Legal</td>
                                     <td>25 minutes</td>
                                     <td></td>
                                 </tr>
                                 <tr>
                                     <td>28/Jun/2020 (8:30 PM)</td>
                                     <td>Head of dept meeting</td>
-                                    <td>637-256-776</td>
+                                    <td>Finance & Accounts</td>
                                     <td>80 minutes</td>
                                     <td>
                                         <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -156,7 +156,7 @@
                                 <tr>
                                     <td>04/Apr/2020 (10:00 AM)</td>
                                     <td>Directors meeting</td>
-                                    <td>342-113-195</td>
+                                    <td>Academic Services</td>
                                     <td>30 minutes</td>
                                     <td>
                                         <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -167,6 +167,25 @@
                     </div>
                 </div>
             </div>
+
+            @*
+
+            new Department { DeptName ="Deputy E.S Technical"},
+                             new Department { DeptName ="Deputy E.S Services"},
+                             new Department { DeptName ="Federal Teachers Scheme"},
+                             new Department { DeptName ="Procurement"},
+                             new Department { DeptName ="Public Relation/Protocol"},
+                             new Department { DeptName ="Legal"},
+                             new Department { DeptName ="Internal Audit"},
+                             new Department { DeptName ="Special Project"},
+                             new Department { DeptName ="Servicom"},
+                             new Department { DeptName ="Administration & Supplies"},
+                             new Department { DeptName ="Finance & Accounts"},
+                             new Department { DeptName ="Planning Research & Statistics"},
+                             new Department { DeptName ="Academic Services"},
+                             new Department { DeptName ="Social Mobilization"},
+            *@
+
             <div class="tab-pane fade" id="cloud-recordings-tab" role="tabpanel" aria-labelledby="cloud-recordings">
                 <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
                     <div class="card-body px-1 py-0  table-responsive">
@@ -175,7 +194,7 @@
                                 <tr class="w-100">
                                     <th>Date</th>
                                     <th style="width:50%">Topic</th>
-                                    <th>Meeting Id</th>
+                                    <th>Dept</th>
                                     <th>Duration</th>
                                     <th style="min-width:10%"></th>
                                 </tr>
@@ -184,7 +203,7 @@
                                 <tr>
                                     <td> 10/Jul/2020 (9:00 AM)</td>
                                     <td>Workers meeting</td>
-                                    <td>887-223-004</td>
+                                    <td>Internal Audit</td>
                                     <td>40 minutes</td>
                                     <td>
                                         <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -193,7 +212,7 @@
                                 <tr>
                                     <td>25/Jul/2020 (8:30 PM)</td>
                                     <td>Company Meeting</td>
-                                    <td>225-767-343</td>
+                                    <td>Procurement</td>
                                     <td>20 minutes</td>
                                     <td>
                                         <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -202,7 +221,7 @@
                                 <tr>
                                     <td>27/Jul/2020 (5:30 PM)</td>
                                     <td>Head of security Meeting</td>
-                                    <td>180-243-887</td>
+                                    <td>Social Mobilization</td>
                                     <td>50 minutes</td>
                                     <td>
                                         <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -211,7 +230,7 @@
                                 <tr>
                                     <td>01/Aug/2020 (10:00 AM)</td>
                                     <td>Environment Meeting</td>
-                                    <td>234-112-809</td>
+                                    <td>Internal Audit</td>
                                     <td>60 minutes</td>
                                     <td>
                                         <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
