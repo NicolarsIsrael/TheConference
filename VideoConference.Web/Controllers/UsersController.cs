@@ -38,7 +38,14 @@ namespace VideoConference.Web.Controllers
                     Username = u.UserName,
                     User = u,
                     Dept = u.DeptName,
+                    DeptId = u.DeptId,
                 }).ToList();
+
+            if (User.IsInRole("DeptAdmin"))
+            {
+                var dept = GetLoggedInUserDept();
+                users = users.Where(u => u.DeptId == dept.Id).ToList();
+            }
 
             foreach(var user in users)
             {

@@ -134,18 +134,84 @@
             vidyoConnector.CycleCamera();
         }
 
+        function SwitchMic() {
+            closeAlert();
+            openAlert();
+            document.getElementById("custom-alert").style.minHeight = "70px";
+            document.getElementById("custom-alert-body").innerHTML = "<h6 class='pl-3'>Switch mic is being worked on</h6>";
+
+            setTimeout(function () {
+                closeAlert();
+            }, 3000);
+        }
+
+        function SwitchVideo() {
+               closeAlert();
+            openAlert();
+            document.getElementById("custom-alert").style.minHeight = "70px";
+            document.getElementById("custom-alert-body").innerHTML = "<h6 class='pl-3'>Switch video is being worked on</h6>";
+
+            setTimeout(function () {
+                closeAlert();
+            }, 3000);
+        }
+
+        function SaveMeeting() {
+               closeAlert();
+            openAlert();
+            document.getElementById("custom-alert").style.minHeight = "70px";
+            document.getElementById("custom-alert-body").innerHTML = "<h6 class='pl-3'>Save meeting is being worked on</h6>";
+
+            setTimeout(function () {
+                closeAlert();
+            }, 3000);
+        }
+
+        function ShareScreen() {
+               closeAlert();
+            openAlert();
+            document.getElementById("custom-alert").style.minHeight = "70px";
+            document.getElementById("custom-alert-body").innerHTML = "<h6 class='pl-3'>Share screen is being worked on</h6>";
+
+            setTimeout(function () {
+                closeAlert();
+            }, 3000);
+        }
+
+        function ViewParticipants() {
+               closeAlert();
+            openAlert();
+            document.getElementById("custom-alert").style.minHeight = "70px";
+            document.getElementById("custom-alert-body").innerHTML = "<h6 class='pl-3'>View participants is being worked on</h6>";
+
+            setTimeout(function () {
+                closeAlert();
+            }, 3000);
+        }
+
+        function ShowMore() {
+               closeAlert();
+            openAlert();
+            document.getElementById("custom-alert").style.minHeight = "70px";
+            document.getElementById("custom-alert-body").innerHTML = "<h6 class='pl-3'>Show more is being worked on</h6>";
+
+            setTimeout(function () {
+                closeAlert();
+            }, 3000);
+        }
+
 /**/</script>
     <div>
         <div class="row px-lg-3 px-2">
             <div class="col-2">
-                <img src="~/Images/camera.svg" class="pointer" id="camera-switch-icon" data-toggle="tooltip" 
+                <img src="~/Images/camera.svg" class="pointer" id="camera-switch-icon" data-toggle="tooltip"
                      data-placement="top" title="Switch camera" onclick="switchCamera()" />
             </div>
             <div class="col-8" style="text-align:center">
                 <h4> @ViewBag.Topic</h4>
             </div>
             <div class="col-2">
-                <button type="button" class="btn btn-sm float-lg-right btn-danger" onclick="ShowEndMeeting()">END</button>
+                <button type="button" class="btn btn-sm float-lg-right btn-danger" onclick="ShowEndMeeting()">LEAVE</button>
             </div>
 
         </div>
@@ -154,27 +220,27 @@
         <hr style="margin:10px" />
         <div class="row px-lg-3 px-2">
             <div class="col-2">
-                <img src="~/Images/mic.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="Off/On mic" />
+                <img src="~/Images/mic.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="Off/On mic" onclick="SwitchMic()" />
             </div>
             <div class="col-2">
-                <img src="~/Images/video.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="Off/On video" />
+                <img src="~/Images/video.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="Off/On video" onclick="SwitchVideo()" />
             </div>
             <div class="col-2">
-                <img src="~/Images/save.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="Save meeting" />
+                <img src="~/Images/save.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="Save meeting" onclick="SaveMeeting()" />
             </div>
             <div class="col-2">
-                <img src="~/Images/monitor.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="Share screen" />
+                <img src="~/Images/monitor.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="Share screen" onclick="ShareScreen()" />
             </div>
             <div class="col-2" style="text-align:center">
-                <img src="~/Images/users.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="View participants" />
+                <img src="~/Images/users.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="View participants" onclick="ViewParticipants()" />
             </div>
             <div class="col-2">
-                <img src="~/Images/more-vertical.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="More" />
+                <img src="~/Images/more-vertical.svg" class="d-block mx-auto pointer" data-toggle="tooltip" data-placement="top" title="More" onclick="ShowMore()" />
             </div>
 
         </div>
         <div id="custom-alert" class="custom-alert">
-           
+
             <div id="custom-alert-body" class="custom-alert-body"></div>
         </div>
     </div>
