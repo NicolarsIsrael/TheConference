@@ -63,6 +63,12 @@ namespace VideoConference.Web.Controllers
                                     $"/AnonMeeting/{GenerateRoute(m.Topic, m.Id)}"
                 }).OrderBy(m => m.StartDate).ToList();
 
+            foreach (var meeting in meetingsModel)
+            {
+                if ((DateTime.Compare(meeting.StartDate, DateTime.UtcNow.AddHours(1)) > 0))
+                    meeting.CanJoin = false;
+            }
+
             return View(meetingsModel);
         }
 
