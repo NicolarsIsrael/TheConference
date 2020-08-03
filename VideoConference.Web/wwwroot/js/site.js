@@ -77,6 +77,19 @@ function CopyToClipBoard(copyValue) {
     document.execCommand('copy');
     // Remove temporary element
     document.body.removeChild(el);
+
+    openAlert();
+    var customAlert = document.getElementById("custom-alert");
+    customAlert.style.width = "100px";
+    customAlert.style.minHeight = "50px";
+    customAlert.style.backgroundColor = "#e6630e";
+    customAlert.style.color = "white";
+    document.getElementById("custom-alert-body").innerHTML = "<p class='px-3'>Copied!</p>";
+
+    setTimeout(function () {
+        closeAlert();
+    }, 3000);
+    
 }
 
 function SelectDeptMeeting() {
@@ -90,7 +103,7 @@ function openAlert() {
     customAlert.classList.add("sideNavBorder");
 }
 
-function cloesAlert() {
+function closeAlert() {
     var customAlert = document.getElementById("custom-alert");
     customAlert.style.width = "0";
     customAlert.classList.remove("sideNavBorder");
