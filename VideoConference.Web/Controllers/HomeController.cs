@@ -33,7 +33,7 @@ namespace VideoConference.Web.Controllers
             return View();
         }
 
-        [Authorize()]
+        //[Authorize()]
         public IActionResult Index()
         {
             IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting

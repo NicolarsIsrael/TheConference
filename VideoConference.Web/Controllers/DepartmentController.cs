@@ -15,7 +15,8 @@ using VideoConference.Web.Models;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize(Roles = "Admin,User")]
+   // [Authorize(Roles = "Admin,User")]
+   [AllowAnonymous]
     public class DepartmentController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -73,18 +74,12 @@ namespace VideoConference.Web.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,DeptAdmin")]
         public IActionResult ScheduleMeeting()
         {
-            var depts = _context.Department;
-            List<SelectListItem> deptSelectList = new List<SelectListItem>();
-            foreach (var dept in depts)
-                deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString() });
-            deptSelectList.Add(new SelectListItem { Text = "General", Value = "0", Selected = true });
-
             ScheduleMeetingVM scheduleMeeting = new ScheduleMeetingVM()
             {
-                SelectDepts = deptSelectList,
+                SelectDepts = GetDeptSelectList(),
                 StartDate = DateTime.Today,
             };
 
@@ -93,18 +88,12 @@ namespace VideoConference.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,DeptAdmin")]
         public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM scheduleModel,int selectedDeptId)
         {
             if (!ModelState.IsValid)
             {
-                var depts = _context.Department;
-                List<SelectListItem> deptSelectList = new List<SelectListItem>();
-                foreach (var _dept in depts)
-                    deptSelectList.Add(new SelectListItem { Text = _dept.DeptName, Value = _dept.Id.ToString(),Selected =_dept.Id==selectedDeptId?true:false });
-                deptSelectList.Add(new SelectListItem { Text = "General", Value = "0", Selected = 0 == selectedDeptId ? true : false });
-
-                scheduleModel.SelectDepts = deptSelectList;
+                scheduleModel.SelectDepts = GetDeptSelectList(selectedDeptId);
                 ModelState.AddModelError("", "One or more validation errors");
                 return View(scheduleModel);
             }
@@ -116,13 +105,7 @@ namespace VideoConference.Web.Controllers
             string roomName = Regex.Replace(scheduleModel.Topic, @"\s+", "");
             if (_context.Meeting.Where(m => m.RoomName == roomName).Count() > 0)
             {
-                var depts = _context.Department;
-                List<SelectListItem> deptSelectList = new List<SelectListItem>();
-                foreach (var _dept in depts)
-                    deptSelectList.Add(new SelectListItem { Text = _dept.DeptName, Value = _dept.Id.ToString(), Selected = _dept.Id == selectedDeptId ? true : false });
-                deptSelectList.Add(new SelectListItem { Text = "General", Value = "0", Selected = 0 == selectedDeptId ? true : false });
-
-                scheduleModel.SelectDepts = deptSelectList;
+                scheduleModel.SelectDepts = GetDeptSelectList(selectedDeptId);
                 ModelState.AddModelError("", "Topic already exist");
                 return View(scheduleModel);
             }
@@ -141,6 +124,7 @@ namespace VideoConference.Web.Controllers
             return RedirectToAction("Index","Home");
         }
 
+        [Authorize(Roles ="Admin,DeptAdmin")]
         public IActionResult Users()
         {
             IEnumerable<UserViewModel> users = _context.Users
@@ -183,6 +167,37 @@ namespace VideoConference.Web.Controllers
         {
             byte[] bytes = System.Text.Encoding.GetEncoding("Cyrillic").GetBytes(text);
             return System.Text.Encoding.ASCII.GetString(bytes);
+        }
+
+        private List<SelectListItem> GetDeptSelectList(int selectedDeptId = 0)
+        {
+            var depts = _context.Department;
+            List<SelectListItem> deptSelectList = new List<SelectListItem>();
+            if (User.IsInRole("Admin"))
+            {
+                foreach (var dept in depts)
+                    deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString(), Selected = dept.Id == selectedDeptId ? true : false, });
+            }
+            else
+            {
+                var userDept = GetLoggedInUserDept();
+                deptSelectList.Add(new SelectListItem { Text = userDept.DeptName, Value = userDept.Id.ToString() });
+            }
+            return deptSelectList;
+        }
+
+        public Department GetLoggedInUserDept()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _userManager.Users.Where(u => u.Id == userId).FirstOrDefault();
+            if (user == null)
+                throw new Exception();
+
+            Department dept = _context.Department.Where(d => d.Id == user.DeptId).FirstOrDefault();
+            if (dept == null)
+                throw new Exception();
+
+            return dept;
         }
 
     }

@@ -16,7 +16,7 @@
             @{
                 if (SignInManager.IsSignedIn(User))
                 {
-                    if (User.IsInRole("Admin"))
+                    if (User.IsInRole("Admin") || User.IsInRole("DeptAdmin"))
                     {
                 <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
                     }

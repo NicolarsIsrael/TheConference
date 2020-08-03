@@ -59,23 +59,6 @@ namespace VideoConference.Web.Controllers
             return View(users);
         }
 
-        private List<SelectListItem> GetDeptSelectList(int selectedDeptId=0)
-        {
-            var depts = _context.Department;
-            List<SelectListItem> deptSelectList = new List<SelectListItem>();
-            if (User.IsInRole("Admin"))
-            {
-                foreach (var dept in depts)
-                    deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString(), Selected =dept.Id==selectedDeptId ? true : false, });
-            }
-            else
-            {
-                var userDept = GetLoggedInUserDept();
-                deptSelectList.Add(new SelectListItem { Text = userDept.DeptName, Value = userDept.Id.ToString() });
-            }
-            return deptSelectList;
-        }
-
         [Authorize(Roles = "Admin,DeptAdmin")]
         public IActionResult RegisterUser()
         {
@@ -213,5 +196,23 @@ namespace VideoConference.Web.Controllers
 
             return dept;
         }
+
+        private List<SelectListItem> GetDeptSelectList(int selectedDeptId = 0)
+        {
+            var depts = _context.Department;
+            List<SelectListItem> deptSelectList = new List<SelectListItem>();
+            if (User.IsInRole("Admin"))
+            {
+                foreach (var dept in depts)
+                    deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString(), Selected = dept.Id == selectedDeptId ? true : false, });
+            }
+            else
+            {
+                var userDept = GetLoggedInUserDept();
+                deptSelectList.Add(new SelectListItem { Text = userDept.DeptName, Value = userDept.Id.ToString() });
+            }
+            return deptSelectList;
+        }
+
     }
 }

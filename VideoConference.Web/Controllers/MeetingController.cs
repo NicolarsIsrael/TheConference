@@ -17,7 +17,7 @@ using VideoConference.Web.Models;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize]
+    [AllowAnonymous]
     public class MeetingController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -36,17 +36,17 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
 
-        public IActionResult Index(int id=0)
+
+        public IActionResult Index(int id = 0)
         {
             Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
             if (meeting == null)
                 throw new Exception();
-            
-            return Redirect("~/Meeting/"+GenerateMeetingRoute(meeting.Topic, id));
+
+            return Redirect("~/Meeting/" + GenerateMeetingRoute(meeting.Topic, id));
         }
 
-        [Authorize]
-        public IActionResult Meet(int id=0)
+        public IActionResult Meet(int id = 0)
         {
             Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
             if (meeting == null)
@@ -54,12 +54,16 @@ namespace VideoConference.Web.Controllers
 
             if (DateTime.Compare(meeting.StartTime, DateTime.UtcNow.AddHours(1)) > 0)
                 return RedirectToAction(nameof(TimeAccessDenied));
+            var username = "";
+            if (User.IsInRole("User") || User.IsInRole("Admin")|| User.IsInRole("DeptAdmin"))
+                username = GetLoggedInUser().UserName;
+            else
+                username = "Anonymous-" + DateTime.Now.ToString("yyyymmddhhmmssfff");
 
-            var user = GetLoggedInUser();
             ViewBag.Room = meeting.RoomName;
             ViewBag.Topic = meeting.Topic;
-            ViewBag.Username = user.UserName;
-            ViewBag.Token = generateToken(user.UserName);
+            ViewBag.Username = username;
+            ViewBag.Token = generateToken(username);
             return View();
         }
 
@@ -73,13 +77,14 @@ namespace VideoConference.Web.Controllers
             if (DateTime.Compare(meeting.StartTime, DateTime.UtcNow.AddHours(1)) > 0)
                 return RedirectToAction(nameof(TimeAccessDenied));
 
-            string username = "Anonymous" + DateTime.Now.ToString("yyyymmddhhmmssfff");
+            string username = "Anonymous-" + DateTime.Now.ToString("yyyymmddhhmmssfff");
             ViewBag.Room = meeting.RoomName;
             ViewBag.Topic = meeting.Topic;
             ViewBag.Username = username;
             ViewBag.Token = generateToken(username);
             return View();
         }
+
 
         public IActionResult TimeAccessDenied()
         {
