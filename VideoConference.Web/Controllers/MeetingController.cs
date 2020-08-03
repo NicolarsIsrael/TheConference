@@ -51,6 +51,10 @@ namespace VideoConference.Web.Controllers
             Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
             if (meeting == null)
                 throw new Exception();
+
+            if (DateTime.Compare(meeting.StartTime, DateTime.UtcNow.AddHours(1)) > 0)
+                return RedirectToAction(nameof(TimeAccessDenied));
+
             var user = GetLoggedInUser();
             ViewBag.Room = meeting.RoomName;
             ViewBag.Topic = meeting.Topic;
@@ -65,16 +69,20 @@ namespace VideoConference.Web.Controllers
             Meeting meeting = _context.Meeting.Where(m => m.Id == id).FirstOrDefault();
             if (meeting == null)
                 throw new Exception();
-            //string username = "aadkdhlshjshksdjhflshfkslfjsslsfhskhfskhsadhadfcmacnljgdfkadhfkskdfjncshkdfjdahlkd2343fsskjshlsjlasdkkfhlasdflsjflsjfhsdfjljfasdfcbasdfalcmfaierirerywofasdfalfxfxmashffamxlfkfhdfamfhsflmsdfmlsfmhfsasdfw3435qkadfclfmfshflmsajdflshdfaxfalsnfafkhfkasfsdfnhafskfhsfnksfhskdnfasdfhksdfasakfacxacahaldhahwueroawurcxbankdfhavkadfcnaxiadkaeihwecakjfaxnafaadfewadfeaiecaxfankfekrwebdxbfkdhdfaseaasdfbabxkdfaladadfwryiwerxnacbakdhaasdfwesasoeuhfskdlaweskdflcbk";
-            //Random rand = new Random();
-            //int a = rand.Next(1, username.Length - 13);
-            //int b = rand.Next(5, 10);
-            //username = username.Substring(a, b);
+
+            if (DateTime.Compare(meeting.StartTime, DateTime.UtcNow.AddHours(1)) > 0)
+                return RedirectToAction(nameof(TimeAccessDenied));
+
             string username = "Anonymous" + DateTime.Now.ToString("yyyymmddhhmmssfff");
             ViewBag.Room = meeting.RoomName;
             ViewBag.Topic = meeting.Topic;
             ViewBag.Username = username;
             ViewBag.Token = generateToken(username);
+            return View();
+        }
+
+        public IActionResult TimeAccessDenied()
+        {
             return View();
         }
 
