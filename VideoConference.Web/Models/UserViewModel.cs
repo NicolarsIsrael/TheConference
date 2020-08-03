@@ -13,5 +13,7 @@ namespace VideoConference.Web.Models
         public string Username { get; set; }
         public ApplicationUser User { get; set; }
         public bool IsAdmin { get; set; }
+        public bool IsDeptAdmin { get; set; }
+        public string Dept { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace VideoConference.Web
                     if (await _roleManager.FindByNameAsync("Admin") == null)
                     {
                         await _roleManager.CreateAsync(new ApplicationRole("Admin"));
-                        var user = new ApplicationUser { UserName = "admin", Email = "admin@gmail.com" };
+                        var user = new ApplicationUser { UserName = "admin", Email = "admin@gmail.com",DeptId=0,DeptName="Admin" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();
@@ -54,6 +54,9 @@ namespace VideoConference.Web
                         depts.ForEach(d => context.Department.Add(d));
                         await context.SaveChangesAsync();
                     }
+
+                    if (await _roleManager.FindByNameAsync("DeptAdmin") == null)
+                        await _roleManager.CreateAsync(new ApplicationRole("DeptAdmin"));
 
                     if (await _roleManager.FindByNameAsync("User") == null)
                         await _roleManager.CreateAsync(new ApplicationRole("User"));

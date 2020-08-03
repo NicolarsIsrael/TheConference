@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
@@ -17,10 +18,14 @@ namespace VideoConference.Web.Controllers
 
     public class HomeController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ApplicationDbContext _context;
-        public HomeController(ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleMananger)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleMananger;
         }
         
         public IActionResult D()
@@ -31,9 +36,6 @@ namespace VideoConference.Web.Controllers
         [Authorize()]
         public IActionResult Index()
         {
-            var a = DateTime.Now;
-            var b = _context.Meeting;
-            var c = _context.Meeting.Where(m => m.Id == 4);
             IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting
                 .Select(m => new ScheduleMeetingVM()
                 {

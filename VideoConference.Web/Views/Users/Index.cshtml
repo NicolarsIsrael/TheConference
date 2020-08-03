@@ -1,4 +1,10 @@
-﻿@model IEnumerable<VideoConference.Web.Models.UserViewModel>
+﻿@using Microsoft.AspNetCore.Identity
+@using VideoConference.Web.Core
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@model IEnumerable<VideoConference.Web.Models.UserViewModel>
 @{
     ViewData["Title"] = "Users";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,7 +15,14 @@
             <h3>Users</h3>
         </div>
         <div>
-            <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Users" asp-action="registeruser">Add new users</a>
+            <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Users" asp-action="registeruser">Add new user</a>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    <a class="btn btn custom-secondary-btn" asp-area="" asp-controller="Users" asp-action="registerdeptadmin">Add dept admin</a>
+                }
+            }
         </div>
     </div>
     <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
@@ -19,6 +32,7 @@
                     <tr class="w-100">
                         <th>Email</th>
                         <th>Username</th>
+                        <th>Dept</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -27,17 +41,24 @@
                         @{
                             foreach (var user in Model)
                             {
-                                <tr>
-                                    <td>@user.Email</td>
-                                    <td>@user.Username</td>
-                                    <td>
-                                        @if (!user.IsAdmin)
-                                        {
-                                            <a class="btn btn-sm custom-secondary-btn float-right" onclick="ShowDeleteUser('@user.Id')">delete</a>
-                                        }
-                                    </td>
-                                </tr>
-                             }
+                            <tr>
+                                <td>@user.Email</td>
+                                <td>@user.Username</td>
+                                <td>
+                                    @user.Dept
+                                @if (user.IsDeptAdmin)
+                                {
+                                    <span>(Dept. admin)</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!user.IsAdmin)
+                                {
+                                    <a class="btn btn-sm custom-secondary-btn float-right" onclick="ShowDeleteUser('@user.Id')">delete</a>
+                                }
+                            </td>
+                        </tr>
+                    }
                         }
 
                     </tbody>
