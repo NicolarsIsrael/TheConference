@@ -49,7 +49,7 @@ namespace VideoConference.Web.Controllers
 
             foreach(var user in users)
             {
-                if (await _userManager.IsInRoleAsync(user.User, "Admin"))
+                if (await _userManager.IsInRoleAsync(user.User, "Admin") || await _userManager.IsInRoleAsync(user.User,"ES"))
                 {
                     user.IsAdmin = true;user.IsDeptAdmin = false;
                 }

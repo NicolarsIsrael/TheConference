@@ -13,6 +13,7 @@ namespace VideoConference.Web.Core
         public string Topic { get; set; }
         public string RoomName { get; set; }
         public DateTime StartTime { get; set; }
+        public bool IsExecMeeting { get; set; }
     }
 
 }

@@ -1,0 +1,224 @@
+﻿
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="container mt-3">
+        <div class="section_header">
+            <div class="section_header_text">
+                <a class="btn btn custom-primary-btn" asp-controller="Es" asp-action="Schedulemeeting">New private meeting</a>
+            </div>
+            <div class="meetings_tab">
+                <button class="navbar-toggler collapsed position-relative" type="button" data-toggle="collapse" data-target="#meetingsMenuBar"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav nav-tabs justify-content-center justify-content-md-end" id="meetingsMenuBar" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active tab-link" id="upcoming-meetings" data-toggle="tab" href="#upcoming-meetings-tab" role="tab"
+                           aria-controls="upcoming-meetings" aria-selected="true">Upcoming meetings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link tab-link" id="prev-meetings" data-toggle="tab" href="#prev-meetings-tab" role="tab"
+                           aria-controls="prev-meetings" aria-selected="true">Previous meetings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link tab-link" id="cloud-recordings" data-toggle="tab" href="#cloud-recordings-tab" role="tab"
+                           aria-controls="cloud-recordings" aria-selected="true">Cloud recordings</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab_slider">
+            <div class="tab-pane fade show active" id="upcoming-meetings-tab" role="tabpanel" aria-labelledby="upcoming-meetings">
+                <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+                    <div class="card-body px-1 py-0  table-responsive">
+                        <table class="table w-100">
+                            <thead>
+                                <tr class="w-100">
+                                    <th>Start time</th>
+                                    <th style="width:50%">Topic</th>
+                                    <th>Dept</th>
+                                    <th style="min-width:10%"></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    @{
+                                        foreach (var meeting in Model)
+                                        {
+                                        <tr>
+                                            <td>@meeting.StartDateString</td>
+                                            <td>@meeting.Topic</td>
+
+                                            <td>@meeting.DeptName</td>
+                                            <td>
+                                                @if (meeting.CanJoin)
+                                                {
+                                                    <a class="btn btn-sm custom-primary-btn" target="_blank"
+                                                       asp-controller="Meeting" asp-action="Index" asp-route-id="@meeting.Id">Join</a>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-sm custom-primary-btn" style="cursor:default" disabled>
+                                                        Join
+                                                    </button>
+                                                }
+
+                                            </td>
+                                            <td>
+                                                @if (meeting.CanJoin)
+                                                {
+                                                    <button class="btn btn-sm custom-secondary-btn" onclick="CopyToClipBoard('@meeting.AnonymousLink')">
+                                                        <img src="~/Images/copy.svg" />
+                                                    </button>
+                                                }
+                                                else
+                                                {
+                                                    <button class="btn btn-sm custom-secondary-btn" style="cursor:default" disabled>
+                                                        <img src="~/Images/copy.svg" />
+                                                    </button>
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="prev-meetings-tab" role="tabpanel" aria-labelledby="prev-meetings">
+                    <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+                        <div class="card-body px-1 py-0  table-responsive">
+                            <table class="table w-100">
+                                <thead>
+                                    <tr class="w-100">
+                                        <th>Date</th>
+                                        <th style="width:50%">Topic</th>
+                                        <th>Dept</th>
+                                        <th>Duration</th>
+                                        <th style="min-width:10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>01/Jun/2020 (5:30 PM)</td>
+                                        <td>Montly staff review</td>
+                                        <td>Federal Teachers Scheme</td>
+                                        <td>100 minutes</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td> 06/Jul/2020 (9:00 AM)</td>
+                                        <td>Security meeting</td>
+                                        <td>Legal</td>
+                                        <td>25 minutes</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>28/Jun/2020 (8:30 PM)</td>
+                                        <td>Head of dept meeting</td>
+                                        <td>Finance & Accounts</td>
+                                        <td>80 minutes</td>
+                                        <td>
+                                            <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>04/Apr/2020 (10:00 AM)</td>
+                                        <td>Directors meeting</td>
+                                        <td>Academic Services</td>
+                                        <td>30 minutes</td>
+                                        <td>
+                                            <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                @*
+
+                new Department { DeptName ="Deputy E.S Technical"},
+                                 new Department { DeptName ="Deputy E.S Services"},
+                                 new Department { DeptName ="Federal Teachers Scheme"},
+                                 new Department { DeptName ="Procurement"},
+                                 new Department { DeptName ="Public Relation/Protocol"},
+                                 new Department { DeptName ="Legal"},
+                                 new Department { DeptName ="Internal Audit"},
+                                 new Department { DeptName ="Special Project"},
+                                 new Department { DeptName ="Servicom"},
+                                 new Department { DeptName ="Administration & Supplies"},
+                                 new Department { DeptName ="Finance & Accounts"},
+                                 new Department { DeptName ="Planning Research & Statistics"},
+                                 new Department { DeptName ="Academic Services"},
+                                 new Department { DeptName ="Social Mobilization"},
+                *@
+
+                <div class="tab-pane fade" id="cloud-recordings-tab" role="tabpanel" aria-labelledby="cloud-recordings">
+                    <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+                        <div class="card-body px-1 py-0  table-responsive">
+                            <table class="table w-100">
+                                <thead>
+                                    <tr class="w-100">
+                                        <th>Date</th>
+                                        <th style="width:50%">Topic</th>
+                                        <th>Dept</th>
+                                        <th>Duration</th>
+                                        <th style="min-width:10%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td> 10/Jul/2020 (9:00 AM)</td>
+                                        <td>Workers meeting</td>
+                                        <td>Internal Audit</td>
+                                        <td>40 minutes</td>
+                                        <td>
+                                            <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>25/Jul/2020 (8:30 PM)</td>
+                                        <td>Company Meeting</td>
+                                        <td>Procurement</td>
+                                        <td>20 minutes</td>
+                                        <td>
+                                            <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>27/Jul/2020 (5:30 PM)</td>
+                                        <td>Head of security Meeting</td>
+                                        <td>Social Mobilization</td>
+                                        <td>50 minutes</td>
+                                        <td>
+                                            <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>01/Aug/2020 (10:00 AM)</td>
+                                        <td>Environment Meeting</td>
+                                        <td>Internal Audit</td>
+                                        <td>60 minutes</td>
+                                        <td>
+                                            <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>

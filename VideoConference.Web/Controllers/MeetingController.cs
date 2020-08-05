@@ -17,7 +17,7 @@ using VideoConference.Web.Models;
 
 namespace VideoConference.Web.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class MeetingController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

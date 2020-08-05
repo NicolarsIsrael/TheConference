@@ -15,7 +15,7 @@ using VideoConference.Web.Models;
 
 namespace VideoConference.Web.Controllers
 {
-   // [Authorize(Roles = "Admin,User")]
+   [Authorize(Roles = "Admin,DeptAdmin,User")]
    [AllowAnonymous]
     public class DepartmentController : Controller
     {
@@ -46,7 +46,7 @@ namespace VideoConference.Web.Controllers
                 throw new Exception();
 
             ViewBag.Dept =id>0? dept.DeptName:"General";
-            var deptMeetings = _context.Meeting.ToList();
+            var deptMeetings = _context.Meeting.Where(m => m.IsExecMeeting == false).ToList();
             if (id > 0)
                 deptMeetings = deptMeetings.Where(d => d.DeptID == id).ToList();
 
@@ -117,6 +117,7 @@ namespace VideoConference.Web.Controllers
                 StartTime = scheduleModel.StartDate,
                 DeptID = selectedDeptId,
                 DeptName = selectedDeptId == 0 ? "General" : dept.DeptName,
+                IsExecMeeting = false,
             };
 
             await _context.Meeting.AddAsync(meeting);

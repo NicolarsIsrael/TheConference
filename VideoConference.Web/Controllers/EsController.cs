@@ -1,42 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace VideoConference.Web.Controllers
 {
-
-    public class HomeController : Controller
+    [Authorize(Roles ="ES")]
+    public class EsController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly ApplicationDbContext _context;
-        public HomeController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleMananger)
+        public EsController(ApplicationDbContext context)
         {
             _context = context;
-            _userManager = userManager;
-            _roleManager = roleMananger;
         }
-        
-        public IActionResult D()
+        public IActionResult Index()
         {
-            return View();
+            return RedirectToAction(nameof(Dashboard));
         }
 
-        [Authorize()]
-        public async Task<IActionResult> Index()
+        public IActionResult Dashboard()
         {
-            IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m=>m.IsExecMeeting==false)
+            IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m => m.IsExecMeeting)
                 .Select(m => new ScheduleMeetingVM()
                 {
                     Id = m.Id,
@@ -47,10 +37,10 @@ namespace VideoConference.Web.Controllers
                     RoomName = m.RoomName,
                     CanJoin = true,
                     AnonymousLink = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" +
-                                    $"/AnonMeeting/{GenerateRoute(m.Topic,m.Id)}"
+                                    $"/AnonMeeting/{GenerateRoute(m.Topic, m.Id)}"
                 }).OrderBy(m => m.StartDate).ToList();
 
-            foreach(var meeting in meetingsModel)
+            foreach (var meeting in meetingsModel)
             {
                 if ((DateTime.Compare(meeting.StartDate, DateTime.UtcNow.AddHours(1)) > 0))
                     meeting.CanJoin = false;
@@ -59,37 +49,40 @@ namespace VideoConference.Web.Controllers
             return View(meetingsModel);
         }
 
-        public IActionResult EndMeeting()
-        {
-            return PartialView("_endMeetingMessage");
-        }
-
-        public IActionResult DepartmentMeeting()
-        {
-            var depts = _context.Department
-                .Select(d => new DeptAndIdViewModel()
-                {
-                    DeptId = d.Id,
-                    DeptName = d.DeptName,
-                }).ToList();
-
-            DeptViewModel deptModel = new DeptViewModel()
-            {
-                Department = depts,
-            };
-
-            return PartialView("_departmentMeeting",deptModel);
-        }
-
-        public IActionResult Privacy()
+        public IActionResult ScheduleMeeting()
         {
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM meetingModel)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (!ModelState.IsValid)
+            {   ModelState.AddModelError("", "One or more validation errors");
+                return View(meetingModel);
+            }
+
+            string roomName = Regex.Replace(meetingModel.Topic, @"\s+", "");
+            if (_context.Meeting.Where(m => m.RoomName == roomName).Count() > 0)
+            {
+                ModelState.AddModelError("", "Topic already exist");
+                return View(meetingModel);
+            }
+
+            Meeting meeting = new Meeting()
+            {
+                Topic = meetingModel.Topic,
+                RoomName = roomName,
+                StartTime = meetingModel.StartDate,
+                DeptID = 0,
+                DeptName = "Exec private meeting",
+                IsExecMeeting = true,
+            };
+
+            await _context.Meeting.AddAsync(meeting);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Dashboard));
         }
 
         private string GenerateRoute(string Name, int Id)
@@ -108,6 +101,7 @@ namespace VideoConference.Web.Controllers
             byte[] bytes = System.Text.Encoding.GetEncoding("Cyrillic").GetBytes(text);
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
+
 
     }
 }
