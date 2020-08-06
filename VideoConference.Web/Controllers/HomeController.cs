@@ -15,7 +15,7 @@ using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace VideoConference.Web.Controllers
 {
-
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -28,29 +28,28 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
         
-        public IActionResult D()
+        public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize()]
-        public async Task<IActionResult> Index()
+        public IActionResult Meeting()
         {
-            IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m=>m.IsExecMeeting==false)
-                .Select(m => new ScheduleMeetingVM()
-                {
-                    Id = m.Id,
-                    Topic = m.Topic,
-                    DeptName = m.DeptName,
-                    StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
-                    StartDate = m.StartTime,
-                    RoomName = m.RoomName,
-                    CanJoin = true,
-                    AnonymousLink = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" +
-                                    $"/AnonMeeting/{GenerateRoute(m.Topic,m.Id)}"
-                }).OrderBy(m => m.StartDate).ToList();
+            IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m => m.MeetingType == MeetingType.General)
+               .Select(m => new ScheduleMeetingVM()
+               {
+                   Id = m.Id,
+                   Topic = m.Topic,
+                   DeptName = m.DeptName,
+                   StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
+                   StartDate = m.StartTime,
+                   RoomName = m.RoomName,
+                   CanJoin = true,
+                   AnonymousLink = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" +
+                                   $"/AnonMeeting/{GenerateRoute(m.Topic, m.Id)}"
+               }).OrderBy(m => m.StartDate).ToList();
 
-            foreach(var meeting in meetingsModel)
+            foreach (var meeting in meetingsModel)
             {
                 if ((DateTime.Compare(meeting.StartDate, DateTime.UtcNow.AddHours(1)) > 0))
                     meeting.CanJoin = false;
@@ -59,11 +58,13 @@ namespace VideoConference.Web.Controllers
             return View(meetingsModel);
         }
 
+        [AllowAnonymous]
         public IActionResult EndMeeting()
         {
             return PartialView("_endMeetingMessage");
         }
 
+        [AllowAnonymous]
         public IActionResult DepartmentMeeting()
         {
             var depts = _context.Department

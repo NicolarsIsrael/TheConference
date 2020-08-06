@@ -12,8 +12,12 @@ namespace VideoConference.Web.Core
         public string DeptName { get; set; }
         public string Topic { get; set; }
         public string RoomName { get; set; }
+        public MeetingType MeetingType { get; set; }
         public DateTime StartTime { get; set; }
-        public bool IsExecMeeting { get; set; }
     }
 
+    public enum MeetingType
+    {
+        Admin, ZonalDirector, General, ExecutiveSecretary, Subeb
+    }
 }

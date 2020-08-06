@@ -66,12 +66,23 @@ namespace VideoConference.Web
                     }
                         await _roleManager.CreateAsync(new ApplicationRole("ES"));
 
-                    if (await _roleManager.FindByNameAsync("DeptAdmin") == null)
-                        await _roleManager.CreateAsync(new ApplicationRole("DeptAdmin"));
-
                     if (await _roleManager.FindByNameAsync("User") == null)
                         await _roleManager.CreateAsync(new ApplicationRole("User"));
 
+                    if (await _roleManager.FindByNameAsync("ZonalDirector") == null)
+                    {
+                        await _roleManager.CreateAsync(new ApplicationRole("ZonalDirector"));
+                        var user = new ApplicationUser { UserName = "ZonalDirector", Email = "zonaldirector1@gmail.com", DeptId = 0, DeptName = "Zonal Director" };
+                        var result = await _userManager.CreateAsync(user, "Abc123*");
+                        if (!result.Succeeded)
+                            throw new Exception();
+                        await _userManager.AddToRoleAsync(user, "ZonalDirector");
+
+                    }
+                        
+
+                    if (await _roleManager.FindByNameAsync("User") == null)
+                        await _roleManager.CreateAsync(new ApplicationRole("User"));
                 }
             }
             catch (Exception ex)

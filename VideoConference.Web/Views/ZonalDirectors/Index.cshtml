@@ -5,114 +5,51 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @{
-    ViewData["Title"] = "Meeting";
+    ViewData["Title"] = "Zonal directors";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<style>
-</style>
-<div class="d-sm-block d-md-none d-lg-none d-xl-none">
-    <div class="img-box">
-        <img class="img-box" src="~/Images/background-image-mobile.jpg" />
-
-    </div>
-
-</div>
-<div class="d-none d-md-block">
-    <div style="height:400px;width:100%">
-        <img src="~/Images/background-image.jpg" class="img-box-lg" />
-    </div>
-</div>
-
-<div class="container mt-3 mt-lg-5">
-    <div class="card box-shadow">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-2 mb-1">
-                    <a class="btn btn-sm custom-primary-btn btn-block" asp-area="" asp-controller="Es" asp-action="Index">
-                        ES<br class="d-none d-md-block" /> Meeting Room
-                    </a>
+<div class="container mt-3">
+    @{
+        if (SignInManager.IsSignedIn(User))
+        {
+            if (User.IsInRole("Admin") || User.IsInRole("DeptAdmin"))
+            {
+                <div style="text-align:right">
+                    <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Zonaldirectors" asp-action="ScheduleMeeting">New meeting</a>
                 </div>
-
-                <div class="col-md-2 mb-1">
-                    <a class="btn btn-sm custom-primary-btn btn-block" asp-area="" asp-controller="ZonalDirectors" asp-action="Index">
-                        Zonal Directors<br class="d-none d-md-block" /> Meeting Room
-                    </a>
-                </div>
-                <div class="col-md-2 mb-1">
-                    <a class="btn btn-sm custom-primary-btn btn-block" asp-area="" asp-controller="Subeb" asp-action="Index">
-                        SUBEB<br class="d-none d-md-block" /> Meeting Room
-                    </a>
-                </div>
-                <div class="col-md-2 mb-1">
-                    <a class="btn btn-sm custom-primary-btn btn-block" asp-area="" asp-controller="Home" asp-action="Meeting">
-                        General<br class="d-none d-md-block" /> Meeting Room
-                    </a>
-                </div>
-                <div class="col-md-2 mb-1">
-                    <a class="btn btn-sm custom-primary-btn btn-block" asp-area="" asp-controller="Es" asp-action="Index">
-                        General<br class="d-none d-md-block" /> Memo
-                    </a>
-                </div>
-                <div class="col-md-2 mb-1">
-                    <a class="btn btn-sm custom-primary-btn btn-block" asp-area="" asp-controller="Es" asp-action="Index">
-                        Department<br class="d-none d-md-block" /> Memo
-                    </a>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-</div>
-
-@*<div class="container mt-3">
-    <div class="row  mb-2">
-        <div class="col-6">
-            <h4>Dept: General</h4>
-        </div>
-        <div class="col-6" style="text-align:right">
-            <a class="btn btn-sm custom-primary-btn" style="text-align:right" asp-area="" asp-controller="Es" asp-action="Index">ES Meeting Room</a>
-        </div>
-    </div>
-    <div class="section_header">
-        <div class="section_header_text">
-            @{
-                if (SignInManager.IsSignedIn(User))
-                {
-                    if (User.IsInRole("Admin") || User.IsInRole("DeptAdmin"))
-                    {
-                        <a class="btn btn-sm custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
-                    }
-                }
-
+                <hr />
             }
-            <a class="btn btn-sm custom-secondary-btn" onclick="ShowDeptMeetings()">Department meeting</a>
+        }
 
-        </div>
-        <div class="meetings_tab">
-            <button class="navbar-toggler collapsed position-relative" type="button" data-toggle="collapse" data-target="#meetingsMenuBar"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav nav-tabs justify-content-center justify-content-md-end" id="meetingsMenuBar" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active tab-link" id="upcoming-meetings" data-toggle="tab" href="#upcoming-meetings-tab" role="tab"
-                       aria-controls="upcoming-meetings" aria-selected="true">Upcoming meetings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link tab-link" id="prev-meetings" data-toggle="tab" href="#prev-meetings-tab" role="tab"
-                       aria-controls="prev-meetings" aria-selected="true">Previous meetings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link tab-link" id="cloud-recordings" data-toggle="tab" href="#cloud-recordings-tab" role="tab"
-                       aria-controls="cloud-recordings" aria-selected="true">Cloud recordings</a>
-                </li>
-            </ul>
-        </div>
+    }
+<div class="section_header">
+    <div class="section_header_text">
+        <h4> Zonal Directors Room</h4>
+
     </div>
+    <div class="meetings_tab">
+        <button class="navbar-toggler collapsed position-relative" type="button" data-toggle="collapse" data-target="#meetingsMenuBar"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav nav-tabs justify-content-center justify-content-md-end" id="meetingsMenuBar" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active tab-link" id="upcoming-meetings" data-toggle="tab" href="#upcoming-meetings-tab" role="tab"
+                   aria-controls="upcoming-meetings" aria-selected="true">Upcoming meetings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link tab-link" id="prev-meetings" data-toggle="tab" href="#prev-meetings-tab" role="tab"
+                   aria-controls="prev-meetings" aria-selected="true">Previous meetings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link tab-link" id="cloud-recordings" data-toggle="tab" href="#cloud-recordings-tab" role="tab"
+                   aria-controls="cloud-recordings" aria-selected="true">Cloud recordings</a>
+            </li>
+        </ul>
+    </div>
+</div>
     <div class="tab_slider">
         <div class="tab-pane fade show active" id="upcoming-meetings-tab" role="tabpanel" aria-labelledby="upcoming-meetings">
             <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
@@ -285,4 +222,4 @@
             </div>
 
         </div>
-    </div>*@
+    </div>

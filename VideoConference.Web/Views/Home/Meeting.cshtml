@@ -1,12 +1,37 @@
-﻿
+﻿@model IEnumerable<VideoConference.Web.Models.ScheduleMeetingVM>
+@using Microsoft.AspNetCore.Identity
+@using VideoConference.Web.Core
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = ViewBag.Dept;
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
     <div class="container mt-3">
+        <div class="row  mb-2">
+            <div class="col-6">
+                <h4>Dept: General</h4>
+            </div>
+            <div class="col-6" style="text-align:right">
+                <a class="btn btn-sm custom-primary-btn" style="text-align:right" asp-area="" asp-controller="Es" asp-action="Index">ES Meeting Room</a>
+            </div>
+        </div>
         <div class="section_header">
             <div class="section_header_text">
-                <a class="btn btn custom-primary-btn" asp-controller="Es" asp-action="Schedulemeeting">New private meeting</a>
+                @{
+                    if (SignInManager.IsSignedIn(User))
+                    {
+                        if (User.IsInRole("Admin") || User.IsInRole("DeptAdmin"))
+                        {
+                            <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Department" asp-action="ScheduleMeeting">New meeting</a>
+                        }
+                    }
+
+                }
+                <a class="btn btn custom-secondary-btn" onclick="ShowDeptMeetings()">Department meeting</a>
+
             </div>
             <div class="meetings_tab">
                 <button class="navbar-toggler collapsed position-relative" type="button" data-toggle="collapse" data-target="#meetingsMenuBar"
@@ -53,7 +78,6 @@
                                         <tr>
                                             <td>@meeting.StartDateString</td>
                                             <td>@meeting.Topic</td>
-
                                             <td>@meeting.DeptName</td>
                                             <td>
                                                 @if (meeting.CanJoin)
@@ -110,21 +134,21 @@
                                     <tr>
                                         <td>01/Jun/2020 (5:30 PM)</td>
                                         <td>Montly staff review</td>
-                                        <td>Federal Teachers Scheme</td>
+                                        <td>@ViewBag.Dept</td>
                                         <td>100 minutes</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <td> 06/Jul/2020 (9:00 AM)</td>
                                         <td>Security meeting</td>
-                                        <td>Legal</td>
+                                        <td>@ViewBag.Dept</td>
                                         <td>25 minutes</td>
                                         <td></td>
                                     </tr>
                                     <tr>
                                         <td>28/Jun/2020 (8:30 PM)</td>
                                         <td>Head of dept meeting</td>
-                                        <td>Finance & Accounts</td>
+                                        <td>@ViewBag.Dept</td>
                                         <td>80 minutes</td>
                                         <td>
                                             <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -134,7 +158,7 @@
                                     <tr>
                                         <td>04/Apr/2020 (10:00 AM)</td>
                                         <td>Directors meeting</td>
-                                        <td>Academic Services</td>
+                                        <td>@ViewBag.Dept</td>
                                         <td>30 minutes</td>
                                         <td>
                                             <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -145,7 +169,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="tab-pane fade" id="cloud-recordings-tab" role="tabpanel" aria-labelledby="cloud-recordings">
                     <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
                         <div class="card-body px-1 py-0  table-responsive">
@@ -163,7 +186,7 @@
                                     <tr>
                                         <td> 10/Jul/2020 (9:00 AM)</td>
                                         <td>Workers meeting</td>
-                                        <td>Internal Audit</td>
+                                        <td>@ViewBag.Dept</td>
                                         <td>40 minutes</td>
                                         <td>
                                             <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -172,7 +195,7 @@
                                     <tr>
                                         <td>25/Jul/2020 (8:30 PM)</td>
                                         <td>Company Meeting</td>
-                                        <td>Procurement</td>
+                                        <td>@ViewBag.Dept</td>
                                         <td>20 minutes</td>
                                         <td>
                                             <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -181,7 +204,7 @@
                                     <tr>
                                         <td>27/Jul/2020 (5:30 PM)</td>
                                         <td>Head of security Meeting</td>
-                                        <td>Social Mobilization</td>
+                                        <td>@ViewBag.Dept</td>
                                         <td>50 minutes</td>
                                         <td>
                                             <a class="btn btn-sm custom-primary-btn float-right">Watch</a>
@@ -190,7 +213,7 @@
                                     <tr>
                                         <td>01/Aug/2020 (10:00 AM)</td>
                                         <td>Environment Meeting</td>
-                                        <td>Internal Audit</td>
+                                        <td>@ViewBag.Dept</td>
                                         <td>60 minutes</td>
                                         <td>
                                             <a class="btn btn-sm custom-primary-btn float-right">Watch</a>

@@ -11,22 +11,17 @@ using VideoConference.Web.Models;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize(Roles ="ES")]
-    public class EsController : Controller
+    [Authorize(Roles ="Admin,DeptAdmin,ES,ZonalDirector")]
+    public class ZonalDirectorsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        public EsController(ApplicationDbContext context)
+        public ZonalDirectorsController(ApplicationDbContext context)
         {
             _context = context;
         }
         public IActionResult Index()
         {
-            return RedirectToAction(nameof(Dashboard));
-        }
-
-        public IActionResult Dashboard()
-        {
-            IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m => m.MeetingType ==MeetingType.ExecutiveSecretary)
+            IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m => m.MeetingType == MeetingType.ZonalDirector)
                 .Select(m => new ScheduleMeetingVM()
                 {
                     Id = m.Id,
@@ -59,7 +54,8 @@ namespace VideoConference.Web.Controllers
         public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM meetingModel)
         {
             if (!ModelState.IsValid)
-            {   ModelState.AddModelError("", "One or more validation errors");
+            {
+                ModelState.AddModelError("", "One or more validation errors");
                 return View(meetingModel);
             }
 
@@ -76,14 +72,15 @@ namespace VideoConference.Web.Controllers
                 RoomName = roomName,
                 StartTime = meetingModel.StartDate,
                 DeptID = 0,
-                DeptName = "Exec private meeting",
-                MeetingType = MeetingType.ExecutiveSecretary,
+                DeptName = "Subeb meeting",
+                MeetingType = MeetingType.ZonalDirector,
             };
 
             await _context.Meeting.AddAsync(meeting);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Dashboard));
+            return RedirectToAction(nameof(Index));
         }
+
 
         private string GenerateRoute(string Name, int Id)
         {
@@ -101,7 +98,5 @@ namespace VideoConference.Web.Controllers
             byte[] bytes = System.Text.Encoding.GetEncoding("Cyrillic").GetBytes(text);
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
-
-
     }
 }

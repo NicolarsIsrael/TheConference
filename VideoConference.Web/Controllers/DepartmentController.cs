@@ -46,7 +46,7 @@ namespace VideoConference.Web.Controllers
                 throw new Exception();
 
             ViewBag.Dept =id>0? dept.DeptName:"General";
-            var deptMeetings = _context.Meeting.Where(m => m.IsExecMeeting == false).ToList();
+            var deptMeetings = _context.Meeting.Where(m => m.MeetingType == MeetingType.General).ToList();
             if (id > 0)
                 deptMeetings = deptMeetings.Where(d => d.DeptID == id).ToList();
 
@@ -117,12 +117,12 @@ namespace VideoConference.Web.Controllers
                 StartTime = scheduleModel.StartDate,
                 DeptID = selectedDeptId,
                 DeptName = selectedDeptId == 0 ? "General" : dept.DeptName,
-                IsExecMeeting = false,
+               MeetingType = MeetingType.General,
             };
 
             await _context.Meeting.AddAsync(meeting);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Meeting","Home");
         }
 
         [Authorize(Roles ="Admin,DeptAdmin")]

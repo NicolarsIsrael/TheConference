@@ -1,0 +1,41 @@
+﻿@model VideoConference.Web.Models.ScheduleMeetingVM
+
+@{
+    ViewData["Title"] = "Schedule Meeting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="login-register-logo-div mx-auto mt-2">
+        <img src="~/Images/logo.jpg" />
+    </div>
+    <div class="card login-card mx-auto">
+        <div class="card-body">
+            <form asp-action="ScheduleMeeting">
+                <h4 class="login-header">SCHEDULE MEETING</h4>
+                <hr />
+                <input type="hidden" asp-for="DeptId" value="0" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="DeptId" type="hidden" />
+                <div class="form-group">
+                    <label asp-for="Topic" class="control-label"></label>
+                    <input asp-for="Topic" class="form-control" />
+                    <span asp-validation-for="Topic" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input asp-for="StartDate" class="form-control" placeholder="Start date" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Schedule" class="btn custom-primary-btn btn-block" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
