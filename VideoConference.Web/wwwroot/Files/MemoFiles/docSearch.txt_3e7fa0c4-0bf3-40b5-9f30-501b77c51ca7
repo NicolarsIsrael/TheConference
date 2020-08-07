@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Doc search</title>
+
+    
+    <!-- Theme style -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <!-- carousel -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css">
+</head>
+
+<style>
+    body {
+        overflow-x: hidden;
+        background-color: #e9ecef;
+        margin:0;
+    }
+
+    .landing-picture {
+        background: url('https://cdn.pixabay.com/photo/2019/10/25/10/49/audit-4576720_960_720.jpg') no-repeat center;
+        background-size: cover;
+        height: 85vh;
+        width: 100%;
+        justify-content: center;
+    }
+
+.search-doc, .about{
+    margin-right: auto;
+    margin-left: auto;
+    margin-top:30px;
+    margin-bottom:30px;
+}
+
+.text-header{
+    text-align: center;
+    margin-bottom: 5px;
+    padding-bottom: 2px;
+    border-bottom: 2px solid #007bff;
+}
+
+.footer{
+    padding:50px 20px;
+    background-color: #343a40;
+}
+.about-p{
+    text-align: center;
+}
+
+.about{
+    padding-right: 20px;
+    padding-left: 20px
+}
+
+.aboutus-img{
+    height: 100%;
+    width: 100%;
+}
+
+.about-text{
+    margin:50px 0;
+}
+</style>
+
+<body class="container-fluid">
+    <div class="">
+       
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                        <a href="#" class="navbar-brand">
+                            
+                            <span class="brand-text font-weight-light">MY DOC SEARCH</span>
+                        </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    </div>
+               
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+
+                        <!-- Left navbar links -->
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+        
+                                <a href="#" class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#about" class="nav-link">About</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#contactUs" class="nav-link">Contact</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#search" class="nav-link">Search</a>
+                            </li>
+                          
+                        </ul>
+        
+        
+                    </div>
+                    <!-- Right navbar links -->
+              </nav>
+
+
+
+    </div>
+
+
+    <!-- landing picture -->
+    <div class="landing-picture">
+ 
+    </div>
+
+
+    <!--End landing picture -->
+
+<!-- search doc-->
+
+
+    <div class="ml-auto search-doc" id="search">
+        <div class="row">
+            <div class="col-md-4">
+
+            </div>
+            <div class="col-md-4">
+                    <form>
+                            <h3 class="text-header">UPLOAD YOUR TEXT FILE</h3>
+                            <input type="file" class="form-control" style="margin-bottom: 5px">
+                            <input class="form-control btn btn-primary" value="SEARCH" type="submit" >
+                        </form>
+                </div>
+        </div>
+      
+    </div>
+<!--end of search doc-->
+
+<!-- about site-->
+
+
+<div class="ml-auto about" id="about">
+        <div class="row">
+            <div class="col-md-6 about-text">
+                    <h3 class="text-header">ABOUT APP</h3>
+                    <p class="about-p"> MY DOC SEARCH is an online app that takes in your text files and reads it. It uses data structures and algorithms to present to you all unique strings in the text file and the frequency in which they occur</p>
+            </div>
+            <div class="col-md-6">
+                  <img src="https://cdn.pixabay.com/photo/2012/02/28/15/36/concept-18290_960_720.jpg" class="aboutus-img">
+                </div>
+        </div>
+      
+    </div>
+<!--about site-->
+
+
+
+
+  <!-- /.content-wrapper -->
+  <footer class="footer"  style="color: white">
+        <strong>My docs search 2019.</a></strong>
+        All rights reserved.
+      </footer>
+    
+
+      <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous"></script>
+    <!-- Bootstrap -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.js"></script>
+</body>
+
+</html>

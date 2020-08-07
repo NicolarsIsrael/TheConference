@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,9 +24,10 @@ namespace VideoConference.Web.Models
         public DateTime DateCreated { get; set; }
         public string DateCreatedString { get; set; }
 
-        [Required(ErrorMessage ="Message is required")]
-        [BeginWIthAlphaNumeric(ErrorMessage ="Message must begin with alphabeth or number")]
-        public string Message { get; set; }
+        [Display(Name = "Memo file")]
+        [DataType(DataType.Upload)]
+        public IFormFile MemoFile { get; set; }
+        public string MemoFilePath { get; set; }
     }
 
 

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
+using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
@@ -38,11 +40,11 @@ namespace VideoConference.Web.Controllers
                     DeptName = m.DeptName,
                     DateCreated = m.DateCreated,
                     DateCreatedString = m.DateCreated.ToString("dd/MMM/yyyy(hh: mm tt)"),
+                    MemoFilePath = m.MemoFile,
                 }).OrderByDescending(m=>m.DateCreated).ToList();
 
             return View(allMemos);
         }
-
 
         public IActionResult DeptMemo(int id)
         {
@@ -54,6 +56,7 @@ namespace VideoConference.Web.Controllers
                    DeptName = m.DeptName,
                    DateCreated = m.DateCreated,
                    DateCreatedString = m.DateCreated.ToString("dd/MMM/yyyy(hh: mm tt)"),
+                   MemoFilePath = m.MemoFile,
                }).OrderByDescending(m => m.DateCreated).ToList();
             var dept = _context.Department.Where(d => d.Id == id).FirstOrDefault();
             if (dept == null)
@@ -89,13 +92,23 @@ namespace VideoConference.Web.Controllers
             if (selectedDeptId != 0 && dept == null)
                 throw new Exception();
 
+            var file = memoModel.MemoFile;
+            string uri = string.Empty;
+            if (file == null)
+                throw new Exception();
+            else
+                uri = FileService.SaveDoc(file, "MemoFiles");
+
+            if (string.IsNullOrEmpty(uri) || string.IsNullOrWhiteSpace(uri))
+                throw new Exception();
+
             Memo memo = new Memo()
             {
                 Title = memoModel.Title,
-                Message = memoModel.Message,
                 DeptId = selectedDeptId,
                 DeptName = selectedDeptId == 0 ? "General" : dept.DeptName,
                 DateCreated = DateTime.UtcNow.AddHours(1),
+                MemoFile = uri,
             };
             await _context.Memo.AddAsync(memo);
             await _context.SaveChangesAsync();

@@ -1,0 +1,323 @@
+@using Microsoft.AspNetCore.Identity
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link href="~/Content/Dashboard/css/main.css" rel="stylesheet" />
+
+    <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
+
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <style>
+        .user-panel img {
+            width: auto;
+            max-width: 7rem;
+            max-height: 7rem;
+            height: 7rem;
+            width: 7rem;
+        }
+
+        .user-panel {
+            flex-direction: column;
+        }
+    </style>
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav" style="margin-right:auto">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars" style="padding-top: 0.5rem"></i></a>
+                </li>
+                
+            </ul>
+            @Html.Partial("_LoginPartial")
+
+
+        </nav>
+        <!-- /.navbar -->
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary ">
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <a class="nav-link" href="@Url.Action("")">
+                    <div class="user-panel mt-3 pb-3 mb-2 d-flex">
+
+                        <div class="image m-auto pl-0" id="partial-image">
+                          
+                        </div>
+                        <div class="info m-auto">
+                            <p class="d-block">@User.Identity.Name</p>
+                        </div>
+
+                    </div>
+                </a>
+
+                <!-- Sidebar -->
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                        data-accordion="false">
+                        <!-- Add icons to the links using the .nav-icon class
+                        with font-awesome or any other icon font library -->
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Store" asp-action="Dashboard">
+                                <i class="fas fa-th"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-inbox"></i>
+                                <p>
+                                    Orders
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Store"
+                                       asp-action="ViewAwaitingOrders">
+
+                                        <i class="fas fa-align-left"></i>
+                                        <p>
+                                            Awaiting orders
+                                        </p>
+                                    </a>
+
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Store"
+                                       asp-action="ViewReadyOrders">
+                                        <i class="fas fa-align-right"></i>
+                                        <p>
+                                            Ready orders
+                                        </p>
+                                    </a>
+
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Store"
+                                       asp-action="ViewDeliveredOrders">
+
+                                        <i class="fas fa-align-justify"></i>
+                                        <p>
+                                            Delivered orders
+                                        </p>
+                                    </a>
+
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="nav-item has-treeview">
+                            <a class="nav-link" href="#">
+                                <i class="fas fa-chart-pie"></i>
+                                <p>
+                                    Reports and Charts
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Store" asp-action="Report">
+                                        <i class="fas fa-chart-pie"></i>
+                                        <p>
+                                            Reports
+                                        </p>
+                                    </a>
+
+                                </li>
+                                <li class="nav-item has-treeview">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-user"></i>
+                                        <p>
+                                            Customers
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Store"
+                                               asp-action="CustomersMonthlyChart">
+                                                <i class="fas fa-calendar"></i>
+                                                <p>
+                                                    Monthly
+                                                </p>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Store"
+                                               asp-action="CustomersQuarterlyChart">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                <p>
+                                                    Quarterly
+                                                </p>
+                                            </a>
+
+                                        </li>
+
+                                    </ul>
+                                </li>
+
+                                <li class="nav-item has-treeview">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-users"></i>
+                                        <p>
+                                            Employees
+                                            <i class="fas fa-angle-left right"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Store"
+                                               asp-action="EmployeesMonthlyChart">
+                                                <i class="fas fa-calendar"></i>
+                                                <p>
+                                                    Monthly
+                                                </p>
+                                            </a>
+
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-controller="Store"
+                                               asp-action="EmployeeQuarterlyChart">
+                                                <i class="fas fa-calendar-alt"></i>
+                                                <p>
+                                                    Quarterly
+                                                </p>
+                                            </a>
+
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Store"
+                                       asp-action="ProductMonthlyChart">
+                                        <i class="fas fa-barcode"></i>
+                                        <p>
+                                            Products
+                                        </p>
+                                    </a>
+
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Store"
+                                       asp-action="ServiceMonthlyChart">
+                                        <i class="fas fa-barcode"></i>
+                                        <p>
+                                            Services
+                                        </p>
+                                    </a>
+
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Store"
+                                       asp-action="ComboMonthlyChart">
+                                        <i class="fas fa-shopping-basket"></i>
+                                        <p>
+                                            Combos
+                                        </p>
+                                    </a>
+
+                                </li>
+
+
+
+                            </ul>
+
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+        <!-- Main Footer -->
+        <footer class="main-footer">
+            <div class="container text-center">
+                &copy; 2020 - Savvy laundry
+            </div>
+        </footer>
+        <style>
+            .main-footer {
+                background-color: #343a40 !important;
+                color: white !important;
+            }
+
+            @@media screen and (max-width: 2000px) and (min-width: 520px) {
+                .main-footer {
+                    margin-left: 0rem !important;
+                }
+            }
+        </style>
+    </div>
+
+    <!-- ./wrapper -->
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <!-- REQUIRED SCRIPTS -->
+    <script src="~/Content/Dashboard/js/main.js"></script>
+
+
+    <script>
+
+            //image for dashboard
+            //var image = document.getElementById("partial-image");
+            //var img = document.createElement("img");
+            //img.classList.add('elevation-3');
+            //img.classList.add('img-circle');
+            //axios.get('/store/userimage')
+            //    .then(function (response) {
+            //        console.log(response)
+            //        img.src = response.data.result;
+            //        image.appendChild(img);
+            //    })
+            //    .catch(function (error) {
+            //        console.log(error);
+            //    });
+
+    </script>
+</body>
+
+</html>

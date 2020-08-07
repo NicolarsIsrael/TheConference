@@ -10,7 +10,7 @@ namespace VideoConference.Web.Core
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime DateCreated { get; set; }
-        public string Message { get; set; }
+        public string MemoFile { get; set; }
         public int DeptId { get; set; }
         public string DeptName { get; set; }
     }
