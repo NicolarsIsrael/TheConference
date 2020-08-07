@@ -1,0 +1,318 @@
+﻿/* The side navigation menu */
+a:hover {
+    text-decoration: none;
+}
+
+.row {
+    margin-bottom: 10px;
+}
+
+.select2 {
+    width: 100% !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 0.25rem;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 0 !important;
+}
+
+.dashboard-sidenav {
+    height: inherit;
+    min-height: 100%;
+    display: block;
+    width: 0; /* 0 width - change this with JavaScript */
+    position: absolute; /* Stay in place */
+    z-index: 100; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #384859;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 10px; /* Place content 60px from the top */
+    transition: .3s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+
+    /* When you mouse over the navigation links, change their color */
+    .dashboard-sidenav a:hover {
+        color: #f1f1f1;
+    }
+
+.dashboard-side-navitem > * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.dashboard-side-navitem > i {
+    margin-right: 10px;
+}
+
+.navbar-toggle-link:hover {
+    cursor: pointer;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main-content {
+    transition: margin-left .3s;
+}
+
+
+.content-wrapper-body {
+    min-height: 85vh;
+    padding: 20px;
+}
+
+.dashb-navbar-item {
+    border-radius: 0;
+}
+
+    .dashb-navbar-item:hover {
+        background-color: #4dccff;
+        color: white;
+        border-radius: 0 !important;
+    }
+
+.dashboard-side-navitem:hover {
+    color: white;
+    opacity: 1 !important;
+}
+
+.dashboard-sidenav-link {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.dashboard-side-navitem {
+    color: white !important;
+    opacity: 0.8 !important;
+}
+
+.nav-treeview > li {
+    margin-left: 30px;
+}
+
+.table-responsive {
+    overflow: auto
+}
+
+    .table-responsive > .table tr td, .table-responsive > .table tr th {
+        white-space: normal !important
+    }
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .dashboard-sidenav {
+        padding-top: 15px;
+    }
+
+        .dashboard-sidenav a {
+            font-size: 18px;
+        }
+}
+
+/*@@media screen and (max-width:990){
+        .dashboard-sidenav{
+            width:0;
+        }
+    }*/
+
+/*screens greater than md*/
+@media screen and (min-width:991px) {
+    /* The sidenav */
+    .dashboard-sidenav {
+        width: 250px;
+    }
+    /* Page content */
+    #main-content {
+        margin-left: 250px; /* Same as the width of the sidenav */
+    }
+}
+
+
+@media (max-width:575.98px) {
+    .table-responsive-sm {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+
+        .table-responsive-sm > .table-bordered {
+            border: 0
+        }
+}
+
+@media (max-width:767.98px) {
+    .table-responsive-md {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+
+        .table-responsive-md > .table-bordered {
+            border: 0
+        }
+}
+
+
+@media (max-width:991.98px) {
+    .table-responsive-lg {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+
+        .table-responsive-lg > .table-bordered {
+            border: 0
+        }
+}
+
+@media (max-width:1199.98px) {
+    .table-responsive-xl {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch
+    }
+
+        .table-responsive-xl > .table-bordered {
+            border: 0
+        }
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch
+}
+
+    .table-responsive > .table-bordered {
+        border: 0
+    }
+
+.table-responsive {
+    overflow: auto
+}
+
+    .table-responsive > .table tr td, .table-responsive > .table tr th {
+        white-space: normal !important
+    }
+
+
+.dashboard-dropdown-item {
+    display: none;
+}
+
+.table.table-head-fixed thead tr:nth-child(1) th {
+    background-color: #fff;
+    border-bottom: 0;
+    box-shadow: inset 0 1px 0 #dee2e6,inset 0 -1px 0 #dee2e6;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.table.table-head-fixed.table-dark thead tr:nth-child(1) th {
+    background-color: #212529;
+    box-shadow: inset 0 1px 0 #383f45,inset 0 -1px 0 #383f45
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0,0,0,.05)
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255,255,255,.05)
+}
+
+.card-header > .card-tools {
+    float: right;
+    margin-right: -.625rem
+}
+
+    .card-header > .card-tools .input-group, .card-header > .card-tools .nav, .card-header > .card-tools .pagination {
+        margin-bottom: -.3rem;
+        margin-top: -.3rem
+    }
+
+    .card-header > .card-tools [data-toggle=tooltip] {
+        position: relative
+    }
+
+.login-card-body .input-group .form-control, .register-card-body .input-group .form-control {
+    border-right: 0
+}
+
+    .login-card-body .input-group .form-control:focus, .register-card-body .input-group .form-control:focus {
+        box-shadow: none
+    }
+
+        .login-card-body .input-group .form-control:focus ~ .input-group-append .input-group-text, .register-card-body .input-group .form-control:focus ~ .input-group-append .input-group-text {
+            border-color: #80bdff
+        }
+
+    .login-card-body .input-group .form-control.is-valid:focus, .register-card-body .input-group .form-control.is-valid:focus {
+        box-shadow: none
+    }
+
+    .login-card-body .input-group .form-control.is-valid ~ .input-group-append .input-group-text, .register-card-body .input-group .form-control.is-valid ~ .input-group-append .input-group-text {
+        border-color: #28a745
+    }
+
+    .login-card-body .input-group .form-control.is-invalid:focus, .register-card-body .input-group .form-control.is-invalid:focus {
+        box-shadow: none
+    }
+
+    .login-card-body .input-group .form-control.is-invalid ~ .input-group-append .input-group-text, .register-card-body .input-group .form-control.is-invalid ~ .input-group-append .input-group-text {
+        border-color: #dc3545
+    }
+
+.login-card-body .input-group .input-group-text, .register-card-body .input-group .input-group-text {
+    background-color: transparent;
+    border-bottom-right-radius: .25rem;
+    border-left: 0;
+    border-top-right-radius: .25rem;
+    color: #777;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out
+}
+
+.input-group-sm > .custom-select, .input-group-sm > .form-control:not(textarea) {
+    height: calc(1.8125rem + 2px)
+}
+
+.input-group-sm > .custom-select, .input-group-sm > .form-control, .input-group-sm > .input-group-append > .btn, .input-group-sm > .input-group-append > .input-group-text, .input-group-sm > .input-group-prepend > .btn, .input-group-sm > .input-group-prepend > .input-group-text {
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem
+}
+
+.input-group-lg > .custom-select, .input-group-sm > .custom-select {
+    padding-right: 1.75rem
+}
+
+.input-group-sm + .form-control-feedback.fa, .input-group-sm + .form-control-feedback.fab, .input-group-sm + .form-control-feedback.far, .input-group-sm + .form-control-feedback.fas, .input-group-sm + .form-control-feedback.glyphicon, .input-group-sm + .form-control-feedback.ion, .input-sm + .form-control-feedback.fa, .input-sm + .form-control-feedback.fab, .input-sm + .form-control-feedback.far, .input-sm + .form-control-feedback.fas, .input-sm + .form-control-feedback.glyphicon, .input-sm + .form-control-feedback.ion {
+    line-height: calc(1.8125rem + 2px)
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    padding: .75rem 1.25rem;
+    position: relative;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.card-title {
+    float: left;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin: 0;
+}
