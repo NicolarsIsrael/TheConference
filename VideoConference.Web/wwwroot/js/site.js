@@ -43,6 +43,21 @@ function ShowDeptMeetings() {
     });
 }
 
+function ShowDepartmentMemo() {
+    $.ajax({
+        url: "/Home/DepartmentMemo/",
+        dataType: "html",
+        data: {},
+        success: function (result) {
+            $("#sidebarbody").html(result);
+            openNav();
+        },
+        error: function (xhr, status, error) {
+            ShowSnackbarError("Oops, sorry! Error");
+        }
+    });
+}
+
 function ShowDeleteUser(id) {
     $.ajax({
         url: "/Users/DeleteUser/",
@@ -95,6 +110,11 @@ function CopyToClipBoard(copyValue) {
 function SelectDeptMeeting() {
     var deptID = $('#Department').val();
     window.location.href = "/Department/Index/" + deptID;
+}
+
+function SelectDeptMemo() {
+    var deptID = $('#Department').val();
+    window.location.href = "/Memo/Index/" + deptID;
 }
 
 function openAlert() {

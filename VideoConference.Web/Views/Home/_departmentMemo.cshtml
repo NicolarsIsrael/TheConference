@@ -1,0 +1,32 @@
+﻿@model VideoConference.Web.Models.DeptViewModel
+
+<div style="padding:10px">
+    <hr />
+
+    @using (Html.BeginForm("Dept", "Department", FormMethod.Post, new { id = "deptMeetingForm" }))
+    {
+        <div class="form-horizontal">
+            <div class="mr-2">
+                <div class="form-group">
+                    <div class="col-form-label">Department</div>
+                    <select class="col-12 form-control" id="Department">
+                        @{
+                            foreach (var dept in Model.Department)
+                            {
+                                <option value="@dept.DeptId">@dept.DeptName</option>
+                            }
+                            <option value="0" selected>General</option>
+                        }
+                    </select>
+                </div>
+
+            </div>
+            <div>
+                <hr class="my-2" />
+                <input type="button" value="View dept memo" class="btn mt-0 custom-primary-btn"
+                       onclick="SelectDeptMemo()" />
+            </div>
+
+        </div>
+    }
+</div>

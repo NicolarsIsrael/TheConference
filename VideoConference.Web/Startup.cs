@@ -105,6 +105,12 @@ namespace VideoConference.Web
                     );
 
                 routes.MapRoute(
+                    name:"Memo",
+                    template:"Memo/{deptName}-{id}",
+                    defaults: new {controller ="Memo", action = "DeptMemo"}
+                    );
+
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });

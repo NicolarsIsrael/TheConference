@@ -82,6 +82,23 @@ namespace VideoConference.Web.Controllers
             return PartialView("_departmentMeeting",deptModel);
         }
 
+        public IActionResult DepartmentMemo()
+        {
+            var depts = _context.Department
+              .Select(d => new DeptAndIdViewModel()
+              {
+                  DeptId = d.Id,
+                  DeptName = d.DeptName,
+              }).ToList();
+
+            DeptViewModel deptModel = new DeptViewModel()
+            {
+                Department = depts,
+            };
+
+            return PartialView("_departmentMemo", deptModel);
+        }
+
         public IActionResult Privacy()
         {
             return View();
