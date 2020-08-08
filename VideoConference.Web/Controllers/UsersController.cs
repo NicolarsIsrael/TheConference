@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
+using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
@@ -26,8 +27,7 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
 
-
-        [Authorize(Roles ="Admin,DeptAdmin")]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
         public async Task<IActionResult> Index()
         {
             IEnumerable<UserViewModel> users = _context.Users
@@ -49,11 +49,11 @@ namespace VideoConference.Web.Controllers
 
             foreach(var user in users)
             {
-                if (await _userManager.IsInRoleAsync(user.User, "Admin") || await _userManager.IsInRoleAsync(user.User,"ES"))
+                if (await _userManager.IsInRoleAsync(user.User, AppConstant.AdminRole) || await _userManager.IsInRoleAsync(user.User,AppConstant.ESRole))
                 {
                     user.IsAdmin = true;user.IsDeptAdmin = false;
                 }
-                else if(await _userManager.IsInRoleAsync(user.User, "DeptAdmin"))
+                else if(await _userManager.IsInRoleAsync(user.User,AppConstant.DeptAdminRole))
                 {
                     user.IsAdmin = false;user.IsDeptAdmin = true;
                 }
@@ -66,20 +66,21 @@ namespace VideoConference.Web.Controllers
             return View(users);
         }
 
-        [Authorize(Roles = "Admin,DeptAdmin")]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
         public IActionResult RegisterUser()
         {
             RegisterViewModel registerModel = new RegisterViewModel()
             {
                 Departments = GetDeptSelectList(),
+                UserTypes = GetUserTypeSelectList(),
             };
             return View(registerModel);
         }
 
-        [Authorize(Roles = "Admin,DeptAdmin")]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> RegisterUser(RegisterViewModel registerModel,int deptId)
+        public async Task<IActionResult> RegisterUser(RegisterViewModel registerModel,int deptId, int userType)
         {
             if (ModelState.IsValid)
             {
@@ -91,14 +92,17 @@ namespace VideoConference.Web.Controllers
                 var result = await _userManager.CreateAsync(user, registerModel.Password);
                 if (result.Succeeded)
                 {
-                    if (await _roleManager.FindByNameAsync("User") == null)
-                        await _roleManager.CreateAsync(new ApplicationRole("User"));
-                    await _userManager.AddToRoleAsync(user, "User");
+                   
+                    string userRole = AppConstant.UserTypes[userType - 1, 1];
+                    if (await _roleManager.FindByNameAsync(userRole) == null)
+                        await _roleManager.CreateAsync(new ApplicationRole(userRole));
+                    await _userManager.AddToRoleAsync(user, userRole);
                     return RedirectToAction(nameof(Index));
                 }
                 foreach (var error in result.Errors)
                 {
                     registerModel.Departments = GetDeptSelectList(deptId);
+                    registerModel.UserTypes = GetUserTypeSelectList(userType);
                     ModelState.AddModelError(string.Empty, error.Description);
                     return View(registerModel);
                 }
@@ -106,13 +110,14 @@ namespace VideoConference.Web.Controllers
             else
             {
                 registerModel.Departments = GetDeptSelectList(deptId);
+                registerModel.UserTypes = GetUserTypeSelectList(userType);
                 ModelState.AddModelError("", "One or more validation errors");
                 return View(registerModel);
             }
             return View(registerModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppConstant.AdminRole)]
         public IActionResult RegisterDeptAdmin()
         {
             var depts = _context.Department;
@@ -126,7 +131,7 @@ namespace VideoConference.Web.Controllers
             return View(registerModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppConstant.AdminRole)]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> RegisterDeptAdmin(RegisterViewModel registerModel, int deptId)
@@ -162,7 +167,7 @@ namespace VideoConference.Web.Controllers
             return View(registerModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppConstant.AdminRole)]
         public IActionResult DeleteUser(string id)
         {
             var user = _userManager.Users.Where(u => u.Id == id).FirstOrDefault();
@@ -179,7 +184,7 @@ namespace VideoConference.Web.Controllers
             return PartialView("_deleteUser",userModel);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = AppConstant.AdminRole)]
         public async Task<IActionResult> ConfirmDeleteUser(string id)
         {
             var user = _userManager.Users.Where(u => u.Id == id).FirstOrDefault();
@@ -219,6 +224,21 @@ namespace VideoConference.Web.Controllers
                 deptSelectList.Add(new SelectListItem { Text = userDept.DeptName, Value = userDept.Id.ToString() });
             }
             return deptSelectList;
+        }
+
+        private List<SelectListItem> GetUserTypeSelectList(int selectedUserType = 0)
+        {
+            List<SelectListItem> userTypeSelectList = new List<SelectListItem>();
+            for(int i = 0; i < AppConstant.UserTypes.GetLength(0); i++)
+            {
+                userTypeSelectList.Add(new SelectListItem
+                {
+                    Text = AppConstant.UserTypes[i, 1],
+                    Value = AppConstant.UserTypes[i, 0],
+                    Selected = selectedUserType.ToString() == AppConstant.UserTypes[i, 0] ? true : false,
+                });
+            }
+            return userTypeSelectList;
         }
 
     }

@@ -12,11 +12,12 @@ using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
+using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
-   [Authorize(Roles = "Admin,DeptAdmin,User")]
-   [AllowAnonymous]
+    //[Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.UserRole)]
+    [AllowAnonymous]
     public class DepartmentController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -73,8 +74,7 @@ namespace VideoConference.Web.Controllers
             return View(meetingsModel);
         }
 
-
-        [Authorize(Roles = "Admin,DeptAdmin")]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole )]
         public IActionResult ScheduleMeeting()
         {
             ScheduleMeetingVM scheduleMeeting = new ScheduleMeetingVM()
@@ -88,7 +88,7 @@ namespace VideoConference.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin,DeptAdmin")]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
         public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM scheduleModel,int selectedDeptId)
         {
             if (!ModelState.IsValid)
@@ -125,7 +125,7 @@ namespace VideoConference.Web.Controllers
             return RedirectToAction("Meeting","Home");
         }
 
-        [Authorize(Roles ="Admin,DeptAdmin")]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
         public IActionResult Users()
         {
             IEnumerable<UserViewModel> users = _context.Users

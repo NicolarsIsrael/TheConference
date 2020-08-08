@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
+using VideoConference.Web.Services;
 
 namespace VideoConference.Web
 {
@@ -24,14 +25,14 @@ namespace VideoConference.Web
                     serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
                 {
 
-                    if (await _roleManager.FindByNameAsync("Admin") == null)
+                    if (await _roleManager.FindByNameAsync(AppConstant.AdminRole) == null)
                     {
-                        await _roleManager.CreateAsync(new ApplicationRole("Admin"));
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.AdminRole));
                         var user = new ApplicationUser { UserName = "admin", Email = "admin@gmail.com",DeptId=0,DeptName="Admin" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();
-                        await _userManager.AddToRoleAsync(user, "Admin");
+                        await _userManager.AddToRoleAsync(user, AppConstant.AdminRole);
 
                         var depts =  new List<Department>
                         {
@@ -55,7 +56,7 @@ namespace VideoConference.Web
                         await context.SaveChangesAsync();
                     }
 
-                    if (await _roleManager.FindByNameAsync("ES") == null)
+                    if (await _roleManager.FindByNameAsync(AppConstant.ESRole) == null)
                     {
                         await _roleManager.CreateAsync(new ApplicationRole("ES"));
                         var user = new ApplicationUser { UserName = "ExecutiveSec", Email = "es@gmail.com", DeptId = 0, DeptName = "Executive secretary" };
@@ -64,25 +65,27 @@ namespace VideoConference.Web
                             throw new Exception();
                         await _userManager.AddToRoleAsync(user, "ES");
                     }
-                        await _roleManager.CreateAsync(new ApplicationRole("ES"));
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.ESRole));
 
-                    if (await _roleManager.FindByNameAsync("User") == null)
-                        await _roleManager.CreateAsync(new ApplicationRole("User"));
-
-                    if (await _roleManager.FindByNameAsync("ZonalDirector") == null)
+                    if (await _roleManager.FindByNameAsync(AppConstant.ZonalDirectorRole) == null)
                     {
-                        await _roleManager.CreateAsync(new ApplicationRole("ZonalDirector"));
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.ZonalDirectorRole));
                         var user = new ApplicationUser { UserName = "ZonalDirector", Email = "zonaldirector1@gmail.com", DeptId = 0, DeptName = "Zonal Director" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();
-                        await _userManager.AddToRoleAsync(user, "ZonalDirector");
+                        await _userManager.AddToRoleAsync(user, AppConstant.ZonalDirectorRole);
 
                     }
-                        
 
-                    if (await _roleManager.FindByNameAsync("User") == null)
-                        await _roleManager.CreateAsync(new ApplicationRole("User"));
+                    if (await _roleManager.FindByNameAsync(AppConstant.DeptAdminRole) == null)
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.DeptAdminRole));
+
+                    if (await _roleManager.FindByNameAsync(AppConstant.SecretaryRole) == null)
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.SecretaryRole));
+
+                    if (await _roleManager.FindByNameAsync(AppConstant.UserRole) == null)
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.UserRole));
                 }
             }
             catch (Exception ex)

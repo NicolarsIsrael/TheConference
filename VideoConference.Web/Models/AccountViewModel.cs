@@ -32,6 +32,9 @@ namespace VideoConference.Web.Models
 
         [Display(Name ="Department")]
         public List<SelectListItem> Departments { get; set; }
+
+        [Display(Name ="User type")]
+        public List<SelectListItem> UserTypes { get; set; }
     }
 
     public class AlphaNumeric : ValidationAttribute

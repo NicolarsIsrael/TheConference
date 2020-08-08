@@ -11,7 +11,7 @@ using VideoConference.Web.Models;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize(Roles ="Admin,DeptAdmin,ES,ZonalDirector")]
+    [Authorize]
     public class ZonalDirectorsController : Controller
     {
         private readonly ApplicationDbContext _context;
