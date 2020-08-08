@@ -35,7 +35,9 @@ namespace VideoConference.Web.Controllers
                     Title = d.Title,
                     DocumentNumber = d.DocumentNumber,
                     CurrentOffice = d.CurrentDepartment.DeptName,
-                }).ToList();
+                    DateReceived = d.DateReceived,
+                    DateReceivedString = d.DateReceived.ToString("dd/MMM/yyyy (hh:mm tt)"),
+                }).OrderByDescending(d=>d.DateReceived).ToList();
 
             return View(docModels);
         }
@@ -117,9 +119,6 @@ namespace VideoConference.Web.Controllers
                 CurrentDept = document.CurrentDepartment.DeptName,
                 Departments = GetDeptSelectList(0,document.CurrentDepartment.Id),
             };
-            //documentModel.Departments = GetDeptSelectList().Remove(GetDeptSelectList())
-            //documentModel.Departments = documentModel.Departments.Remove(documentModel.Departments
-            //    .Where(d => d.Value == documentModel.currentDeptId.ToString()).FirstOrDefault()).;
             return View(documentModel);
         }
 
@@ -129,9 +128,7 @@ namespace VideoConference.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                docMinuteModel.Departments = GetDeptSelectList(SubmittedDeptId);
-                docMinuteModel.Departments.Remove(docMinuteModel.Departments
-                    .Where(d => d.Value == docMinuteModel.currentDeptId.ToString()).FirstOrDefault());
+                docMinuteModel.Departments = GetDeptSelectList(SubmittedDeptId,docMinuteModel.currentDeptId);
                 ModelState.AddModelError("", "One or more validation errors");
                 return View(docMinuteModel);
             }

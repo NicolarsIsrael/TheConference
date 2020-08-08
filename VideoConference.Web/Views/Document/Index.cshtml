@@ -19,6 +19,7 @@
             <table class="table w-100">
                 <thead>
                     <tr class="w-100">
+                        <td>Date received</td>
                         <th>Doc no</th>
                         <th>Title</th>
                         <th>Current office</th>
@@ -29,6 +30,7 @@
                     @foreach (var doc in Model)
                     {
                         <tr>
+                            <td>@doc.DateReceivedString</td>
                             <td>@doc.DocumentNumber</td>
                             <td>@doc.Title</td>
                             <td>@doc.CurrentOffice</td>

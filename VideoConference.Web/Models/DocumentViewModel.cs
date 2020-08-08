@@ -37,6 +37,8 @@ namespace VideoConference.Web.Models
         public string Title { get; set; }
         public string CurrentOffice { get; set; }
         public IEnumerable<DocumentMinuteViewModel> DocMinutes { get; set; }
+        public DateTime DateReceived { get; set; }
+        public string DateReceivedString { get; set; }
     }
 
     public class DocumentMinuteViewModel
