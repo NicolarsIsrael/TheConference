@@ -38,13 +38,20 @@
                     </p>
                 </a>
             </li>
-            <li class="nav-item dashb-navbar-item">
-                <a class="nav-link dashboard-side-navitem " asp-area="" asp-controller="Es" asp-action="Index">
-                    <p class="dashboard-sidenav-link">
-                        ES Meeting Room
-                    </p>
-                </a>
-            </li>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                if (User.IsInRole("ES"))
+                {
+                    <li class="nav-item dashb-navbar-item">
+                        <a class="nav-link dashboard-side-navitem " asp-area="" asp-controller="Es" asp-action="Index">
+                            <p class="dashboard-sidenav-link">
+                                ES Meeting Room
+                            </p>
+                        </a>
+                    </li>
+                }
+            }
+
             <li class="nav-item dashb-navbar-item">
                 <a class="nav-link dashboard-side-navitem " asp-area="" asp-controller="ZonalDirectors" asp-action="Index">
                     <p class="dashboard-sidenav-link">
@@ -86,6 +93,14 @@
                     </li>
                 }
             }
+
+            <li class="nav-item dashb-navbar-item">
+                <a class="nav-link dashboard-side-navitem " asp-area="" asp-controller="Document" asp-action="Index">
+                    <p class="dashboard-sidenav-link">
+                        File manager
+                    </p>
+                </a>
+            </li>
         </ul>
 
 

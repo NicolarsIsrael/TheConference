@@ -1,0 +1,54 @@
+﻿@model VideoConference.Web.Models.AddDocumentMinuteViewModel
+@{
+    ViewData["Title"] = "Minute";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container">
+    <div class="card login-card mx-auto">
+        <div class="card-body">
+            <div>Title: @Model.DocTitle</div>
+            <div>Doc number: @Model.DocNumber</div>
+            <hr />
+            <form asp-action="Minute">
+                <input type="hidden" asp-for="DocId" />
+                <input type="hidden" asp-for="DocTitle" />
+                <input type="hidden" asp-for="DocNumber" />
+                <input type="hidden" asp-for="currentDeptId" />
+                <input type="hidden" asp-for="CurrentDept" />
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label class="control-label">From</label>
+                    <input asp-for="CurrentDept" type="text" readonly class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="SubmittedBy" class="control-label"></label>
+                    <input asp-for="SubmittedBy" class="form-control" />
+                    <span asp-validation-for="SubmittedBy" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Office/Dept of submission</label>
+                    <select asp-items="Model.Departments" name="SubmittedDeptId" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ReceivedBy" class="control-label"></label>
+                    <input asp-for="ReceivedBy" class="form-control" />
+                    <span asp-validation-for="ReceivedBy" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Remarks" class="control-label"></label>
+                    <input asp-for="Remarks" class="form-control" />
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Submit" class="btn custom-primary-btn btn-block" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

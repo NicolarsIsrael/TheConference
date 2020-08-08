@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VideoConference.Web.Data;
 
 namespace VideoConference.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200808090301_documentminute1")]
+    partial class documentminute1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,13 +244,9 @@ namespace VideoConference.Web.Data.Migrations
 
                     b.Property<string>("RecievedBy");
 
-                    b.Property<string>("Remarks");
-
                     b.Property<string>("SubmittedBy");
 
                     b.Property<int?>("ToDepartmentId");
-
-                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
@@ -359,7 +357,7 @@ namespace VideoConference.Web.Data.Migrations
 
             modelBuilder.Entity("VideoConference.Web.Core.DocumentMinute", b =>
                 {
-                    b.HasOne("VideoConference.Web.Core.Document", "Document")
+                    b.HasOne("VideoConference.Web.Core.Document")
                         .WithMany("DocumentMinutes")
                         .HasForeignKey("DocumentId");
 

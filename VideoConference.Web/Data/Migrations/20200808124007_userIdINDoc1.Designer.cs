@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VideoConference.Web.Data;
 
 namespace VideoConference.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200808124007_userIdINDoc1")]
+    partial class userIdINDoc1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,8 +243,6 @@ namespace VideoConference.Web.Data.Migrations
                     b.Property<int?>("FromDepartmentId");
 
                     b.Property<string>("RecievedBy");
-
-                    b.Property<string>("Remarks");
 
                     b.Property<string>("SubmittedBy");
 

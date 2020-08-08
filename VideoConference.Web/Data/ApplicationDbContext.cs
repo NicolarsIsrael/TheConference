@@ -25,6 +25,8 @@ namespace VideoConference.Web.Data
         public DbSet<Meeting> Meeting { get; set; }
         public DbSet<Department> Department { get; set; }
         public DbSet<Memo> Memo { get; set; }
+        public DbSet<Document> Document { get; set; }
+        public DbSet<DocumentMinute> DocumentMinute { get; set; }
     }
 }
 

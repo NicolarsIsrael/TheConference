@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VideoConference.Web.Data;
 
 namespace VideoConference.Web.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200808090134_documentminute")]
+    partial class documentminute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,66 +203,6 @@ namespace VideoConference.Web.Data.Migrations
                     b.ToTable("Department");
                 });
 
-            modelBuilder.Entity("VideoConference.Web.Core.Document", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CurrentDepartmentId");
-
-                    b.Property<DateTime>("DateReceived");
-
-                    b.Property<string>("DocumentNumber");
-
-                    b.Property<string>("RecievedBy");
-
-                    b.Property<string>("Remarks");
-
-                    b.Property<string>("SubmittedBy");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CurrentDepartmentId");
-
-                    b.ToTable("Document");
-                });
-
-            modelBuilder.Entity("VideoConference.Web.Core.DocumentMinute", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DateMinuted");
-
-                    b.Property<int?>("DocumentId");
-
-                    b.Property<int?>("FromDepartmentId");
-
-                    b.Property<string>("RecievedBy");
-
-                    b.Property<string>("Remarks");
-
-                    b.Property<string>("SubmittedBy");
-
-                    b.Property<int?>("ToDepartmentId");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DocumentId");
-
-                    b.HasIndex("FromDepartmentId");
-
-                    b.HasIndex("ToDepartmentId");
-
-                    b.ToTable("DocumentMinute");
-                });
-
             modelBuilder.Entity("VideoConference.Web.Core.Meeting", b =>
                 {
                     b.Property<int>("Id")
@@ -348,28 +290,6 @@ namespace VideoConference.Web.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("VideoConference.Web.Core.Document", b =>
-                {
-                    b.HasOne("VideoConference.Web.Core.Department", "CurrentDepartment")
-                        .WithMany()
-                        .HasForeignKey("CurrentDepartmentId");
-                });
-
-            modelBuilder.Entity("VideoConference.Web.Core.DocumentMinute", b =>
-                {
-                    b.HasOne("VideoConference.Web.Core.Document", "Document")
-                        .WithMany("DocumentMinutes")
-                        .HasForeignKey("DocumentId");
-
-                    b.HasOne("VideoConference.Web.Core.Department", "FromDepartment")
-                        .WithMany()
-                        .HasForeignKey("FromDepartmentId");
-
-                    b.HasOne("VideoConference.Web.Core.Department", "ToDepartment")
-                        .WithMany()
-                        .HasForeignKey("ToDepartmentId");
                 });
 #pragma warning restore 612, 618
         }
