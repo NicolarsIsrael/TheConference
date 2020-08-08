@@ -13,13 +13,15 @@ namespace VideoConference.Web.Services
         public const string SecretaryRole = "Secretary";
         public const string ZonalDirectorRole = "Zonal Director";
         public const string UserRole = "User";
+        public const string SubebRole = "SUBEB";
 
         public static readonly string[,] UserTypes =
         {
-            { "1","User"},
-            { "2","Secretary"},
-            { "3","Department Admin"},
-            { "4","Zonal Director"},
+            { "1",UserRole},
+            { "2",SecretaryRole},
+            { "3",DeptAdminRole},
+            { "4",ZonalDirectorRole},
+            {"5",SubebRole },
             //{"5","Executive secretary" },
         };
     }

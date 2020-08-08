@@ -5,31 +5,37 @@
 }
 
 <div class="container">
+    @if (Model.CanMinute)
+    {
+        <div style="text-align:right" class="mb-2">
+            <a class="btn btn-sm custom-primary-btn" style="width:100px" asp-controller="Document" asp-action="Minute" asp-route-id="@Model.Id">Minute</a>
+        </div>
+    }
+
     <div class="card box-shadow p-3">
         <div>
-            Doc no. : @Model.DocumentNumber
+            <span class="font-weight-bold">Doc no.:</span> @Model.DocumentNumber
         </div>
         <div>
-            Title : @Model.Title
+            <span class="font-weight-bold"> Title: </span> @Model.Title
         </div>
         <div>
-            Current office: @Model.CurrentOffice
+            <span class="font-weight-bold"> Current office:</span> @Model.CurrentOffice
         </div>
-        <a class="btn btn-sm custom-primary-btn" style="width:100px" asp-controller="Document" asp-action="Minute" asp-route-id="@Model.Id">Minute</a>
 
         <h6 class="mt-3">Document Minute History</h6>
         <hr class="m-0" />
         @foreach (var docMinutes in Model.DocMinutes)
         {
             <div>
-                <div> Date minuted: @docMinutes.DateCreatedString</div>
+                <div> <span class="font-weight-bold">Date minuted:</span> @docMinutes.DateCreatedString</div>
                 <div>
-                    From Dept/Office: @docMinutes.FromDept
+                    <span class="font-weight-bold"> From Dept/Office:</span> @docMinutes.FromDept
                 </div>
-                <div>   To Dept/Office: @docMinutes.ToDept</div>
-                <div> Submitted by: @docMinutes.SubmittedBy</div>
-                <div>  Received by: @docMinutes.ReceivedBy</div>
-                <div>   Remarks: @docMinutes.Remarks</div>
+                <div>  <span class="font-weight-bold"> To Dept/Office: </span>@docMinutes.ToDept</div>
+                <div><span class="font-weight-bold"> Submitted by:</span> @docMinutes.SubmittedBy</div>
+                <div> <span class="font-weight-bold"> Received by: </span>@docMinutes.ReceivedBy</div>
+                <div>  <span class="font-weight-bold"> Remarks:</span> @docMinutes.Remarks</div>
             </div>
             <hr />
         }

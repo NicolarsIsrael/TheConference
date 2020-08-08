@@ -19,7 +19,7 @@
             <table class="table w-100">
                 <thead>
                     <tr class="w-100">
-                        <td>Date received</td>
+                        <th>Date received</th>
                         <th>Doc no</th>
                         <th>Title</th>
                         <th>Current office</th>
@@ -36,6 +36,10 @@
                             <td>@doc.CurrentOffice</td>
                             <td>
                                 <a class="btn btn-sm custom-primary-btn float-right" asp-controller="Document" asp-action="ViewDocument" asp-route-id="@doc.Id">View</a>
+                                @if (doc.CanMinute)
+                                {
+                                    <a class="btn btn-sm custom-secondary-btn float-right mr-1" asp-controller="Document" asp-action="Minute" asp-route-id="@doc.Id">Minute</a>
+                                }
                             </td>
                         </tr>
                     }

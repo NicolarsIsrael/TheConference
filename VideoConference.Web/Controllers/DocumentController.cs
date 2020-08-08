@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
+using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
+    [Authorize()]
     public class DocumentController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -27,6 +30,8 @@ namespace VideoConference.Web.Controllers
 
         public IActionResult Index()
         {
+            var user = GetLoggedInUser();
+
             var documents = _context.Document;
             IEnumerable<ViewDocumentViewModel> docModels = documents
                 .Select(d => new ViewDocumentViewModel()
@@ -37,11 +42,13 @@ namespace VideoConference.Web.Controllers
                     CurrentOffice = d.CurrentDepartment.DeptName,
                     DateReceived = d.DateReceived,
                     DateReceivedString = d.DateReceived.ToString("dd/MMM/yyyy (hh:mm tt)"),
+                    CanMinute = d.CurrentDepartment.Id == user.DeptId ? true:false,
                 }).OrderByDescending(d=>d.DateReceived).ToList();
 
             return View(docModels);
         }
 
+        [Authorize(Roles =AppConstant.SecretaryRole)]
         public IActionResult RegisterDocument()
         {
             RegisterDocumentViewModel docModel = new RegisterDocumentViewModel()
@@ -54,6 +61,7 @@ namespace VideoConference.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppConstant.SecretaryRole)]
         public async Task<IActionResult> RegisterDocument(RegisterDocumentViewModel docModel, int SubmittedDeptId)
         {
             if (!ModelState.IsValid)
@@ -91,6 +99,7 @@ namespace VideoConference.Web.Controllers
                 DocumentNumber = document.DocumentNumber,
                 Title = document.Title,
                 Id = document.Id,
+                CanMinute = document.CurrentDepartment.Id == GetLoggedInUser().DeptId ?true:false,
                 DocMinutes = docMinute
                     .Select(d => new DocumentMinuteViewModel()
                     {
@@ -107,9 +116,13 @@ namespace VideoConference.Web.Controllers
             return View(docModel);
         }
 
+        [Authorize(Roles = AppConstant.SecretaryRole)]
         public IActionResult Minute(int id = 0)
         {
             var document = _context.Document.Include(d=>d.CurrentDepartment).Where(d => d.Id == id).First();
+            if (document.CurrentDepartment.Id != GetLoggedInUser().DeptId)
+                throw new Exception();
+
             AddDocumentMinuteViewModel documentModel = new AddDocumentMinuteViewModel()
             {
                 DocId = document.Id,
@@ -124,6 +137,7 @@ namespace VideoConference.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppConstant.SecretaryRole)]
         public async Task<IActionResult> Minute(AddDocumentMinuteViewModel docMinuteModel, int SubmittedDeptId)
         {
             if (!ModelState.IsValid)
@@ -134,6 +148,9 @@ namespace VideoConference.Web.Controllers
             }
 
             Document document = _context.Document.Where(d => d.Id == docMinuteModel.DocId).First();
+            if (document.CurrentDepartment.Id != GetLoggedInUser().DeptId)
+                throw new Exception();
+
             Department fromDepartment = _context.Department.Where(d => d.Id == docMinuteModel.currentDeptId).First();
             Department toDepartment = _context.Department.Where(d => d.Id == SubmittedDeptId).First();
 
@@ -153,7 +170,7 @@ namespace VideoConference.Web.Controllers
             _context.Document.Update(document);
             _context.Entry(document).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(ViewDocument),new { id = document.Id });
         }
 
         private List<SelectListItem> GetDeptSelectList(int selectedDeptId = 0,int ignoreDept=0)
