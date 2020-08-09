@@ -30,7 +30,28 @@ namespace VideoConference.Web.Controllers
         
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m => m.MeetingType == MeetingType.General)
+             .Select(m => new ScheduleMeetingVM()
+             {
+                 Id = m.Id,
+                 Topic = m.Topic,
+                 DeptName = m.DeptName,
+                 StartDateString = m.StartTime.ToString("dd/MMM/yyyy (hh:mm tt)"),
+                 StartDate = m.StartTime,
+                 RoomName = m.RoomName,
+                 CanJoin = true,
+                 AnonymousLink = $"{this.Request.Scheme}://{this.Request.Host}{this.Request.PathBase}" +
+                                 $"/AnonMeeting/{GenerateRoute(m.Topic, m.Id)}"
+             }).OrderBy(m => m.StartDate).ToList();
+
+            foreach (var meeting in meetingsModel)
+            {
+                if ((DateTime.Compare(meeting.StartDate, DateTime.UtcNow.AddHours(1)) > 0))
+                    meeting.CanJoin = false;
+            }
+
+            return View(meetingsModel);
+            //return View();
         }
 
         public IActionResult Meeting()

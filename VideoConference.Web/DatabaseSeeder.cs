@@ -34,7 +34,7 @@ namespace VideoConference.Web
                             throw new Exception();
                         await _userManager.AddToRoleAsync(user, AppConstant.AdminRole);
 
-                        var depts =  new List<Department>
+                        var depts = new List<Department>
                         {
                             new Department { DeptName ="Deputy E.S Technical"},
                             new Department { DeptName ="Deputy E.S Services"},
@@ -50,6 +50,7 @@ namespace VideoConference.Web
                             new Department { DeptName ="Planning Research & Statistics"},
                             new Department { DeptName ="Academic Services"},
                             new Department { DeptName ="Social Mobilization"},
+                            new Department { DeptName ="ICT"},
                         };
                             
                         depts.ForEach(d => context.Department.Add(d));

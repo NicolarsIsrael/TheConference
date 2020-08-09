@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
+using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize]
+    [Authorize(Roles =AppConstant.AdminRole + "," + AppConstant.SubebRole)]
     public class SubebController : Controller
     {
         private readonly ApplicationDbContext _context;
