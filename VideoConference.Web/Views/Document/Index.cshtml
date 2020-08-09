@@ -5,47 +5,58 @@
 }
 
 
-<div class="container mt-3">
-    <div class="section_header">
-        <div class="section_header_text">
-            <h3>Files</h3>
+    <div class="container mt-3">
+        <div class="section_header">
+            <div class="section_header_text">
+                <h3>Files</h3>
+            </div>
+            <div>
+                <a class="btn btn-sm custom-primary-btn" asp-area="" asp-controller="Document" asp-action="RegisterDocument">Register new file/doc/letter/proposal</a>
+            </div>
         </div>
-        <div>
-            <a class="btn btn-sm custom-primary-btn" asp-area="" asp-controller="Document" asp-action="RegisterDocument">Register new file/doc/letter/proposal</a>
-        </div>
-    </div>
-    <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
-        <div class="card-body px-1 py-0  table-responsive">
-            <table class="table w-100">
-                <thead>
-                    <tr class="w-100">
-                        <th>Date received</th>
-                        <th>Doc no</th>
-                        <th>Title</th>
-                        <th>Current office</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var doc in Model)
-                    {
-                        <tr>
-                            <td>@doc.DateReceivedString</td>
-                            <td>@doc.DocumentNumber</td>
-                            <td>@doc.Title</td>
-                            <td>@doc.CurrentOffice</td>
-                            <td>
-                                <a class="btn btn-sm custom-primary-btn float-right" asp-controller="Document" asp-action="ViewDocument" asp-route-id="@doc.Id">View</a>
-                                @if (doc.CanMinute)
-                                {
-                                    <a class="btn btn-sm custom-secondary-btn float-right mr-1" asp-controller="Document" asp-action="Minute" asp-route-id="@doc.Id">Minute</a>
-                                }
-                            </td>
+
+        <form asp-action="Index">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Search for file" style="border-radius:0" name="query" value="@ViewBag.Query">
+                <div class="input-group-append">
+                    <button class="btn custom-secondary-btn" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+            <div class="card-body px-1 py-0  table-responsive">
+                <table class="table w-100">
+                    <thead>
+                        <tr class="w-100">
+                            <th>Date received</th>
+                            <th>Doc no</th>
+                            <th>Title</th>
+                            <th>Current office</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var doc in Model)
+                        {
+                            <tr>
+                                <td>@doc.DateReceivedString</td>
+                                <td>@doc.DocumentNumber</td>
+                                <td>@doc.Title</td>
+                                <td>@doc.CurrentOffice</td>
+                                <td>
+                                    <a class="btn btn-sm custom-primary-btn float-right" asp-controller="Document" asp-action="ViewDocument" asp-route-id="@doc.Id">View</a>
+                                    @if (doc.CanMinute)
+                                    {
+                                        <a class="btn btn-sm custom-secondary-btn float-right mr-1" asp-controller="Document" asp-action="Minute" asp-route-id="@doc.Id">Minute</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
 

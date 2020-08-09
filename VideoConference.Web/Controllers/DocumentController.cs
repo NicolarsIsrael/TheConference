@@ -28,10 +28,9 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string query)
         {
             var user = GetLoggedInUser();
-
             var documents = _context.Document;
             IEnumerable<ViewDocumentViewModel> docModels = documents
                 .Select(d => new ViewDocumentViewModel()
@@ -42,9 +41,15 @@ namespace VideoConference.Web.Controllers
                     CurrentOffice = d.CurrentDepartment.DeptName,
                     DateReceived = d.DateReceived,
                     DateReceivedString = d.DateReceived.ToString("dd/MMM/yyyy (hh:mm tt)"),
-                    CanMinute = d.CurrentDepartment.Id == user.DeptId ? true:false,
-                }).OrderByDescending(d=>d.DateReceived).ToList();
+                    CanMinute = d.CurrentDepartment.Id == user.DeptId ? true : false,
+                }).OrderByDescending(d => d.DateReceived).ToList();
 
+            if (!string.IsNullOrEmpty(query))
+                docModels = docModels.Where(d => d.Title.ToLower().Contains(query.ToLower())
+                    || d.DocumentNumber.ToLower().Contains(query.ToLower())
+                    || d.CurrentOffice.ToLower().Contains(query.ToLower())).ToList();
+
+            ViewBag.Query = query;
             return View(docModels);
         }
 

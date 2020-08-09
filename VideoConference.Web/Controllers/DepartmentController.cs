@@ -79,7 +79,7 @@ namespace VideoConference.Web.Controllers
         {
             ScheduleMeetingVM scheduleMeeting = new ScheduleMeetingVM()
             {
-                SelectDepts = GetDeptSelectList(),
+                SelectDepts = GetDeptSelectList(0,true),
                 StartDate = DateTime.Today,
             };
 
@@ -93,7 +93,7 @@ namespace VideoConference.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                scheduleModel.SelectDepts = GetDeptSelectList(selectedDeptId);
+                scheduleModel.SelectDepts = GetDeptSelectList(selectedDeptId,true);
                 ModelState.AddModelError("", "One or more validation errors");
                 return View(scheduleModel);
             }
@@ -105,7 +105,7 @@ namespace VideoConference.Web.Controllers
             string roomName = Regex.Replace(scheduleModel.Topic, @"\s+", "");
             if (_context.Meeting.Where(m => m.RoomName == roomName).Count() > 0)
             {
-                scheduleModel.SelectDepts = GetDeptSelectList(selectedDeptId);
+                scheduleModel.SelectDepts = GetDeptSelectList(selectedDeptId,true);
                 ModelState.AddModelError("", "Topic already exist");
                 return View(scheduleModel);
             }
@@ -170,12 +170,14 @@ namespace VideoConference.Web.Controllers
             return System.Text.Encoding.ASCII.GetString(bytes);
         }
 
-        private List<SelectListItem> GetDeptSelectList(int selectedDeptId = 0)
+        private List<SelectListItem> GetDeptSelectList(int selectedDeptId = 0,bool includeGeneral = false)
         {
             var depts = _context.Department;
             List<SelectListItem> deptSelectList = new List<SelectListItem>();
             if (User.IsInRole("Admin"))
             {
+                if (includeGeneral)
+                    deptSelectList.Add(new SelectListItem { Text = "General", Value = "0", Selected = true });
                 foreach (var dept in depts)
                     deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString(), Selected = dept.Id == selectedDeptId ? true : false, });
             }
