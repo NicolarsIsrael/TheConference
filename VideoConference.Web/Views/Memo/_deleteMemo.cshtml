@@ -1,0 +1,22 @@
+﻿@model VideoConference.Web.Models.MemoViewModel
+
+<div style="padding:10px">
+    <hr />
+    <div class="mr-2">
+        <h6>Are you sure you wish to delete this memo? The file will be deleted as well and this change cannot be reversed.</h6>
+        <div>
+            Title: @Model.Title
+        </div>
+        <div>
+            Dept: @Model.DeptName
+        </div>
+        <div>
+            Date: @Model.DateCreatedString
+        </div>
+        <div>
+            <hr class="my-2" />
+            <input type="button" value="Delete Memo" class="btn mt-0 custom-primary-btn"
+                   onclick="ConfirmDeleteMemo(@Model.Id)" />
+        </div>
+    </div>
+</div>

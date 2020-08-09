@@ -67,6 +67,7 @@ namespace VideoConference.Web.Controllers
             return View(allMemos);
         }
 
+        [Authorize(Roles =AppConstant.AdminRole)]
         public IActionResult Add(int deptId=0)
         {
             MemoViewModel memoModel = new MemoViewModel()
@@ -77,6 +78,7 @@ namespace VideoConference.Web.Controllers
             return View(memoModel);
         }
 
+        [Authorize(Roles = AppConstant.AdminRole)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(MemoViewModel memoModel, int selectedDeptId)
@@ -115,6 +117,32 @@ namespace VideoConference.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult DeleteMemo(int id)
+        {
+            var memo = _context.Memo.Where(m => m.Id == id).First();
+            MemoViewModel memoModel = new MemoViewModel()
+            {
+                Id = memo.Id,
+                DeptName = memo.DeptName,
+                DateCreatedString = memo.DateCreated.ToString("dd/MMM/yyyy(hh: mm tt)"),
+                Title = memo.Title,
+            };
+            return PartialView("_deleteMemo",memoModel);
+        }
+
+        [Authorize(Roles = AppConstant.AdminRole)]
+        public async Task<IActionResult> ConfirmDelete(int id)
+        {
+            var memo = _context.Memo.Where(m => m.Id == id).First();
+            _context.Memo.Remove(memo);
+            await _context.SaveChangesAsync();
+            try
+            {
+                FileService.DeleteFile(memo.MemoFile);
+            }
+            catch (Exception){}
+            return RedirectToAction(nameof(Index));
+        }
 
         private List<SelectListItem> GetDeptSelectList(int selectedDeptId = 0)
         {

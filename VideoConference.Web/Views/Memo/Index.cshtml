@@ -1,50 +1,71 @@
-﻿@model IEnumerable<VideoConference.Web.Models.MemoViewModel>
+﻿@using Microsoft.AspNetCore.Identity
+@using VideoConference.Web.Core
+@using VideoConference.Web.Services
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IEnumerable<VideoConference.Web.Models.MemoViewModel>
 @{
     ViewData["Title"] = "Memo";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
-    <div class="container mt-3">
-        <h4>General Memo</h4>
-        <div class="row mb-2">
-            <div class="col-6">
-                <button type="button" class="btn custom-secondary-btn" onclick="ShowDepartmentMemo()">Department Memo</button>
-            </div>
-            <div class="col-6">
-                <div style="text-align:right">
-                    <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Memo" asp-action="Add">New memo</a>
-                </div>
-            </div>
+<div class="container mt-3">
+    <h4>General Memo</h4>
+    <div class="row mb-2">
+        <div class="col-6">
+            <button type="button" class="btn custom-secondary-btn" onclick="ShowDepartmentMemo()">Department Memo</button>
         </div>
-        <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
-            <div class="card-body px-1 py-0  table-responsive">
-                <table class="table w-100">
-                    <thead>
-                        <tr class="w-100">
-                            <th>Release Date</th>
-                            <th style="width:50%">Title</th>
-                            <th>Dept</th>
-                            <th style="min-width:10%"></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var memo in Model)
-                        {
-                            <tr>
-                                <td>@memo.DateCreatedString</td>
-                                <td>@memo.Title</td>
-                                <td>@memo.DeptName</td>
-                                <td>
-                                    <a class="btn btn-sm custom-primary-btn" target="_blank" href="~/@Url.Content(memo.MemoFilePath).Remove(0,8)">View</a>
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm custom-secondary-btn">Share</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+        <div class="col-6">
+            <div style="text-align:right">
+                <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Memo" asp-action="Add">New memo</a>
             </div>
         </div>
     </div>
+    <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+        <div class="card-body px-1 py-0  table-responsive">
+            <table class="table w-100">
+                <thead>
+                    <tr class="w-100">
+                        <th>Release Date</th>
+                        <th style="width:50%">Title</th>
+                        <th>Dept</th>
+                        <th style="min-width:10%"></th>
+                        <th></th>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            if (User.IsInRole(AppConstant.AdminRole))
+                            { <th></th>}
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var memo in Model)
+                    {
+                        <tr>
+                            <td>@memo.DateCreatedString</td>
+                            <td>@memo.Title</td>
+                            <td>@memo.DeptName</td>
+                            <td>
+                                <a class="btn btn-sm custom-primary-btn" target="_blank" href="~/@Url.Content(memo.MemoFilePath).Remove(0,8)">View</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm custom-secondary-btn">Share</a>
+                            </td>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                if (User.IsInRole(AppConstant.AdminRole))
+                                {
+                                    <td>
+                                        <a class="btn btn-sm custom-secondary-btn" style="background-color:#dc3545" onclick="ShowDeleteMemo(@memo.Id)">Delete</a>
+                                    </td>
+
+                                }
+                            }
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

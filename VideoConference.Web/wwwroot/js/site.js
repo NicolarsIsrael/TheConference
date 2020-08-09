@@ -38,7 +38,7 @@ function ShowDeptMeetings() {
             openNav();
         },
         error: function (xhr, status, error) {
-            ShowSnackbarError("Oops, sorry! Error");
+            //ShowSnackbarError("Oops, sorry! Error");
         }
     });
 }
@@ -53,7 +53,7 @@ function ShowDepartmentMemo() {
             openNav();
         },
         error: function (xhr, status, error) {
-            ShowSnackbarError("Oops, sorry! Error");
+            //ShowSnackbarError("Oops, sorry! Error");
         }
     });
 }
@@ -68,13 +68,32 @@ function ShowDeleteUser(id) {
             openNav();
         },
         error: function (xhr, status, error) {
-            ShowSnackbarError("Oops, sorry! Error");
+            //ShowSnackbarError("Oops, sorry! Error");
         }
     });
 }
 
 function DeleteUser(id) {
     window.location.href = "/Users/ConfirmDeleteUser?id=" + id;
+}
+
+function ShowDeleteMemo(id) {
+    $.ajax({
+        url: "/Memo/DeleteMemo/",
+        dataType: "html",
+        data: { id: id },
+        success: function (result) {
+            $("#sidebarbody").html(result);
+            openNav();
+        },
+        error: function (xhr, status, error) {
+            //ShowSnackbarError("Oops, sorry! Error");
+        }
+    });
+}
+
+function ConfirmDeleteMemo(id) {
+    window.location.href = "/Memo/ConfirmDelete/" + id;
 }
 
 function CopyToClipBoard(copyValue) {

@@ -1,4 +1,9 @@
-﻿@model IEnumerable<VideoConference.Web.Models.MemoViewModel>
+﻿@using Microsoft.AspNetCore.Identity
+@using VideoConference.Web.Core
+@using VideoConference.Web.Services
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@model IEnumerable<VideoConference.Web.Models.MemoViewModel>
 @{
     ViewData["Title"] = "Dept Memo";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
@@ -26,6 +31,12 @@
                         <th>Dept</th>
                         <th style="min-width:10%"></th>
                         <th></th>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            if (User.IsInRole(AppConstant.AdminRole))
+                            {
+                                <th></th>}
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -41,6 +52,17 @@
                             <td>
                                 <a class="btn btn-sm custom-secondary-btn">Share</a>
                             </td>
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                if (User.IsInRole(AppConstant.AdminRole))
+                                {
+                                    <td>
+                                        <a class="btn btn-sm custom-secondary-btn" style="background-color:#dc3545" onclick="ShowDeleteMemo(@memo.Id)">Delete</a>
+                                    </td>
+
+                                }
+                            }
+
                         </tr>
                     }
                 </tbody>
