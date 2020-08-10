@@ -28,6 +28,11 @@ namespace VideoConference.Web.Models
         [BeginWIthAlphaNumeric(ErrorMessage ="Should begin with an alphabeth or number")]
         [Required(ErrorMessage = "Remarks is required")]
         public string Remarks { get; set; }
+
+        [BeginWIthAlphabeth(ErrorMessage = "Should begin with an alphabeth")]
+        [Display(Name = "Addressed to")]
+        [Required(ErrorMessage = "Addressed to is required")]
+        public string AddressedTo { get; set; }
     }
 
     public class ViewDocumentViewModel
@@ -40,6 +45,8 @@ namespace VideoConference.Web.Models
         public IEnumerable<DocumentMinuteViewModel> DocMinutes { get; set; }
         public DateTime DateReceived { get; set; }
         public string DateReceivedString { get; set; }
+        public string Remarks { get; set; }
+        public string AddressedTo { get; set; }
     }
 
     public class DocumentMinuteViewModel
@@ -51,6 +58,7 @@ namespace VideoConference.Web.Models
         public string SubmittedBy { get; set; }
         public string ReceivedBy { get; set; }
         public string Remarks { get; set; }
+        public string AddressedTo { get; set; }
     }
 
     public class AddDocumentMinuteViewModel
@@ -58,13 +66,15 @@ namespace VideoConference.Web.Models
         public string DocTitle { get; set; }
         public int DocId { get; set; }
         public string DocNumber { get; set; }
-        public int currentDeptId { get; set; }
-        public string CurrentDept { get; set; }
+        public int FromDeptId { get; set; }
+        public string FromDept { get; set; }
+        public int ToDeptId { get; set; }
+        public string ToDept { get; set; }
         public List<SelectListItem> Departments { get; set; }
 
         [BeginWIthAlphabeth(ErrorMessage ="Should begin with an alphabeth")]
-        [Display(Name = "Submitted by")]
-        [Required(ErrorMessage = "Submitted by is required")]
+        [Display(Name = "Delivered by")]
+        [Required(ErrorMessage = "Delivered by is required")]
         public string SubmittedBy { get; set; }
 
         [BeginWIthAlphabeth(ErrorMessage = "Should begin with an alphabeth")]
@@ -75,6 +85,11 @@ namespace VideoConference.Web.Models
         [BeginWIthAlphaNumeric(ErrorMessage = "Should begin with an alphabeth or number")]
         [Required(ErrorMessage = "Remarks is required")]
         public string Remarks { get; set; }
+
+        [BeginWIthAlphabeth(ErrorMessage = "Should begin with an alphabeth")]
+        [Display(Name = "Addressed to")]
+        [Required(ErrorMessage = "Addressed to is required")]
+        public string AddressedTo { get; set; }
 
     }
 }

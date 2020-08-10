@@ -16,5 +16,6 @@ namespace VideoConference.Web.Core
         public string RecievedBy { get; set; }
         public string UserId { get; set; }
         public string Remarks { get; set; }
+        public string AddressedTo { get; set; }
     }
 }

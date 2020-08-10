@@ -41,7 +41,7 @@ namespace VideoConference.Web.Controllers
                     CurrentOffice = d.CurrentDepartment.DeptName,
                     DateReceived = d.DateReceived,
                     DateReceivedString = d.DateReceived.ToString("dd/MMM/yyyy (hh:mm tt)"),
-                    CanMinute = d.CurrentDepartment.Id == user.DeptId ? true : false,
+                    //CanMinute = d.CurrentDepartment.Id != user.DeptId ? true : false,
                 }).OrderByDescending(d => d.DateReceived).ToList();
 
             if (!string.IsNullOrEmpty(query))
@@ -81,14 +81,20 @@ namespace VideoConference.Web.Controllers
             Document document = new Document()
             {
                 Title = docModel.Title,
-                DocumentNumber = (docCount + 1).ToString() + "-" + DateTime.UtcNow.AddHours(1).ToString("yyyymmddhhmmssfff"),
+                //DocumentNumber = (docCount + 1).ToString(),
                 CurrentDepartment = dept,
                 SubmittedBy = docModel.SubmittedBy,
                 RecievedBy = docModel.RecievedBy,
                 DateReceived = DateTime.UtcNow.AddHours(1),
                 Remarks = docModel.Remarks,
+                AddressedTo = docModel.AddressedTo,
+                UserId = GetLoggedInUser().Id,
             };
             _context.Document.Add(document);
+            await _context.SaveChangesAsync();
+            document.DocumentNumber = document.Id.ToString() + DateTime.UtcNow.AddHours(1).ToString("hhmmssfff");
+            //_context.Document.Update(document);
+            _context.Entry(document).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -104,7 +110,9 @@ namespace VideoConference.Web.Controllers
                 DocumentNumber = document.DocumentNumber,
                 Title = document.Title,
                 Id = document.Id,
-                CanMinute = document.CurrentDepartment.Id == GetLoggedInUser().DeptId ?true:false,
+                DateReceivedString = document.DateReceived.ToString("dd/MMM/yyy (hh:mm tt)"),
+                Remarks = document.Remarks,
+                AddressedTo = document.AddressedTo,
                 DocMinutes = docMinute
                     .Select(d => new DocumentMinuteViewModel()
                     {
@@ -115,6 +123,7 @@ namespace VideoConference.Web.Controllers
                         DateCreated = d.DateMinuted,
                         DateCreatedString = d.DateMinuted.ToString("dd/MMM/yyyy (hh:mm tt)"),
                         Remarks = d.Remarks,
+                        AddressedTo = d.AddressedTo,
                     }).OrderByDescending(d=>d.DateCreated).ToList(),
             };
 
@@ -125,17 +134,18 @@ namespace VideoConference.Web.Controllers
         public IActionResult Minute(int id = 0)
         {
             var document = _context.Document.Include(d=>d.CurrentDepartment).Where(d => d.Id == id).First();
-            if (document.CurrentDepartment.Id != GetLoggedInUser().DeptId)
-                throw new Exception();
 
+            var user = GetLoggedInUser();
             AddDocumentMinuteViewModel documentModel = new AddDocumentMinuteViewModel()
             {
                 DocId = document.Id,
                 DocTitle = document.Title,
                 DocNumber = document.DocumentNumber,
-                currentDeptId = document.CurrentDepartment.Id,
-                CurrentDept = document.CurrentDepartment.DeptName,
-                Departments = GetDeptSelectList(0,document.CurrentDepartment.Id),
+                FromDeptId = document.CurrentDepartment.Id,
+                FromDept = document.CurrentDepartment.DeptName,
+                ToDeptId = user.DeptId,
+                ToDept = user.DeptName,
+                //Departments = GetDeptSelectList(0,document.CurrentDepartment.Id),
             };
             return View(documentModel);
         }
@@ -143,21 +153,18 @@ namespace VideoConference.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AppConstant.SecretaryRole)]
-        public async Task<IActionResult> Minute(AddDocumentMinuteViewModel docMinuteModel, int SubmittedDeptId)
+        public async Task<IActionResult> Minute(AddDocumentMinuteViewModel docMinuteModel)
         {
             if (!ModelState.IsValid)
             {
-                docMinuteModel.Departments = GetDeptSelectList(SubmittedDeptId,docMinuteModel.currentDeptId);
+                //docMinuteModel.Departments = GetDeptSelectList(SubmittedDeptId,docMinuteModel.currentDeptId);
                 ModelState.AddModelError("", "One or more validation errors");
                 return View(docMinuteModel);
             }
 
             Document document = _context.Document.Where(d => d.Id == docMinuteModel.DocId).First();
-            if (document.CurrentDepartment.Id != GetLoggedInUser().DeptId)
-                throw new Exception();
-
-            Department fromDepartment = _context.Department.Where(d => d.Id == docMinuteModel.currentDeptId).First();
-            Department toDepartment = _context.Department.Where(d => d.Id == SubmittedDeptId).First();
+            Department fromDepartment = _context.Department.Where(d => d.Id == docMinuteModel.FromDeptId).First();
+            Department toDepartment = _context.Department.Where(d => d.Id == docMinuteModel.ToDeptId).First();
 
             DocumentMinute docMinute = new DocumentMinute()
             {
@@ -168,6 +175,7 @@ namespace VideoConference.Web.Controllers
                 Remarks = docMinuteModel.Remarks,
                 RecievedBy = docMinuteModel.ReceivedBy,
                 SubmittedBy = docMinuteModel.SubmittedBy,
+                AddressedTo=docMinuteModel.AddressedTo,
                 UserId = GetLoggedInUser().Id,
             };
             document.CurrentDepartment = toDepartment;

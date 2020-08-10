@@ -84,16 +84,16 @@
             {
                 if (User.IsInRole("Admin") || User.IsInRole("DeptAdmin"))
                 {
-                    <li class="nav-item dashb-navbar-item">
-                        <a class="nav-link dashboard-side-navitem " asp-area="" asp-controller="Users" asp-action="Index">
-                            <p class="dashboard-sidenav-link">
-                                Users
-                            </p>
-                        </a>
-                    </li>
+
                 }
             }
-
+            <li class="nav-item dashb-navbar-item">
+                <a class="nav-link dashboard-side-navitem " asp-area="" asp-controller="Users" asp-action="Index">
+                    <p class="dashboard-sidenav-link">
+                        Users
+                    </p>
+                </a>
+            </li>
             <li class="nav-item dashb-navbar-item">
                 <a class="nav-link dashboard-side-navitem " asp-area="" asp-controller="Document" asp-action="Index">
                     <p class="dashboard-sidenav-link">

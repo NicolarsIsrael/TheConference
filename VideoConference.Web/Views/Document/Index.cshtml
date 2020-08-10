@@ -46,11 +46,8 @@
                                 <td>@doc.Title</td>
                                 <td>@doc.CurrentOffice</td>
                                 <td>
-                                    <a class="btn btn-sm custom-primary-btn float-right" asp-controller="Document" asp-action="ViewDocument" asp-route-id="@doc.Id">View</a>
-                                    @if (doc.CanMinute)
-                                    {
-                                        <a class="btn btn-sm custom-secondary-btn float-right mr-1" asp-controller="Document" asp-action="Minute" asp-route-id="@doc.Id">Minute</a>
-                                    }
+                                    <a class="btn btn-sm mb-1 custom-primary-btn float-right" asp-controller="Document" asp-action="ViewDocument" asp-route-id="@doc.Id">View</a>
+                                    <a class="btn btn-sm custom-secondary-btn float-right mr-1" asp-controller="Document" asp-action="Minute" asp-route-id="@doc.Id">Minute</a>
                                 </td>
                             </tr>
                         }

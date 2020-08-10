@@ -14,7 +14,7 @@ using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize(Roles = "Admin,DeptAdmin")]
+    [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;

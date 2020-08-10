@@ -6,9 +6,9 @@
 
 <div class="container">
     @*<div class="login-register-logo-div mx-auto mt-3">
-        <img src="~/Images/logo.jpg" />
-    </div>*@
-    <div class="card login-card mx-auto">
+            <img src="~/Images/logo.jpg" />
+        </div>*@
+    <div class="card register-doc-card mx-auto">
         <div class="card-body">
             <form asp-action="RegisterDocument">
                 <h4 class="login-header">Register Document</h4>
@@ -19,19 +19,28 @@
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label>Office/Dept of submission</label>
-                    <select asp-items="Model.Departments" name="SubmittedDeptId" class="form-control"></select>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label>Office/Dept of submission</label>
+                        <select asp-items="Model.Departments" name="SubmittedDeptId" class="form-control"></select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="AddressedTo" class="control-label"></label>
+                        <input asp-for="AddressedTo" class="form-control" />
+                        <span asp-validation-for="AddressedTo" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label asp-for="SubmittedBy" class="control-label"></label>
-                    <input asp-for="SubmittedBy" class="form-control" />
-                    <span asp-validation-for="SubmittedBy" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="RecievedBy" class="control-label"></label>
-                    <input asp-for="RecievedBy" class="form-control" />
-                    <span asp-validation-for="RecievedBy" class="text-danger"></span>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="SubmittedBy" class="control-label"></label>
+                        <input asp-for="SubmittedBy" class="form-control" />
+                        <span asp-validation-for="SubmittedBy" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="RecievedBy" class="control-label"></label>
+                        <input asp-for="RecievedBy" class="form-control" />
+                        <span asp-validation-for="RecievedBy" class="text-danger"></span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="Remarks" class="control-label"></label>
@@ -45,6 +54,24 @@
         </div>
     </div>
 </div>
+
+<style>
+    .register-doc-card {
+        width: 80%;
+        box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);
+        margin-top: 20px;
+        margin-bottom: 70px;
+    }
+
+    /*smart phones*/
+    @@media screen and (max-width: 420px) and (min-width: 0px) {
+        .register-doc-card{
+            min-width:300px;max-width:400px;
+        }
+    }
+
+</style>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
