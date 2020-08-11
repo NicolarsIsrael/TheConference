@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
+using VideoConference.Web.Services;
 using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace VideoConference.Web.Controllers
@@ -28,7 +29,7 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m => m.MeetingType == MeetingType.General)
              .Select(m => new ScheduleMeetingVM()

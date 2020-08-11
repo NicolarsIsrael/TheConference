@@ -59,12 +59,12 @@ namespace VideoConference.Web
 
                     if (await _roleManager.FindByNameAsync(AppConstant.ESRole) == null)
                     {
-                        await _roleManager.CreateAsync(new ApplicationRole("ES"));
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.ESRole));
                         var user = new ApplicationUser { UserName = "ExecutiveSec", Email = "es@gmail.com", DeptId = 0, DeptName = "Executive secretary" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();
-                        await _userManager.AddToRoleAsync(user, "ES");
+                        await _userManager.AddToRoleAsync(user, AppConstant.ESRole);
                     }
                         await _roleManager.CreateAsync(new ApplicationRole(AppConstant.ESRole));
 
