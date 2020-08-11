@@ -85,10 +85,24 @@ namespace VideoConference.Web.Controllers
             if (ModelState.IsValid)
             {
                 var dept = _context.Department.Where(d => d.Id == deptId).FirstOrDefault();
-                if (dept == null)
+                if (dept == null && deptId>0)
                     throw new Exception();
 
-                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email,DeptId=dept.Id,DeptName = dept.DeptName };
+                var deptName = "";
+                int _deptId = 0;
+                if (dept == null)
+                {
+                    if (deptId == -1)
+                        deptName = "SUBEB";
+                    else if (deptId == -2)
+                        deptName = "Zonal Director";
+                }
+                else
+                {
+                    deptName = dept.DeptName;
+                    _deptId = dept.Id;
+                }
+                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email,DeptId=_deptId,DeptName = deptName };
                 var result = await _userManager.CreateAsync(user, registerModel.Password);
                 if (result.Succeeded)
                 {
@@ -111,56 +125,6 @@ namespace VideoConference.Web.Controllers
             {
                 registerModel.Departments = GetDeptSelectList(deptId);
                 registerModel.UserTypes = GetUserTypeSelectList(userType);
-                ModelState.AddModelError("", "One or more validation errors");
-                return View(registerModel);
-            }
-            return View(registerModel);
-        }
-
-        [Authorize(Roles = AppConstant.AdminRole)]
-        public IActionResult RegisterDeptAdmin()
-        {
-            var depts = _context.Department;
-            List<SelectListItem> deptSelectList = new List<SelectListItem>();
-            foreach (var dept in depts)
-                deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString() });
-            RegisterViewModel registerModel = new RegisterViewModel()
-            {
-                Departments = GetDeptSelectList(),
-            };
-            return View(registerModel);
-        }
-
-        [Authorize(Roles = AppConstant.AdminRole)]
-        [ValidateAntiForgeryToken]
-        [HttpPost]
-        public async Task<IActionResult> RegisterDeptAdmin(RegisterViewModel registerModel, int deptId)
-        {
-            if (ModelState.IsValid)
-            {
-                var dept = _context.Department.Where(d => d.Id == deptId).FirstOrDefault();
-                if (dept == null)
-                    throw new Exception();
-
-                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email, DeptId = dept.Id, DeptName = dept.DeptName };
-                var result = await _userManager.CreateAsync(user, registerModel.Password);
-                if (result.Succeeded)
-                {
-                    if (await _roleManager.FindByNameAsync("DeptAdmin") == null)
-                        await _roleManager.CreateAsync(new ApplicationRole("DeptAdmin"));
-                    await _userManager.AddToRoleAsync(user, "DeptAdmin");
-                    return RedirectToAction(nameof(Index));
-                }
-                foreach (var error in result.Errors)
-                {
-                    registerModel.Departments = GetDeptSelectList(deptId);
-                    ModelState.AddModelError(string.Empty, error.Description);
-                    return View(registerModel);
-                }
-            }
-            else
-            {
-                registerModel.Departments = GetDeptSelectList(deptId);
                 ModelState.AddModelError("", "One or more validation errors");
                 return View(registerModel);
             }
@@ -213,10 +177,12 @@ namespace VideoConference.Web.Controllers
         {
             var depts = _context.Department;
             List<SelectListItem> deptSelectList = new List<SelectListItem>();
-            if (User.IsInRole("Admin"))
+            if (User.IsInRole(AppConstant.AdminRole) || User.IsInRole(AppConstant.ESRole))
             {
                 foreach (var dept in depts)
                     deptSelectList.Add(new SelectListItem { Text = dept.DeptName, Value = dept.Id.ToString(), Selected = dept.Id == selectedDeptId ? true : false, });
+                deptSelectList.Add(new SelectListItem { Text = "SUBEB", Value = "-1", Selected = selectedDeptId == -1 ? true : false });
+                deptSelectList.Add(new SelectListItem { Text = "Zonal Director", Value = "-2", Selected = selectedDeptId == -2 ? true : false });
             }
             else
             {
