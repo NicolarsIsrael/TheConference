@@ -16,13 +16,13 @@
         </div>
         <div>
             <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Users" asp-action="registeruser">Add new user</a>
-            @if (SignInManager.IsSignedIn(User))
+            @*@if (SignInManager.IsSignedIn(User))
             {
                 if (User.IsInRole("Admin"))
                 {
                     <a class="btn btn custom-secondary-btn" asp-area="" asp-controller="Users" asp-action="registerdeptadmin">Add dept admin</a>
                 }
-            }
+            }*@
         </div>
     </div>
     <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">

@@ -67,7 +67,7 @@ namespace VideoConference.Web.Controllers
             return View(allMemos);
         }
 
-        [Authorize(Roles =AppConstant.AdminRole)]
+        [Authorize(Roles =AppConstant.AdminRole + "," + AppConstant.ESRole)]
         public IActionResult Add(int deptId=0)
         {
             MemoViewModel memoModel = new MemoViewModel()
@@ -78,7 +78,7 @@ namespace VideoConference.Web.Controllers
             return View(memoModel);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.ESRole)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(MemoViewModel memoModel, int selectedDeptId)
@@ -117,6 +117,7 @@ namespace VideoConference.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.ESRole)]
         public IActionResult DeleteMemo(int id)
         {
             var memo = _context.Memo.Where(m => m.Id == id).First();
@@ -130,7 +131,7 @@ namespace VideoConference.Web.Controllers
             return PartialView("_deleteMemo",memoModel);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.ESRole)]
         public async Task<IActionResult> ConfirmDelete(int id)
         {
             var memo = _context.Memo.Where(m => m.Id == id).First();

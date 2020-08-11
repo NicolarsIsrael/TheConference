@@ -14,7 +14,7 @@ using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
+    [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,7 +27,7 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
 
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         public async Task<IActionResult> Index()
         {
             IEnumerable<UserViewModel> users = _context.Users
@@ -66,7 +66,7 @@ namespace VideoConference.Web.Controllers
             return View(users);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         public IActionResult RegisterUser()
         {
             RegisterViewModel registerModel = new RegisterViewModel()
@@ -77,7 +77,7 @@ namespace VideoConference.Web.Controllers
             return View(registerModel);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> RegisterUser(RegisterViewModel registerModel,int deptId, int userType)
@@ -167,7 +167,7 @@ namespace VideoConference.Web.Controllers
             return View(registerModel);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.ESRole)]
         public IActionResult DeleteUser(string id)
         {
             var user = _userManager.Users.Where(u => u.Id == id).FirstOrDefault();
@@ -184,7 +184,7 @@ namespace VideoConference.Web.Controllers
             return PartialView("_deleteUser",userModel);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.ESRole)]
         public async Task<IActionResult> ConfirmDeleteUser(string id)
         {
             var user = _userManager.Users.Where(u => u.Id == id).FirstOrDefault();

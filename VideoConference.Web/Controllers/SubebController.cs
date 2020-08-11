@@ -12,7 +12,7 @@ using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize(Roles =AppConstant.AdminRole + "," + AppConstant.SubebRole)]
+    [Authorize(Roles =AppConstant.SubebRole + "," + AppConstant.ESRole)]
     public class SubebController : Controller
     {
         private readonly ApplicationDbContext _context;

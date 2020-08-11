@@ -74,7 +74,7 @@ namespace VideoConference.Web.Controllers
             return View(meetingsModel);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole )]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         public IActionResult ScheduleMeeting()
         {
             ScheduleMeetingVM scheduleMeeting = new ScheduleMeetingVM()
@@ -88,7 +88,7 @@ namespace VideoConference.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         public async Task<IActionResult> ScheduleMeeting(ScheduleMeetingVM scheduleModel,int selectedDeptId)
         {
             if (!ModelState.IsValid)
@@ -125,7 +125,7 @@ namespace VideoConference.Web.Controllers
             return RedirectToAction("Meeting","Home");
         }
 
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole)]
+        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         public IActionResult Users()
         {
             IEnumerable<UserViewModel> users = _context.Users
