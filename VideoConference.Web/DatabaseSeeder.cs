@@ -76,11 +76,32 @@ namespace VideoConference.Web
                         if (!result.Succeeded)
                             throw new Exception();
                         await _userManager.AddToRoleAsync(user, AppConstant.ZonalDirectorRole);
-
                     }
 
                     if (await _roleManager.FindByNameAsync(AppConstant.DeptAdminRole) == null)
                         await _roleManager.CreateAsync(new ApplicationRole(AppConstant.DeptAdminRole));
+
+                    if (await _roleManager.FindByNameAsync(AppConstant.ZonalDirectorAdminRole) == null)
+                    {
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.ZonalDirectorAdminRole));
+                        var user = new ApplicationUser { UserName = "ZonalDirectorAdmin", Email = "zonaldirectoradmin@gmail.com", DeptId = 0, DeptName = "Zonal Director" };
+                        var result = await _userManager.CreateAsync(user, "Abc123*");
+                        if (!result.Succeeded)
+                            throw new Exception();
+                        await _userManager.AddToRoleAsync(user, AppConstant.ZonalDirectorAdminRole);
+                    }
+
+                    if (await _roleManager.FindByNameAsync(AppConstant.SubebAdminRole) == null)
+                    {
+                        await _roleManager.CreateAsync(new ApplicationRole(AppConstant.SubebAdminRole));
+                        var user = new ApplicationUser { UserName = "SUBEBAdmin", Email = "subebadmin@gmail.com", DeptId = 0, DeptName = "SUBEB" };
+                        var result = await _userManager.CreateAsync(user, "Abc123*");
+                        if (!result.Succeeded)
+                            throw new Exception();
+                        await _userManager.AddToRoleAsync(user, AppConstant.SubebAdminRole);
+                    }
+
+
 
                     if (await _roleManager.FindByNameAsync(AppConstant.SecretaryRole) == null)
                         await _roleManager.CreateAsync(new ApplicationRole(AppConstant.SecretaryRole));

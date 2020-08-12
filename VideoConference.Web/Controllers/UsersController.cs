@@ -14,7 +14,8 @@ using VideoConference.Web.Services;
 
 namespace VideoConference.Web.Controllers
 {
-    [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
+    [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole
+        + "," + AppConstant.ESRole + "," + AppConstant.SubebAdminRole + "," + AppConstant.ZonalDirectorAdminRole)]
     public class UsersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,7 +28,6 @@ namespace VideoConference.Web.Controllers
             _roleManager = roleMananger;
         }
 
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         public async Task<IActionResult> Index()
         {
             IEnumerable<UserViewModel> users = _context.Users
@@ -41,7 +41,7 @@ namespace VideoConference.Web.Controllers
                     DeptId = u.DeptId,
                 }).ToList();
 
-            if (User.IsInRole("DeptAdmin"))
+            if (User.IsInRole(AppConstant.DeptAdminRole))
             {
                 var dept = GetLoggedInUserDept();
                 users = users.Where(u => u.DeptId == dept.Id).ToList();
@@ -66,7 +66,6 @@ namespace VideoConference.Web.Controllers
             return View(users);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         public IActionResult RegisterUser()
         {
             RegisterViewModel registerModel = new RegisterViewModel()
@@ -77,7 +76,6 @@ namespace VideoConference.Web.Controllers
             return View(registerModel);
         }
 
-        [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.DeptAdminRole + "," + AppConstant.ESRole)]
         [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> RegisterUser(RegisterViewModel registerModel,int deptId, int userType)
@@ -184,10 +182,16 @@ namespace VideoConference.Web.Controllers
                 deptSelectList.Add(new SelectListItem { Text = "SUBEB", Value = "-1", Selected = selectedDeptId == -1 ? true : false });
                 deptSelectList.Add(new SelectListItem { Text = "Zonal Director", Value = "-2", Selected = selectedDeptId == -2 ? true : false });
             }
-            else
+            else if(User.IsInRole(AppConstant.DeptAdminRole))
             {
                 var userDept = GetLoggedInUserDept();
                 deptSelectList.Add(new SelectListItem { Text = userDept.DeptName, Value = userDept.Id.ToString() });
+            }else if (User.IsInRole(AppConstant.ZonalDirectorAdminRole))
+            {
+                deptSelectList.Add(new SelectListItem { Text = "Zonal Director", Value = "-2" });
+            }else if (User.IsInRole(AppConstant.SubebAdminRole))
+            {
+                deptSelectList.Add(new SelectListItem { Text = "SUBEB", Value = "-1" });
             }
             return deptSelectList;
         }
@@ -195,15 +199,26 @@ namespace VideoConference.Web.Controllers
         private List<SelectListItem> GetUserTypeSelectList(int selectedUserType = 0)
         {
             List<SelectListItem> userTypeSelectList = new List<SelectListItem>();
-            for(int i = 0; i < AppConstant.UserTypes.GetLength(0); i++)
+            if (User.IsInRole(AppConstant.AdminRole) || User.IsInRole(AppConstant.ESRole) || User.IsInRole(AppConstant.DeptAdminRole))
             {
-                userTypeSelectList.Add(new SelectListItem
+                for (int i = 0; i < AppConstant.UserTypes.GetLength(0); i++)
                 {
-                    Text = AppConstant.UserTypes[i, 1],
-                    Value = AppConstant.UserTypes[i, 0],
-                    Selected = selectedUserType.ToString() == AppConstant.UserTypes[i, 0] ? true : false,
-                });
+                    userTypeSelectList.Add(new SelectListItem
+                    {
+                        Text = AppConstant.UserTypes[i, 1],
+                        Value = AppConstant.UserTypes[i, 0],
+                        Selected = selectedUserType.ToString() == AppConstant.UserTypes[i, 0] ? true : false,
+                    });
+                }
             }
+            else if (User.IsInRole(AppConstant.DeptAdminRole))
+                userTypeSelectList.Add(new SelectListItem { Text = AppConstant.UserRole, Value = "1" });
+            else if (User.IsInRole(AppConstant.SubebAdminRole))
+                userTypeSelectList.Add(new SelectListItem { Text = AppConstant.SubebRole, Value = "5" });
+            else if (User.IsInRole(AppConstant.ZonalDirectorAdminRole))
+                userTypeSelectList.Add(new SelectListItem { Text = AppConstant.ZonalDirectorRole, Value = "4" });
+
+
             return userTypeSelectList;
         }
 
