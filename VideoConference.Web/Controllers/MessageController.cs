@@ -50,13 +50,13 @@ namespace VideoConference.Web.Controllers
                     .Select(m => new MessageViewModel()
                     {
                         Id = m.Id,
-                        From = _context.Users.Where(u => u.Id == m.FromUserId).First().UserName,
+                        To = _context.Users.Where(u => u.Id == m.ToUserId).First().UserName,
                         DateCreated = m.DateCreated,
                         MessageBody = m.MessageBody,
                         Title = m.Title,
                         Urgency = m.Urgency.ToString(),
                         DateCreatedString = m.DateCreated.ToString("dd/MMM/yyyy(hh: mm tt)"),
-                        IsRead = m.IsRead ? true : false,
+                        IsRead = false,
                         Attachment = m.AttachmentPath,
                         HaveAttachment = string.IsNullOrEmpty(m.AttachmentPath) ? false : true,
                     }),
@@ -68,6 +68,7 @@ namespace VideoConference.Web.Controllers
         public async Task<IActionResult> Read(int id=0)
         {
             var message = _context.Message.Where(m => m.Id == id).First();
+            var user = GetLoggedInUser();
             MessageViewModel messageModel = new MessageViewModel()
             {
                 From = _context.Users.Where(u => u.Id == message.FromUserId).First().UserName,
@@ -80,10 +81,12 @@ namespace VideoConference.Web.Controllers
                 Attachment = message.AttachmentPath,
                 HaveAttachment = string.IsNullOrEmpty(message.AttachmentPath) ? false : true,
             };
-
-            message.IsRead = true;
-            _context.Entry(message).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            if (user.Id != message.FromUserId)
+            {
+                message.IsRead = true;
+                _context.Entry(message).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
 
             return View(messageModel);
         }

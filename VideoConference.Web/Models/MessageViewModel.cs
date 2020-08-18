@@ -38,6 +38,7 @@ namespace VideoConference.Web.Models
         public string Title { get; set; }
         public string MessageBody { get; set; }
         public string From { get; set; }
+        public string To { get; set; }
         public string Urgency { get; set; }
         public string Attachment { get; set; }
         public bool HaveAttachment { get; set; }
