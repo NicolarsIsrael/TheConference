@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container mt-3">
+   
+    <div class="row mb-2">
+        <div class="col-6">
+            <h4>Messages</h4>
+        </div>
+        <div class="col-6">
+            <div style="text-align:right">
+                <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Message" asp-action="New">New message</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+        <div class="card-body px-1 py-0  table-responsive">
+            <table class="table w-100">
+                <thead>
+                    <tr class="w-100">
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Message</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

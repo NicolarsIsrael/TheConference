@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Files\MemoFiles\" />
+    <Folder Include="wwwroot\Files\MessageAttachments\" />
   </ItemGroup>
 
 </Project>
