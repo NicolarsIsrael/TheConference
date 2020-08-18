@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
@@ -28,7 +29,63 @@ namespace VideoConference.Web.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            var user = GetLoggedInUser();
+            MessageIndexViewModel messages = new MessageIndexViewModel()
+            {
+                ReceivedMessages = _context.Message.Where(m => m.ToUserId == user.Id)
+                    .Select(m => new MessageViewModel()
+                    {
+                        Id = m.Id,
+                        From = _context.Users.Where(u => u.Id == m.FromUserId).First().UserName,
+                        DateCreated = m.DateCreated,
+                        MessageBody = m.MessageBody,
+                        Title = m.Title,
+                        Urgency = m.Urgency.ToString(),
+                        DateCreatedString = m.DateCreated.ToString("dd/MMM/yyyy(hh: mm tt)"),
+                        IsRead = m.IsRead ? true : false,
+                        Attachment = m.AttachmentPath,
+                        HaveAttachment = string.IsNullOrEmpty(m.AttachmentPath) ? false : true,
+                    }),
+                SentMessages = _context.Message.Where(m => m.FromUserId == user.Id)
+                    .Select(m => new MessageViewModel()
+                    {
+                        Id = m.Id,
+                        From = _context.Users.Where(u => u.Id == m.FromUserId).First().UserName,
+                        DateCreated = m.DateCreated,
+                        MessageBody = m.MessageBody,
+                        Title = m.Title,
+                        Urgency = m.Urgency.ToString(),
+                        DateCreatedString = m.DateCreated.ToString("dd/MMM/yyyy(hh: mm tt)"),
+                        IsRead = m.IsRead ? true : false,
+                        Attachment = m.AttachmentPath,
+                        HaveAttachment = string.IsNullOrEmpty(m.AttachmentPath) ? false : true,
+                    }),
+            };
+
+            return View(messages);
+        }
+
+        public async Task<IActionResult> Read(int id=0)
+        {
+            var message = _context.Message.Where(m => m.Id == id).First();
+            MessageViewModel messageModel = new MessageViewModel()
+            {
+                From = _context.Users.Where(u => u.Id == message.FromUserId).First().UserName,
+                DateCreated = message.DateCreated,
+                MessageBody = message.MessageBody,
+                Title = message.Title,
+                Urgency = message.Urgency.ToString(),
+                DateCreatedString = message.DateCreated.ToString("dd/MMM/yyyy(hh: mm tt)"),
+                IsRead = message.IsRead ? true : false,
+                Attachment = message.AttachmentPath,
+                HaveAttachment = string.IsNullOrEmpty(message.AttachmentPath) ? false : true,
+            };
+
+            message.IsRead = true;
+            _context.Entry(message).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return View(messageModel);
         }
 
         public async Task<IActionResult> New()

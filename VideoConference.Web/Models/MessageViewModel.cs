@@ -29,4 +29,24 @@ namespace VideoConference.Web.Models
         [DataType(DataType.Upload)]
         public IFormFile AttachmentFile { get; set; }
     }
+
+    public class MessageViewModel
+    {
+        public int Id { get; set; }
+        public DateTime DateCreated { get; set; }
+        public string DateCreatedString { get; set; }
+        public string Title { get; set; }
+        public string MessageBody { get; set; }
+        public string From { get; set; }
+        public string Urgency { get; set; }
+        public string Attachment { get; set; }
+        public bool HaveAttachment { get; set; }
+        public bool IsRead { get; set; }
+    }
+
+    public class MessageIndexViewModel
+    {
+        public IEnumerable<MessageViewModel> ReceivedMessages { get; set; }
+        public IEnumerable<MessageViewModel> SentMessages { get; set; }
+    }
 }

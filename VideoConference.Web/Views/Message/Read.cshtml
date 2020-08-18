@@ -1,0 +1,32 @@
+﻿@model VideoConference.Web.Models.MessageViewModel
+@{
+    ViewData["Title"] = "Read";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+    <div class="card box-shadow">
+        <div class="card-body">
+            <div>
+                From: @Model.From
+            </div>
+            <div>
+                Title: @Model.Title
+            </div>
+            <div>
+                Date: @Model.DateCreatedString
+            </div>
+            <div>
+                Message: 
+                <br />
+                <div class="ml-5">@Model.MessageBody</div>
+            </div>
+            @if (Model.HaveAttachment)
+            {
+                <hr />
+                <a target="_blank" href="~/@Url.Content(Model.Attachment).Remove(0,8)" class="btn custom-primary-btn">
+                    View attachment
+                </a>
+            }
+        </div>
+    </div>
+

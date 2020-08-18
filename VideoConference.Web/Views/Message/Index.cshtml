@@ -1,38 +1,133 @@
-﻿
+﻿@model VideoConference.Web.Models.MessageIndexViewModel
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
 
+
 <div class="container mt-3">
-   
-    <div class="row mb-2">
-        <div class="col-6">
+    <div class="row  mb-2">
+        <div class="col-md-6">
+
+        </div>
+        <div class="col-md-6" style="text-align:right">
+            <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Message" asp-action="New">New message</a>
+        </div>
+    </div>
+    <div class="section_header">
+        <div class="section_header_text">
             <h4>Messages</h4>
         </div>
-        <div class="col-6">
-            <div style="text-align:right">
-                <a class="btn btn custom-primary-btn" asp-area="" asp-controller="Message" asp-action="New">New message</a>
+        <div class="meetings_tab">
+            <button class="navbar-toggler collapsed position-relative" type="button" data-toggle="collapse" data-target="#meetingsMenuBar"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav nav-tabs justify-content-center justify-content-md-end" id="meetingsMenuBar" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active tab-link" id="received-messages" data-toggle="tab" href="#received-messages-tab" role="tab"
+                       aria-controls="received-messages" aria-selected="true">Received messages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link tab-link" id="sent-messages" data-toggle="tab" href="#sent-messages-tab" role="tab"
+                       aria-controls="sent-messages" aria-selected="true">Sent messages</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="tab_slider">
+        <div class="tab-pane fade show active" id="received-messages-tab" role="tabpanel" aria-labelledby="received-messages">
+            <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+                <div class="card-body px-1 py-0  table-responsive">
+                    <table class="table w-100">
+                        <thead>
+                            <tr class="w-100">
+                                <th>Date</th>
+                                <th>From</th>
+                                <th>Title</th>
+                                <th>Message</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var message in Model.ReceivedMessages)
+                            {
+                                <tr>
+                                    <td>@message.DateCreatedString</td>
+                                    <td>@message.From</td>
+                                    <td>@message.Title</td>
+                                    <td>@message.MessageBody</td>
+                                    <td>
+                                        @if (message.HaveAttachment)
+                                        {
+                                            <a target="_blank" href="~/@Url.Content(message.Attachment).Remove(0,8)">
+                                                <img src="~/Images/paperclip.svg" class="mr-4"/>
+                                            </a>
+                                        }
+
+                                        @if (message.IsRead)
+                                        {
+                                            <img src="~/Images/check.svg" />
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Message" asp-action="read" asp-route-id="@message.Id" class="btn custom-primary-btn btn-sm">Read</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="tab-pane fade" id="sent-messages-tab" role="tabpanel" aria-labelledby="sent-messages">
+            <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
+                <div class="card-body px-1 py-0  table-responsive">
+                    <table class="table w-100">
+                        <thead>
+                            <tr class="w-100">
+                                <th>Date</th>
+                                <th>To</th>
+                                <th>Title</th>
+                                <th>Message</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var message in Model.SentMessages)
+                            {
+                            <tr>
+                                <td>@message.DateCreatedString</td>
+                                <td>@message.From</td>
+                                <td>@message.Title</td>
+                                <td>@message.MessageBody</td>
+                                <td>
+                                    @if (message.HaveAttachment)
+                                    {
+                                        <a target="_blank" href="~/@Url.Content(message.Attachment).Remove(0,8)">
+                                            <img src="~/Images/paperclip.svg" class="mr-4" />
+                                        </a>
+                                    }
+                                    @if (message.IsRead)
+                                    {
+                                        <img src="~/Images/check.svg" />
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-controller="Message" asp-action="read" asp-route-id="@message.Id" class="btn custom-primary-btn btn-sm">Read</a>
+                                </td>
+                            </tr>
 
-    <div class="card" style="box-shadow: 2px 2px 12px rgba(47, 47, 47, 0.40);">
-        <div class="card-body px-1 py-0  table-responsive">
-            <table class="table w-100">
-                <thead>
-                    <tr class="w-100">
-                        <th>Date</th>
-                        <th>Title</th>
-                        <th>Message</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                   
-                </tbody>
-            </table>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
-
