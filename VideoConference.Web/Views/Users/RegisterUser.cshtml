@@ -3,14 +3,15 @@
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_DashboardLayout.cshtml";
 }
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <div class="container">
     @*<div class="login-register-logo-div mx-auto mt-2">
-        <img src="~/Images/logo.jpg" />
-    </div>*@
+            <img src="~/Images/logo.jpg" />
+        </div>*@
     <div class="card mx-auto register-card">
         <div class="card-body">
-            <form method="post">
+            <form method="post" autocomplete="off">
                 <h4 class="register-header">REGISTER USER</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
@@ -18,9 +19,15 @@
                     <input asp-for="Email" class="form-control" placeholder="Email" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <input asp-for="UserName" class="form-control" placeholder="Username" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+                <div class="row">
+                    <div class="form-group col-md-6 pr-md-1">
+                        <input asp-for="UserName" class="form-control" placeholder="Username" autocomplete="off" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6 pl-md-1">
+                        <input asp-for="Name" class="form-control" placeholder="Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label asp-for="Departments" class="control-label"></label>
@@ -58,21 +65,21 @@
                     <button type="submit" class="btn btn-primary btn-block register-btn">Register</button>
                 </div>
                 @*<div class="mb-2">
-            <div class="other-socials-intro">
-                Or register with social media accounts
-            </div>
-            <div class="w-100">
-                <a href="#" class="fb btn w-100 mb-1">
-                    <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
-                </a>
-                <a href="#" class="google btn w-100 mb-1">
-                    <i class="fab fa-google fa-fw"></i> Register with Google+
-                </a>
-            </div>
-            <div class="mt-3" style="text-align:center">
-                Already a user? <a id="forgot-password" asp-page="./Login">Login</a>
-            </div>
-        </div>*@
+                        <div class="other-socials-intro">
+                            Or register with social media accounts
+                        </div>
+                        <div class="w-100">
+                            <a href="#" class="fb btn w-100 mb-1">
+                                <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
+                            </a>
+                            <a href="#" class="google btn w-100 mb-1">
+                                <i class="fab fa-google fa-fw"></i> Register with Google+
+                            </a>
+                        </div>
+                        <div class="mt-3" style="text-align:center">
+                            Already a user? <a id="forgot-password" asp-page="./Login">Login</a>
+                        </div>
+                    </div>*@
             </form>
         </div>
 
@@ -82,3 +89,12 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script>
+  $(document).ready(function () {
+           setTimeout(function() {
+      $("#UserName").val("")
+    }, 1000);
+    });
+
+</script>

@@ -19,6 +19,10 @@ namespace VideoConference.Web.Models
         [AlphaNumeric(ErrorMessage ="Username can only contain letters and numbers")]
         public string UserName { get; set; }
 
+        [Required(ErrorMessage = "Name is required")]
+        [BeginWIthAlphaNumeric(ErrorMessage = "Name must begin with alphabeth or number")]
+        public string Name { get; set; }
+
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
@@ -35,6 +39,16 @@ namespace VideoConference.Web.Models
 
         [Display(Name ="User type")]
         public List<SelectListItem> UserTypes { get; set; }
+    }
+
+    public class EditUserViewModel
+    {
+        public string UserId { get; set; }
+
+        [Required(ErrorMessage = "Name is required")]
+        [BeginWIthAlphaNumeric(ErrorMessage = "Name must begin with alphabeth or number")]
+        public string Name { get; set; }
+        public string Email { get; set; }
     }
 
     public class AlphaNumeric : ValidationAttribute

@@ -60,7 +60,7 @@ namespace VideoConference.Web
                     if (await _roleManager.FindByNameAsync(AppConstant.ESRole) == null)
                     {
                         await _roleManager.CreateAsync(new ApplicationRole(AppConstant.ESRole));
-                        var user = new ApplicationUser { UserName = "ExecutiveSec", Email = "es@gmail.com", DeptId = 0, DeptName = "Executive secretary" };
+                        var user = new ApplicationUser { UserName = "ExecutiveSec", Email = "es@gmail.com",Name = "Executive Secretary", DeptId = 0, DeptName = "Executive secretary" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();
@@ -71,7 +71,7 @@ namespace VideoConference.Web
                     if (await _roleManager.FindByNameAsync(AppConstant.ZonalDirectorRole) == null)
                     {
                         await _roleManager.CreateAsync(new ApplicationRole(AppConstant.ZonalDirectorRole));
-                        var user = new ApplicationUser { UserName = "ZonalDirector", Email = "zonaldirector1@gmail.com", DeptId = 0, DeptName = "Zonal Director" };
+                        var user = new ApplicationUser { UserName = "ZonalDirector", Email = "zonaldirector1@gmail.com",Name="Zonal Director", DeptId = 0, DeptName = "Zonal Director" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();
@@ -84,7 +84,7 @@ namespace VideoConference.Web
                     if (await _roleManager.FindByNameAsync(AppConstant.ZonalDirectorAdminRole) == null)
                     {
                         await _roleManager.CreateAsync(new ApplicationRole(AppConstant.ZonalDirectorAdminRole));
-                        var user = new ApplicationUser { UserName = "ZonalDirectorAdmin", Email = "zonaldirectoradmin@gmail.com", DeptId = 0, DeptName = "Zonal Director" };
+                        var user = new ApplicationUser { UserName = "ZonalDirectorAdmin", Email = "zonaldirectoradmin@gmail.com",Name="Zonal Director Admin", DeptId = 0, DeptName = "Zonal Director" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();
@@ -94,7 +94,7 @@ namespace VideoConference.Web
                     if (await _roleManager.FindByNameAsync(AppConstant.SubebAdminRole) == null)
                     {
                         await _roleManager.CreateAsync(new ApplicationRole(AppConstant.SubebAdminRole));
-                        var user = new ApplicationUser { UserName = "SUBEBAdmin", Email = "subebadmin@gmail.com", DeptId = 0, DeptName = "SUBEB" };
+                        var user = new ApplicationUser { UserName = "SUBEBAdmin", Email = "subebadmin@gmail.com",Name="Subeb Admin", DeptId = 0, DeptName = "SUBEB" };
                         var result = await _userManager.CreateAsync(user, "Abc123*");
                         if (!result.Succeeded)
                             throw new Exception();

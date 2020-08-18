@@ -1,0 +1,35 @@
+﻿@model VideoConference.Web.Models.EditUserViewModel
+
+@{
+    ViewData["Title"] = "EditUser";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container mt-md-5">
+    <div class="card mx-auto register-card">
+        <div class="card-body">
+            <form method="post">
+                <h4 class="register-header">EDIT USER</h4>
+                <hr />
+                <input type="hidden" asp-for="UserId"/>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Email" class="form-control" placeholder="Email" readonly/>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Name" class="form-control" placeholder="Name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block register-btn">Save</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

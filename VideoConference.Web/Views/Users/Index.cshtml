@@ -31,6 +31,7 @@
                 <thead>
                     <tr class="w-100">
                         <th>Email</th>
+                        <th>Name</th>
                         <th>Username</th>
                         <th>Dept</th>
                         <th></th>
@@ -43,6 +44,7 @@
                             {
                             <tr>
                                 <td>@user.Email</td>
+                                <td>@user.Name</td>
                                 <td>@user.Username</td>
                                 <td>
                                     @user.Dept
@@ -51,12 +53,13 @@
                                     <span>(Dept. admin)</span>
                                 }
                             </td>
-                            <td>
-                                @if (!user.IsAdmin)
-                                {
-                                    <a class="btn btn-sm custom-secondary-btn float-right" onclick="ShowDeleteUser('@user.Id')">delete</a>
-                                }
-                            </td>
+                                <td>
+                                    @if (!user.IsAdmin)
+                                    {
+                                        <a class="btn btn-sm custom-secondary-btn float-right" onclick="ShowDeleteUser('@user.Id')">Delete</a>
+                                        <a class="btn btn-sm custom-primary-btn float-right mr-2" asp-action="EditUser" asp-route-userid="@user.Id">Edit</a>
+                                    }
+                                </td>
                         </tr>
                     }
                         }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using VideoConference.Web.Core;
 using VideoConference.Web.Data;
 using VideoConference.Web.Models;
@@ -36,6 +37,7 @@ namespace VideoConference.Web.Controllers
                     Id = u.Id,
                     Email = u.Email,
                     Username = u.UserName,
+                    Name = u.Name,
                     User = u,
                     Dept = u.DeptName,
                     DeptId = u.DeptId,
@@ -72,6 +74,7 @@ namespace VideoConference.Web.Controllers
             {
                 Departments = GetDeptSelectList(),
                 UserTypes = GetUserTypeSelectList(),
+                UserName = "",
             };
             return View(registerModel);
         }
@@ -100,7 +103,7 @@ namespace VideoConference.Web.Controllers
                     deptName = dept.DeptName;
                     _deptId = dept.Id;
                 }
-                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email,DeptId=_deptId,DeptName = deptName };
+                var user = new ApplicationUser { UserName = registerModel.UserName, Email = registerModel.Email,Name=registerModel.Name, DeptId=_deptId,DeptName = deptName };
                 var result = await _userManager.CreateAsync(user, registerModel.Password);
                 if (result.Succeeded)
                 {
@@ -128,6 +131,36 @@ namespace VideoConference.Web.Controllers
             }
             return View(registerModel);
         }
+
+        public IActionResult EditUser(string userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "One or more validation errors");
+                return View();
+            }
+
+            var user = _context.Users.Where(u => u.Id == userId).First();
+            EditUserViewModel userModel = new EditUserViewModel()
+            {
+                UserId = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+            };
+            return View(userModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditUser(EditUserViewModel userModel)
+        {
+            var user = _context.Users.Where(u => u.Id == userModel.UserId).First();
+            user.Name = userModel.Name;
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
         [Authorize(Roles = AppConstant.AdminRole + "," + AppConstant.ESRole)]
         public IActionResult DeleteUser(string id)

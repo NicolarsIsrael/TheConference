@@ -146,7 +146,7 @@ namespace VideoConference.Web.Controllers
                 {
                     messageToList.Add(new SelectListItem
                     {
-                        Text = user.UserName,
+                        Text = user.Name,
                         Value = user.Email,
                         Selected = string.Compare(user.Email, selectedEmail, true) == 0 ? true : false,
                     });
