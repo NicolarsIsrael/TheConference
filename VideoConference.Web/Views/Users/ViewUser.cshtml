@@ -1,0 +1,30 @@
+﻿@model VideoConference.Web.Models.UserViewModel
+@{
+    ViewData["Title"] = "ViewUser";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+    <div class="card box-shadow login-card mx-auto mt-lg-5">
+        <div class="card-body">
+            <div>
+                <span class="font-weight-bold">Name: </span> @Model.Name
+            </div>
+            <div>
+                <span class="font-weight-bold">Email: </span> @Model.Email
+            </div>
+            <div>
+                <span class="font-weight-bold">Username: </span> @Model.Username
+            </div>
+            <div>
+                <span class="font-weight-bold">Dept: </span> @Model.Dept
+            </div>
+            <hr />
+            <div style="text-align:right">
+                @if (!Model.IsAdmin)
+                {
+                    <a class="btn btn-sm custom-primary-btn" asp-action="EditUser" asp-route-userid="@Model.Id">Edit</a>
+                    <a class="btn btn-sm custom-secondary-btn" onclick="ShowDeleteUser('@Model.Id')">Delete</a>
+                }
+
+            </div>
+        </div>
+    </div>

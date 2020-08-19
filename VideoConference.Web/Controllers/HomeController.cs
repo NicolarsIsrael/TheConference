@@ -31,12 +31,6 @@ namespace VideoConference.Web.Controllers
         
         public async Task<IActionResult> Index()
         {
-            var uu = _context.Users.Where(u => u.Email == "es@gmail.com").First();
-            uu.Name = "EXECUTIVE SECRETARY";
-            _context.Entry(uu).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-
             IEnumerable<ScheduleMeetingVM> meetingsModel = _context.Meeting.Where(m => m.MeetingType == MeetingType.General)
              .Select(m => new ScheduleMeetingVM()
              {

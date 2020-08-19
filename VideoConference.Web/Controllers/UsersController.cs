@@ -68,6 +68,34 @@ namespace VideoConference.Web.Controllers
             return View(users);
         }
 
+        public async Task<IActionResult> ViewUser(string id)
+        {
+            var user = _context.Users.Where(u => u.Id == id).First();
+            UserViewModel userModel = new UserViewModel()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Username = user.UserName,
+                Name = user.Name,
+                User = user,
+                Dept = user.DeptName,
+                DeptId = user.DeptId,
+            };
+            if (await _userManager.IsInRoleAsync(userModel.User, AppConstant.AdminRole) || await _userManager.IsInRoleAsync(userModel.User, AppConstant.ESRole))
+            {
+                userModel.IsAdmin = true; userModel.IsDeptAdmin = false;
+            }
+            else if (await _userManager.IsInRoleAsync(userModel.User, AppConstant.DeptAdminRole))
+            {
+                userModel.IsAdmin = false; userModel.IsDeptAdmin = true;
+            }
+            else
+            {
+                userModel.IsAdmin = false; userModel.IsDeptAdmin = false;
+            }
+            return View(userModel);
+        }
+
         public IActionResult RegisterUser()
         {
             RegisterViewModel registerModel = new RegisterViewModel()
@@ -174,6 +202,7 @@ namespace VideoConference.Web.Controllers
                 Id = user.Id,
                 Email = user.Email,
                 Username = user.UserName,
+                Name = user.Name,
             };
 
             return PartialView("_deleteUser",userModel);

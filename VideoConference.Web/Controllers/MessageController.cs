@@ -132,7 +132,17 @@ namespace VideoConference.Web.Controllers
 
             await _context.Message.AddAsync(message);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(MessageSent));
+        }
+
+        public IActionResult MessageSent()
+        {
+            return View();
+        }
+
+        public IActionResult MessageSendError()
+        {
+            return View();
         }
 
         public async Task<List<SelectListItem>> GetMessageToSelectList(string selectedEmail="")
