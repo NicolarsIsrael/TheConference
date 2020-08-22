@@ -54,11 +54,7 @@ namespace VideoConference.Web.Controllers
 
             if (DateTime.Compare(meeting.StartTime, DateTime.UtcNow.AddHours(1)) > 0)
                 return RedirectToAction(nameof(TimeAccessDenied));
-            var username = "";
-            if (User.IsInRole("User") || User.IsInRole("Admin")|| User.IsInRole("DeptAdmin"))
-                username = GetLoggedInUser().UserName;
-            else
-                username = "Anonymous-" + DateTime.Now.ToString("yyyymmddhhmmssfff");
+            var username = GetLoggedInUser().UserName;
 
             ViewBag.Room = meeting.RoomName;
             ViewBag.Topic = meeting.Topic;
@@ -77,7 +73,7 @@ namespace VideoConference.Web.Controllers
             if (DateTime.Compare(meeting.StartTime, DateTime.UtcNow.AddHours(1)) > 0)
                 return RedirectToAction(nameof(TimeAccessDenied));
 
-            string username = "Anonymous-" + DateTime.Now.ToString("yyyymmddhhmmssfff");
+            string username = "Anon-" + DateTime.Now.ToString("hhmmssfff");
             ViewBag.Room = meeting.RoomName;
             ViewBag.Topic = meeting.Topic;
             ViewBag.Username = username;
@@ -85,6 +81,10 @@ namespace VideoConference.Web.Controllers
             return View();
         }
 
+        public IActionResult ChatBox()
+        {
+            return PartialView("_chatBox");
+        }
 
         public IActionResult TimeAccessDenied()
         {

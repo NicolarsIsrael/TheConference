@@ -14,6 +14,7 @@ using VideoConference.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VideoConference.Web.Core;
+using VideoConference.Web.Hubs;
 
 namespace VideoConference.Web
 {
@@ -57,9 +58,9 @@ namespace VideoConference.Web
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection1")));
 
-
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
@@ -83,7 +84,10 @@ namespace VideoConference.Web
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chathub");
+            });
             app.UseMvc(routes =>
             {
                routes.MapRoute(

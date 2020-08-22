@@ -3,6 +3,22 @@
 
 // Write your JavaScript code.
 
+function ShowChatBox() {
+    openNav();
+    //$.ajax({
+    //    url: "/Meeting/ChatBox/",
+    //    dataType: "html",
+    //    data: {},
+    //    success: function (result) {
+    //        $("#sidebarbody").html(result);
+    //        openNav();
+    //    },
+    //    error: function (xhr, status, error) {
+    //        //ShowSnackbarError("Oops, sorry! Error");
+    //    }
+    //});
+}
+
 function ShowPassword() {
     var passwordInput = document.getElementById("passwordInput");
     var passwordLockIcon = document.getElementById("password-lock-icon");

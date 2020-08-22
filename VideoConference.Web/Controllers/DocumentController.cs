@@ -77,11 +77,9 @@ namespace VideoConference.Web.Controllers
             }
 
             var dept = _context.Department.Where(d => d.Id == SubmittedDeptId).First();
-            int docCount = _context.Document.Count();
             Document document = new Document()
             {
                 Title = docModel.Title,
-                //DocumentNumber = (docCount + 1).ToString(),
                 CurrentDepartment = dept,
                 SubmittedBy = docModel.SubmittedBy,
                 RecievedBy = docModel.RecievedBy,
@@ -93,7 +91,6 @@ namespace VideoConference.Web.Controllers
             _context.Document.Add(document);
             await _context.SaveChangesAsync();
             document.DocumentNumber = document.Id.ToString() + DateTime.UtcNow.AddHours(1).ToString("hhmmssfff");
-            //_context.Document.Update(document);
             _context.Entry(document).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
